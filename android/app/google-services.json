@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "48308461876",
+    "project_id": "meal-book-1d355",
+    "storage_bucket": "meal-book-1d355.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48308461876:android:3311077beae92d59854561",
+        "android_client_info": {
+          "package_name": "com.example.meal_book"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCx5bJ4HD9KnjbQZ61R5vG6uOvepEiYVto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

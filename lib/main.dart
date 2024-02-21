@@ -1,9 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:meal_book/Theme/theme.dart';
+import 'package:meal_book/Theme/theme_provider.dart';
+import 'package:meal_book/firebase_options.dart';
+import 'package:meal_book/pages/homePage.dart';
 import 'package:meal_book/pages/featureIntro.dart';
+import 'package:meal_book/pages/mainPage.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(ChangeNotifierProvider(
+      create: (context) => ThemeProvider(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,13 +26,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(218, 105, 0, 1)),
-        useMaterial3: true,
-      ),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       debugShowCheckedModeBanner: false,
-      home: const FeatureStep(),
+      home: const IntroPage(),
     );
   }
 }

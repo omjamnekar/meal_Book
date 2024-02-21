@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:meal_book/pages/page.dart';
+import 'package:meal_book/pages/auth.dart';
+import 'package:meal_book/pages/homePage.dart';
 
 class FeatureStep extends StatefulWidget {
   const FeatureStep({Key? key}) : super(key: key);
@@ -152,7 +153,7 @@ class _FeatureStepState extends State<FeatureStep>
       _controller.forward();
     });
     _offsetAnimation3 = Tween<Offset>(
-      begin: const Offset(1.6, 5.9), // Bottom right corner
+      begin: const Offset(1.9, 5.9), // Bottom right corner
       end: const Offset(0.5, 5.6), // Center of the screen
     ).animate(_controller);
     _offsetAnimation4 = Tween<Offset>(
@@ -185,7 +186,7 @@ class _FeatureStepState extends State<FeatureStep>
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
-            return AuthenticationPage(); // Replace 'NextPage' with the actual widget/page you want to navigate to
+            return HomePage(); // Replace 'NextPage' with the actual widget/page you want to navigate to
           },
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(0.0, 1.0);
@@ -369,12 +370,12 @@ class _FeatureStepState extends State<FeatureStep>
               builder: (context, child) {
                 return Transform.translate(
                   offset: Offset(
-                    -10 *
-                        sin(_waveController
+                    -30 *
+                        sin(_waveController1
                             .value), // Adjust the amplitude of the left-right wave
                     -10 *
                         sin(1 *
-                            _waveController
+                            _waveController1
                                 .value), // Adjust the amplitude of the up-down wave
                   ),
                   child: child,
