@@ -1,5 +1,5 @@
+import 'package:MealBook/Theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:meal_book/Theme/theme.dart';
 
 class ThemeProvider extends ChangeNotifier {
   ThemeData _themeData = lightMode;

@@ -1,4 +1,4 @@
-name: meal_book
+name: MealBook
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -49,7 +49,16 @@ dependencies:
   cloud_firestore: ^4.15.5
   firebase_database: ^10.4.6
   http: ^1.2.0
+  flutter_riverpod: ^2.4.10
+  shared_preferences: ^2.2.2
   
+# authentication google apple 
+ 
+ 
+ 
+  firebase_auth: ^4.17.4
+  google_sign_in: ^6.2.1
+  sign_in_with_apple: ^5.0.0
 
  
 
@@ -82,6 +91,7 @@ flutter:
     - assets/image/productsALL/
     - assets/image/combos/
     - assets/image/boat/
+    - assets/image/register/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

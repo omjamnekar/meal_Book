@@ -16,6 +16,8 @@ class FireStoreDataBase {
 
     List<String> fileNames = [];
     List<String> fileNames2 = [];
+    List<String> sortedName = [];
+    List<String> sortedName2 = [];
 
     result.items.forEach((firebase_storage.Reference ref) {
       fileNames.add(ref.name);
@@ -36,11 +38,6 @@ class FireStoreDataBase {
       String url = await storage.ref("combos/$fileName").getDownloadURL();
       downloadURLs.add(url);
     }
-    // for (String fileName in fileNames) {
-    //   String url = await storage.ref("subCombo/$fileName").getDownloadURL();
-    //   downloadURLs.add(url);
-    //   print("Download URL for $fileName: $url");
-    // }
 
     return downloadURLs;
   }

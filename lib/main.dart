@@ -1,12 +1,15 @@
+import 'package:MealBook/Theme/theme_provider.dart';
+import 'package:MealBook/controller/authLogic.dart';
+import 'package:MealBook/firebase_options.dart';
+import 'package:MealBook/pages/actuator.dart';
+import 'package:MealBook/pages/loading.dart';
+import 'package:MealBook/pages/register/register.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:meal_book/Theme/theme.dart';
-import 'package:meal_book/Theme/theme_provider.dart';
-import 'package:meal_book/firebase_options.dart';
-import 'package:meal_book/pages/homePage.dart';
-import 'package:meal_book/pages/featureIntro.dart';
-import 'package:meal_book/pages/mainPage.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
+import 'package:get/get.dart';
+
+import 'package:provider/provider.dart' as provider;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,21 +17,37 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ChangeNotifierProvider(
-      create: (context) => ThemeProvider(), child: MyApp()));
+  Get.put(AuthController());
+  runApp(
+    riverpod.ProviderScope(
+      child: provider.ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        child: MyApp(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: Provider.of<ThemeProvider>(context).themeData,
-      debugShowCheckedModeBanner: false,
-      home: const IntroPage(),
+    return provider.ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: Builder(
+        builder: (context) {
+          return MaterialApp(
+            title: 'Meal Book',
+            theme: provider.Provider.of<ThemeProvider>(context).themeData,
+            debugShowCheckedModeBanner: false,
+            home: Actuator(
+              child: IntroPage(),
+              Register: RegisterPage(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

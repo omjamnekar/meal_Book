@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:MealBook/Theme/theme_provider.dart';
+import 'package:MealBook/firebase/image.dart';
+import 'package:MealBook/json/combo.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +11,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:meal_book/Theme/theme_provider.dart';
-import 'package:meal_book/firebase/image.dart';
+
 import 'package:http/http.dart' as http;
-import 'package:meal_book/json/combo.dart';
+
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -465,12 +467,16 @@ class _HomePageState extends State<HomePage> {
       )),
       bottomNavigationBar: Footer(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {},
-        child: Center(
-          child: Image.asset(
-            "assets/image/boat/boat.png",
-            width: 50,
-            height: 50,
+        child: Transform.translate(
+          offset: Offset(-2, 1),
+          child: Center(
+            child: Image.asset(
+              "assets/image/boat/boat.png",
+              width: 50,
+              height: 50,
+            ),
           ),
         ),
       ),

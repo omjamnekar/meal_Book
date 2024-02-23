@@ -1,11 +1,10 @@
 import 'dart:math';
 
+import 'package:MealBook/pages/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:meal_book/pages/auth.dart';
-import 'package:meal_book/pages/homePage.dart';
 
 class FeatureStep extends StatefulWidget {
   const FeatureStep({Key? key}) : super(key: key);
@@ -41,7 +40,7 @@ class _FeatureStepState extends State<FeatureStep>
   // List of destination positions for dish images
   final List<Offset> _destinationPositions = [
     const Offset(-50, 0),
-    const Offset(250.0, 0.0),
+    const Offset(270.0, 0.0),
     const Offset(-100.0, 550.0),
     // Add more positions as needed
   ];
