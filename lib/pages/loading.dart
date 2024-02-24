@@ -35,10 +35,10 @@ class _IntroPageState extends State<IntroPage>
         setState(() {
           if (_controller.value < 0.125 && !initialScalingComplete) {
             // First 0.5 seconds: Smooth scale-up from 0 size to larger size
-            scaleValue = Curves.easeInOutBack.transform(_controller.value * 8);
+            scaleValue = Curves.easeInOutBack.transform(_controller.value * 6);
           } else {
             // After the first 0.5 seconds: Float in the normal size
-            translateY = sin((_controller.value - 0.125) * pi * 2) * 5;
+            translateY = sin((_controller.value - 0.125) * pi * 2) * 3;
             scaleValue = 1.0;
             initialScalingComplete = true;
           }
@@ -101,50 +101,14 @@ class _IntroPageState extends State<IntroPage>
                           child: Transform.translate(
                             offset: Offset(0, translateY),
                             child: Container(
-                              height: 170,
-                              decoration: const BoxDecoration(),
-                              child: Stack(
-                                children: [
-                                  // Transform.translate(
-                                  //   offset: Offset(180, 110),
-                                  //   child: Image.asset(
-                                  //     "assets/image/introPage/waterMouth.png",
-                                  //   ),
-                                  // ),
-                                  Container(
-                                    child: Image.asset(
-                                      "assets/image/introPage/logoBack.png",
-                                      width: 170,
-                                      height: 170,
-                                    ),
-                                  ),
-                                  Transform.translate(
-                                    offset: Offset(4, 0),
-                                    child: Image.asset(
-                                      "assets/image/introPage/logo.png",
-                                      width: 160,
-                                      height: 160,
-                                    ),
-                                  ),
-                                  Transform.translate(
-                                    offset: const Offset(4, 33),
-                                    child: Image.asset(
-                                      "assets/image/introPage/Rectangle 1.png",
-                                      width: 160,
-                                      height: 160,
-                                    ),
-                                  ),
-                                  Transform.translate(
-                                    offset: const Offset(5, 70),
-                                    child: Image.asset(
-                                      "assets/image/introPage/Rectangle 2.png",
-                                      width: 160,
-                                      height: 110,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                height: 100,
+                                decoration: const BoxDecoration(),
+                                child: Image.asset(
+                                  "assets/logo/meal_book.png",
+                                  width: 190,
+                                  height: 90,
+                                  fit: BoxFit.contain,
+                                )),
                           ),
                         );
                       }),
@@ -153,7 +117,7 @@ class _IntroPageState extends State<IntroPage>
                     delay: Duration(seconds: 1),
                     effects: [FadeEffect(), ScaleEffect()],
                     child: Transform.translate(
-                      offset: const Offset(0, -25),
+                      offset: const Offset(0, -10),
                       child: Container(
                         margin: const EdgeInsets.all(0),
                         width: MediaQuery.sizeOf(context).width,
@@ -203,7 +167,7 @@ class _IntroPageState extends State<IntroPage>
               ),
 
               // loading linearindicator
-
+              Gap(20),
               Visibility(
                 visible: isVisible,
                 child: Center(

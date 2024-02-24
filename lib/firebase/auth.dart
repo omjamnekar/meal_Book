@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:MealBook/controller/authLogic.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -35,31 +39,135 @@ class AuthClass {
     return authResult;
   }
 
-  Future<UserCredential> signInWithGitHub() async {
-    // Create a new provider
-    OAuthProvider oAuthProvider = new OAuthProvider("github.com");
-
-    // Once signed in, return the UserCredential
-
-    return await _auth.signInWithPopup(oAuthProvider);
+  Future<void> signOutWithGoogle() {
+    return googleSignIn.signOut();
   }
 
-  Future<UserCredential> signInWithApple() async {
-    final AuthorizationCredentialAppleID credential =
-        await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
+  Future<UserCredential> signInWithGitHub() async {
+    final githubProvider = OAuthProvider('github.com');
 
-    final OAuthProvider oAuthProvider = OAuthProvider("apple.com");
-    final AuthCredential authCredential = oAuthProvider.credential(
-      idToken: credential.identityToken,
-      accessToken: credential.authorizationCode,
-    );
+    final UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithPopup(githubProvider);
 
-    return await FirebaseAuth.instance.signInWithCredential(authCredential);
+    // Now, use the UserCredential object.
+    return userCredential;
+  }
+
+  Future<UserCredential> registerWithEmailPassword(
+      String email, String password) async {
+    return await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+  }
+
+  Future<bool> sendVerification(BuildContext context) async {
+    try {
+      User? currentUser = _auth.currentUser;
+
+      if (currentUser == null) {
+        throw Exception('No user is signed in.');
+      }
+
+      // Check if the user's email is already verified.
+      if (currentUser.emailVerified) {
+        print('User\'s email is already verified.');
+        return true;
+      }
+
+      // Send email verification and start a timer to periodically check the verification status.
+      await currentUser.sendEmailVerification();
+
+      // Check verification status with a timeout of 60 seconds.
+      bool isVerified =
+          await waitForEmailVerification(currentUser, context, timeout: 60);
+
+      return isVerified;
+    } on FirebaseAuthException catch (e) {
+      // snackbarCon(context, e.message!);
+      return false;
+    }
+  }
+
+  Future<bool> waitForEmailVerification(
+    User user,
+    BuildContext context, {
+    int timeout = 60,
+    int interval = 5,
+  }) async {
+    try {
+      int elapsed = 0;
+      while (elapsed <= timeout) {
+        await Future.delayed(Duration(seconds: interval));
+        elapsed += interval;
+
+        // Reload the user to get the latest email verification status.
+        await user.reload();
+
+        if (user.emailVerified) {
+          print('Your email has been verified.');
+          return true;
+        }
+      }
+
+      print(
+          'Email verification timeout. Your email has not been verified yet.');
+      return false;
+    } catch (e) {
+      print('Error checking email verification: $e');
+      return false;
+    }
+  }
+
+  Future<User?> signInWithEmailAndPassword(
+      String email, String password, BuildContext context) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      return user;
+    } catch (error) {
+      snackbarCon(context, error.toString());
+      return null;
+    }
+  }
+
+  // Send Password Reset Email
+  Future<void> sendPasswordResetEmail(
+      String email, BuildContext context, Function sd) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email.trim());
+      sd;
+      snackbarCon(context, "Password reset email sent, check your email.");
+    } on FirebaseAuthException catch (error) {
+      snackbarCon(context, error.toString());
+      // You might want to handle and log the error more gracefully.
+      throw error;
+    }
+  }
+
+  Future<bool> isEmailAvailable(
+    String email,
+    String password,
+  ) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // If the user is created successfully, then the email is not in use.
+      // Delete the user immediately.
+      await userCredential.user!.delete();
+      return true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        return false;
+      } else {
+        // An unknown error occurred.
+        throw e;
+      }
+    }
   }
 
   Future<void> signInWithPhoneNumber(String phoneNumber) async {

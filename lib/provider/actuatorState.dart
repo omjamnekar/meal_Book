@@ -40,6 +40,8 @@ class ImageListNotifier extends StateNotifier<ImageListModel> {
       print('Error saving data locally: $error');
     }
   }
+
+  ImageListModel get currentImageState => state;
 }
 
 final imageListProvider =

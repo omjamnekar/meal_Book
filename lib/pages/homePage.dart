@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:MealBook/Theme/theme_provider.dart';
 import 'package:MealBook/firebase/image.dart';
 import 'package:MealBook/json/combo.dart';
+import 'package:MealBook/provider/actuatorState.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    bootState();
+  }
+
+  bootState() {
+    // final imageList = context.read(rec);
+  }
+
+  // Moved the initialization to initState or build method
   List<String> foodName = [
     "Cheese Masala Dosa",
     "Cheese Onion Uttapam",
@@ -76,11 +88,6 @@ class _HomePageState extends State<HomePage> {
   FireStoreDataBase storage = FireStoreDataBase();
 
 //Combo
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -467,7 +474,7 @@ class _HomePageState extends State<HomePage> {
       )),
       bottomNavigationBar: Footer(),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).canvasColor,
         onPressed: () {},
         child: Transform.translate(
           offset: Offset(-2, 1),

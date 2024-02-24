@@ -1,17 +1,19 @@
 import 'package:MealBook/controller/authLogic.dart';
 import 'package:MealBook/pages/register/forgotPassword.dart';
+import 'package:MealBook/pages/register/verification.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends ConsumerStatefulWidget {
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  ConsumerState<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends ConsumerState<RegisterPage> {
   @override
   void initState() {
     super.initState();
@@ -22,26 +24,27 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  PageController _pageController = PageController(initialPage: 0);
-
   double _opacity = 0.0;
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return GetBuilder<AuthController>(
       builder: (ctrl) {
         List<Widget> list = [
           ragister(context, ctrl),
           ForgotPasswordPage(onPressed: () {
-            _pageController.animateToPage(0,
+            ctrl.pageController.animateToPage(0,
                 duration: Duration(milliseconds: 300), curve: Curves.easeIn);
           }),
+          Verification(),
         ];
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
           body: SafeArea(
             child: PageView.builder(
                 physics: NeverScrollableScrollPhysics(),
-                controller: _pageController,
+                controller: ctrl.pageController,
                 itemCount: list.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
@@ -56,6 +59,16 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Padding ragister(BuildContext context, AuthController ctrl) {
+    var styleFrom = ElevatedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(
+        vertical: 16,
+      ),
+      primary: const Color.fromARGB(255, 255, 255, 255),
+      onPrimary: const Color.fromARGB(255, 0, 0, 0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -130,16 +143,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   Gap(30),
                   ElevatedButton(
                     onPressed: () {
-                      ctrl.onMainButtonPress(context);
+                      ctrl.onMainButtonPress(context, ref);
                     },
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                       horizontal: 150,
                       vertical: 20,
                     )),
-                    child: const Text('Sign Up'),
+                    child: ctrl.isLogin ? Text('Login In') : Text("Register"),
                   ),
-                  Gap(40),
+                  Gap(10),
                   TextButton(
                     onPressed: () {
                       setState(() {
@@ -154,13 +167,71 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      _pageController.animateToPage(2,
+                      ctrl.pageController.animateToPage(1,
                           duration: Duration(milliseconds: 300),
                           curve: Curves.easeIn);
                     },
                     child: const Text('Forgot Password?'),
                   ),
-                  Gap(20),
+                  Gap(30),
+
+                  // external login getways
+
+                  Container(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          ctrl.googleSignIn(context, ref);
+                        },
+                        style: styleFrom,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/image/auth/google.png',
+                              height: 20,
+                              width: 20,
+                            ),
+                            Gap(15),
+                            Text(
+                              'Google',
+                              style: TextStyle(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Gap(20),
+                      ElevatedButton(
+                        onPressed: () {
+                          ctrl.gitSignIn(
+                            context,
+                            ref,
+                          );
+                        },
+                        style: styleFrom,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/image/auth/github.png',
+                              height: 20,
+                              width: 20,
+                            ),
+                            Gap(15),
+                            Text(
+                              'Github',
+                              style: TextStyle(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+                  Gap(10),
                   Container(
                     width: MediaQuery.of(context).size.width / 1.2,
                     alignment: Alignment.bottomCenter,
@@ -187,29 +258,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-
-                  // external login getways
-
-                  // Gap(20),
-                  Container(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          ctrl.googleSignIn(context);
-                        },
-                        child: const Text('Google'),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          // ctrl.facebookSignIn();
-                        },
-                        child: const Text('gitHub'),
-                      ),
-                    ],
-                  )),
                 ],
               ),
             ),

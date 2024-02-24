@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Define a state
 class BooleanState {
@@ -8,10 +9,24 @@ class BooleanState {
 
 // Define a StateNotifier
 class BooleanNotifier extends StateNotifier<BooleanState> {
-  BooleanNotifier() : super(BooleanState(false));
+  BooleanNotifier() : super(BooleanState(false)) {
+    loadValue();
+  }
 
-  void update(bool value) {
+  Future<void> loadValue() async {
+    final prefs = await SharedPreferences.getInstance();
+    final value = prefs.getBool('boolean_state') ?? false;
     state = BooleanState(value);
+  }
+
+  void update(bool value) async {
+    state = BooleanState(value);
+    await saveValue(value);
+  }
+
+  Future<void> saveValue(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('boolean_state', value);
   }
 }
 

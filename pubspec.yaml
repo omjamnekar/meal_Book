@@ -51,18 +51,39 @@ dependencies:
   http: ^1.2.0
   flutter_riverpod: ^2.4.10
   shared_preferences: ^2.2.2
+
   
 # authentication google apple 
- 
- 
- 
   firebase_auth: ^4.17.4
   google_sign_in: ^6.2.1
-  sign_in_with_apple: ^5.0.0
 
+  flutter_launcher_icons: ^0.13.1
+  lottie: ^3.1.0
+  
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/meal_book.png" 
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/logo/adaptive_meal_book.jpg"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/logo/meal_book.png"
+    background_color: "#ffffff"
+    theme_color: "#FD8D3C"
+  windows:
+    generate: true
+    image_path: "assets/logo/meal_book.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/logo/meal_book.png"
  
 
 dev_dependencies:
+
   flutter_test:
     sdk: flutter
 
@@ -77,6 +98,7 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -91,7 +113,11 @@ flutter:
     - assets/image/productsALL/
     - assets/image/combos/
     - assets/image/boat/
+    - assets/image/auth/
     - assets/image/register/
+    - assets/logo/
+    - assets/lottie/
+  # An image asset can refer to one or more resolution-specific "variants", see
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

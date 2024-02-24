@@ -19,8 +19,24 @@ class Actuator extends ConsumerStatefulWidget {
 
 class _ActuatorState extends ConsumerState<Actuator> {
   @override
+  void initState() {
+    // TODO: implement initState
+    ref.read(imageListProvider.notifier).fetchData();
+    super.initState();
+    Future.delayed(Duration(seconds: 4), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+  }
+
+  bool _isLoading = true;
+  @override
   Widget build(BuildContext context) {
     final booleanState = ref.watch(booleanProvider);
+
     // if isRegistered is true then locate to homepage
     // or fetch data from the firebase
 
@@ -31,22 +47,21 @@ class _ActuatorState extends ConsumerState<Actuator> {
 
     // before checking is see data is loaded or not
     //  2)// locate to ragistration page
+    print(booleanState.value.toString());
+    return AnimatedSwitcher(
+      duration: Duration(seconds: 1), // Define the duration of the animation
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(child: child, opacity: animation);
+      },
+      child: booleanState.value
+          ? _isLoading
+              ? widget.child
+              : HomePage()
+          : ref.watch(imageListProvider).dataCame
+              ? widget.Register
+              : widget.child,
+    );
 
-    if (booleanState.value) {
-      return HomePage();
-    } else {
-      final imageListState = ref.watch(imageListProvider);
-
-      ref.read(imageListProvider.notifier).fetchData();
-      print(imageListState.dataCame);
-      if (imageListState.dataCame) {
-        return widget.Register;
-      } else {
-        // if data is not availabe then show the loading screen
-
-        return widget.child;
-      }
-    }
     // return AnimatedCrossFade(firstChild: widget.child, secondChild: isRegistered?HomePage()  : RegisterPage(), crossFadeState:imageListState.state.dataCame?CrossFadeState.showFirst , duration: duration)
   }
 }
