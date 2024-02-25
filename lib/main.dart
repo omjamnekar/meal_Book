@@ -1,17 +1,21 @@
 import 'package:MealBook/Theme/theme_provider.dart';
 import 'package:MealBook/controller/authLogic.dart';
+import 'package:MealBook/dataAdder.dart';
 import 'package:MealBook/firebase_options.dart';
 import 'package:MealBook/pages/actuator.dart';
 import 'package:MealBook/pages/loading.dart';
 import 'package:MealBook/pages/register/register.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'package:get/get.dart';
 import 'package:provider/provider.dart' as provider;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(
+      widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -27,8 +31,23 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Future.delayed(Duration(seconds: 3), () {
+      FlutterNativeSplash.remove();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +63,7 @@ class MyApp extends StatelessWidget {
               child: IntroPage(),
               Register: RegisterPage(),
             ),
+            // home: Cart(),
             // home: Verification(),
           );
         },
@@ -51,3 +71,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+//user Account  
+// popmenu
+// filtering combo image

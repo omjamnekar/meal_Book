@@ -32,12 +32,15 @@ class UserState extends StateNotifier<UserDataManager> {
     state = UserDataManager();
   }
 
-  Future<void> getUser() async {
+  Future<UserDataManager?> getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? userString = prefs.getString('user');
     if (userString != null) {
       Map<String, dynamic> userJson = jsonDecode(userString);
-      state = UserDataManager.fromJson(userJson);
+      UserDataManager userData = UserDataManager.fromJson(userJson);
+      state = userData;
+      return userData;
     }
+    return null;
   }
 }

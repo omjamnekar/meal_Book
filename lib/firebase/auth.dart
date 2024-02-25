@@ -1,15 +1,34 @@
 import 'dart:convert';
 
 import 'package:MealBook/controller/authLogic.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
+final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+
+enum SignUpPlatform {
+  google,
+  github,
+  email,
+  defaultPlatform,
+  // Add other platforms as needed.
+}
 
 class AuthClass {
+  Future<void> signOut(BuildContext context) async {
+    try {
+      _auth.signOut();
+    } on FirebaseAuthException catch (e) {
+      snackbarCon(context, e.message!);
+    }
+  }
+
   Future<UserCredential?> signInWithGoogle() async {
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();

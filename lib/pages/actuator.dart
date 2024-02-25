@@ -1,4 +1,4 @@
-import 'package:MealBook/pages/homePage.dart';
+import 'package:MealBook/pages/homePage/homePage.dart';
 import 'package:MealBook/pages/register/register.dart';
 import 'package:MealBook/provider/actuatorState.dart';
 import 'package:MealBook/provider/registerState.dart';

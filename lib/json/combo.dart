@@ -1,13 +1,33 @@
-Map<int, Map<String, dynamic>> combo = {
+Map<int, Map<String, dynamic>> asf = {
   0: {
-    "containerColor": "DFA749",
-    "headerColor": "FFE1A7",
-    "text": "6B3300",
-    "image": "south indian delight.png",
-    "name": 'South Indian Delight Combo',
-    "dish": ['Sada Dosa', 'Masala Uttapam', 'Chiku Milk Shake']
+    "containerColor": "87CEEB",
+    "headerColor": "FFB800",
+    "text": "5D5952",
+    "image": "breakfast special.png",
+    "name": 'Breakfast Special Combo',
+    "dish": ['Butter Dosa', 'Onion Uttapam', 'Omelette Pav', 'Orange Juice']
   },
   1: {
+    "containerColor": "123F2F",
+    "headerColor": "E6B330",
+    "text": "AEA8A8",
+    "image": "chat kamal.png",
+    "name": 'Chat Kamal Combo',
+    "dish": [
+      'Sev Puri',
+      'Cheese Chinese Bhel',
+      'Orange Juice',
+    ]
+  },
+  2: {
+    "containerColor": "9D3901",
+    "headerColor": "FFCED9",
+    "text": "FFFFFF",
+    "image": "chat lover's.png",
+    "name": 'Chat Lover Combo',
+    "dish": ['Sev Puri', 'Cheese Chinese Bhel', 'Rose Milk Shake']
+  },
+  3: {
     "containerColor": "FF9D00",
     "headerColor": "FFE1A7",
     "text": "6B3300",
@@ -20,7 +40,7 @@ Map<int, Map<String, dynamic>> combo = {
       'Banana Milk Shake'
     ]
   },
-  2: {
+  4: {
     "containerColor": "CD2626",
     "headerColor": "FFE1A7",
     "text": "D5D5D5",
@@ -33,52 +53,19 @@ Map<int, Map<String, dynamic>> combo = {
       'Watermelon Juice'
     ]
   },
-  3: {
-    "containerColor": "4CAF50",
-    "headerColor": "184C00",
-    "text": "D8D8D8",
-    "image": "quikand filling.png",
-    "name": 'Quick and Filling Combo',
-    "dish": ['Egg Fried Rice', 'Veg Franky', 'Bhel Puri', 'Cold Coffee']
-  },
-  4: {
-    "containerColor": "AF704C",
-    "headerColor": "473401",
-    "text": "DCCAAC",
-    "image": "spicy treat.png",
-    "name": 'Spicy Treat Combo',
+  5: {
+    "containerColor": "FF9595",
+    "headerColor": "B95A02",
+    "text": "888888",
+    "image": "chinese craving.png",
+    "name": 'Chinese Cravings Combo',
     "dish": [
-      'Mysore Masala Dosa',
-      'Veg Shezwan Franky',
-      'Masala Uttapam',
-      'Lemon Soda'
+      'Veg Schezwan Noodles',
+      'Veg Crispy',
+      'Grapes Juice',
     ]
   },
-  5: {
-    "containerColor": "87CEEB",
-    "headerColor": "FFB800",
-    "text": "5D5952",
-    "image": "breakfast special.png",
-    "name": 'Breakfast Special Combo',
-    "dish": ['Butter Dosa', 'Onion Uttapam', 'Omelette Pav', 'Orange Juice']
-  },
   6: {
-    "containerColor": "019D11",
-    "headerColor": "D8C300",
-    "text": "AEAEAE",
-    "image": "healthy choice.png",
-    "name": 'Healthy Choice Combo',
-    "dish": ['Veg Crispy', 'Veg Cheese Franky', 'Apple Juice']
-  },
-  7: {
-    "containerColor": "9D3901",
-    "headerColor": "FFCED9",
-    "text": "FFFFFF",
-    "image": "chat lover's.png",
-    "name": 'Chat Lover Combo',
-    "dish": ['Sev Puri', 'Cheese Chinese Bhel', 'Rose Milk Shake']
-  },
-  8: {
     "containerColor": "008AD7",
     "headerColor": "FFCED9",
     "text": "FFFFFF",
@@ -91,15 +78,7 @@ Map<int, Map<String, dynamic>> combo = {
       'Fresh Lemon'
     ]
   },
-  9: {
-    "containerColor": "FFBF00",
-    "headerColor": "33181F",
-    "text": "63585A",
-    "image": "pizza lover.png",
-    "name": 'Pizza Lover Combo',
-    "dish": ['Pizza', 'Cheese Toast Sandwich', 'Grapes Juice']
-  },
-  10: {
+  7: {
     "containerColor": "F07401",
     "headerColor": "E6B330",
     "text": "FFF2F2",
@@ -111,19 +90,7 @@ Map<int, Map<String, dynamic>> combo = {
       'Apple Juice',
     ]
   },
-  11: {
-    "containerColor": "FF9595",
-    "headerColor": "B95A02",
-    "text": "888888",
-    "image": "chinese craving.png",
-    "name": 'Chinese Cravings Combo',
-    "dish": [
-      'Veg Schezwan Noodles',
-      'Veg Crispy',
-      'Grapes Juice',
-    ]
-  },
-  12: {
+  8: {
     "containerColor": "0A141F",
     "headerColor": "C6C6C6",
     "text": "888888",
@@ -135,7 +102,35 @@ Map<int, Map<String, dynamic>> combo = {
       'Banana Milk Shake',
     ]
   },
-  13: {
+  9: {
+    "containerColor": "019D11",
+    "headerColor": "D8C300",
+    "text": "AEAEAE",
+    "image": "healthy choice.png",
+    "name": 'Healthy Choice Combo',
+    "dish": ['Veg Crispy', 'Veg Cheese Franky', 'Apple Juice']
+  },
+  10: {
+    "containerColor": "683709",
+    "headerColor": "E6B330",
+    "text": "D7DDD3",
+    "image": "hot cold bliss.png",
+    "name": 'Hot & Cold Bliss Combo',
+    "dish": [
+      'Special Tea',
+      'Cold Coffee',
+      'Fresh Lemon',
+    ]
+  },
+  11: {
+    "containerColor": "FFBF00",
+    "headerColor": "33181F",
+    "text": "63585A",
+    "image": "pizza lover.png",
+    "name": 'Pizza Lover Combo',
+    "dish": ['Pizza', 'Cheese Toast Sandwich', 'Grapes Juice']
+  },
+  12: {
     "containerColor": "420838",
     "headerColor": "FFB2B2",
     "text": "D8C1C1",
@@ -147,28 +142,33 @@ Map<int, Map<String, dynamic>> combo = {
       'Rose Milk Shake',
     ]
   },
+  13: {
+    "containerColor": "4CAF50",
+    "headerColor": "184C00",
+    "text": "D8D8D8",
+    "image": "quikand filling.png",
+    "name": 'Quick and Filling Combo',
+    "dish": ['Egg Fried Rice', 'Veg Franky', 'Bhel Puri', 'Cold Coffee']
+  },
   14: {
-    "containerColor": "123F2F",
-    "headerColor": "E6B330",
-    "text": "AEA8A8",
-    "image": "chat kamal.png",
-    "name": 'Chat Kamal Combo',
-    "dish": [
-      'Sev Puri',
-      'Cheese Chinese Bhel',
-      'Orange Juice',
-    ]
+    "containerColor": "DFA749",
+    "headerColor": "FFE1A7",
+    "text": "6B3300",
+    "image": "south indian delight.png",
+    "name": 'South Indian Delight Combo',
+    "dish": ['Sada Dosa', 'Masala Uttapam', 'Chiku Milk Shake']
   },
   15: {
-    "containerColor": "683709",
-    "headerColor": "E6B330",
-    "text": "D7DDD3",
-    "image": "hot cold bliss.png",
-    "name": 'Hot & Cold Bliss Combo',
+    "containerColor": "AF704C",
+    "headerColor": "473401",
+    "text": "DCCAAC",
+    "image": "spicy treat.png",
+    "name": 'Spicy Treat Combo',
     "dish": [
-      'Special Tea',
-      'Cold Coffee',
-      'Fresh Lemon',
+      'Mysore Masala Dosa',
+      'Veg Shezwan Franky',
+      'Masala Uttapam',
+      'Lemon Soda'
     ]
   },
 };
@@ -211,11 +211,61 @@ Map<int, Map<String, dynamic>> comboData = {
     ],
   },
   8: {
-    "name": "Festival_of_Lights_Combo",
+    "name": "Festival of Lights Combo",
     'dish': ['Kesar Milk Shake', 'Mysore Masala Dosa', 'Gulab Jamun'],
   },
   9: {
-    "name": "Thanksgiving_Feast_Combo",
+    "name": "Thanksgiving Feast Combo",
     'dish': ['Cranberry Spritzer', 'Turkey Sandwich', 'Pumpkin Pie'],
   }
 };
+
+// Moved the initialization to initState or build method
+List<String> foodName = [
+  "Cheese Masala Dosa",
+  "Cheese Onion Uttapam",
+  "Cheese Toast Sandwich",
+  "Banana Milk Shake",
+];
+
+List<String> featuredFood1 = [
+  "chaas.png",
+  "francky.png",
+  "rice.png",
+  "uttapam.png",
+  "chai.png",
+  "noodles.png",
+  "chikoo-milkshake.png",
+];
+
+List<String> featureFood2 = [
+  "omlette.png",
+  "sev-puri.png",
+  "juice.png",
+  "dosa.png",
+  "golgappe.png",
+  "milkshake.png",
+  "pizza.png",
+  "sandwich.png"
+];
+
+List<String> featuredFoodName1 = [
+  "chass",
+  "frankie",
+  "rice",
+  "uttapam",
+  "chai",
+  "noodles",
+  "chikoo milkshake",
+];
+
+List<String> featureFoodName2 = [
+  "omelette",
+  "sev puri",
+  "juices",
+  "dosa",
+  "golgappe",
+  "milkshake",
+  "pizza",
+  "sandwich"
+];

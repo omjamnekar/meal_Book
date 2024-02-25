@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:MealBook/pages/auth.dart';
 import 'package:MealBook/pages/featureIntro.dart';
 import 'package:MealBook/provider/registerState.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,7 +42,26 @@ class _VerificationState extends ConsumerState<Verification> {
   Future<bool> verificationSending() async {
     isVerified = await auth.sendVerification(context).then((value) {
       User? user = FirebaseAuth.instance.currentUser;
+
       auth.waitForEmailVerification(user!, context);
+      if (value == true && user.emailVerified == true)
+        Flushbar(
+          title: "Hey Ninja",
+          message:
+              "SignIn...${user?.displayName} is now signed in with Firebase Authentication.",
+          backgroundGradient: LinearGradient(colors: [
+            Color.fromARGB(255, 255, 106, 0),
+            Color.fromARGB(255, 240, 108, 0)
+          ]),
+          backgroundColor: Color.fromARGB(255, 247, 177, 0),
+          boxShadows: [
+            BoxShadow(
+              color: Color.fromARGB(255, 255, 196, 0),
+              offset: Offset(0.0, 2.0),
+              blurRadius: 3.0,
+            )
+          ],
+        )..show(context);
       return value;
     });
 

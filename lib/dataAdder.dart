@@ -18,16 +18,17 @@ class _CartState extends State<Cart> {
   String displayText = 'Results go here!';
 
   snapshot() async {
-    final snapshot = await ref.child('comboData/').get();
-    productList = [];
-    if (snapshot.exists) {
-      productList.add(snapshot.value);
-      products = (snapshot.value);
-      print(snapshot);
-      print(snapshot.value);
-    } else {
-      print('No Data Available');
-    }
+    await ref.child('comboData/').set(comboData);
+    print("object");
+    // productList = [];
+    // if (snapshot.exists) {
+    //   productList.add(snapshot.value);
+    //   products = (snapshot.value);
+    //   print(snapshot);
+    //   print(snapshot.value);
+    // } else {
+    //   print('No Data Available');
+    // }
   }
 
   call() async {
@@ -51,7 +52,7 @@ class _CartState extends State<Cart> {
         ElevatedButton(
           onPressed: () async {
             // await ref.set({"name": "Tyler"});
-            call();
+            snapshot();
           },
           child: const Text("Add Data"),
         ),

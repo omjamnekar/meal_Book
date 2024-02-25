@@ -195,15 +195,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               height: 20,
                               width: 20,
                             ),
-                            Gap(15),
-                            Text(
+                            const Gap(15),
+                            const Text(
                               'Google',
                               style: TextStyle(),
                             ),
                           ],
                         ),
                       ),
-                      Gap(20),
+                      const Gap(20),
                       ElevatedButton(
                         onPressed: () {
                           ctrl.gitSignIn(
@@ -221,8 +221,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               height: 20,
                               width: 20,
                             ),
-                            Gap(15),
-                            Text(
+                            const Gap(15),
+                            const Text(
                               'Github',
                               style: TextStyle(),
                             ),
@@ -231,7 +231,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ),
                     ],
                   )),
-                  Gap(10),
+                  const Gap(10),
                   Container(
                     width: MediaQuery.of(context).size.width / 1.2,
                     alignment: Alignment.bottomCenter,
@@ -269,7 +269,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   Widget TweenAnimate({required Widget child}) => TweenAnimationBuilder(
         tween: Tween<double>(begin: 0, end: 10),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         builder: (context, value, child) {
           return Padding(
             padding: EdgeInsets.only(top: value),

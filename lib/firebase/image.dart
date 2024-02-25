@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:MealBook/json/combo.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-import 'package:firebase_core/firebase_core.dart' as firebase_core;
+// import 'package:firebase_core/firebase_core.dart' as firebase_core;
 
 class FireStoreDataBase {
   final firebase_storage.FirebaseStorage storage =
@@ -33,6 +32,8 @@ class FireStoreDataBase {
   Future<List<String>> downloadURLs() async {
     final fileNames = await listFiles();
     List<String> downloadURLs = [];
+
+    // combo;
 
     for (String fileName in fileNames[0]) {
       String url = await storage.ref("combos/$fileName").getDownloadURL();
