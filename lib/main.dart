@@ -1,10 +1,10 @@
 import 'package:MealBook/Theme/theme_provider.dart';
 import 'package:MealBook/controller/authLogic.dart';
-import 'package:MealBook/dataAdder.dart';
+
 import 'package:MealBook/firebase_options.dart';
 import 'package:MealBook/pages/actuator.dart';
 import 'package:MealBook/pages/loading.dart';
-import 'package:MealBook/pages/register/register.dart';
+import 'package:MealBook/pages/registration/register.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -25,7 +25,7 @@ void main() async {
     riverpod.ProviderScope(
       child: provider.ChangeNotifierProvider(
         create: (context) => ThemeProvider(),
-        child: MyApp(),
+        child: const MyApp(),
       ),
     ),
   );
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
 
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       FlutterNativeSplash.remove();
     });
   }
@@ -63,16 +63,13 @@ class _MyAppState extends State<MyApp> {
               child: IntroPage(),
               Register: RegisterPage(),
             ),
-            // home: Cart(),
-            // home: Verification(),
+
+            //  home: PopoverExample(),
+            //  home: Cdeom(),
+            //  home: Verification(),
           );
         },
       ),
     );
   }
 }
-
-
-//user Account  
-// popmenu
-// filtering combo image

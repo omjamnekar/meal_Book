@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:MealBook/model/user.dart';
 import 'package:MealBook/pages/auth.dart';
 import 'package:MealBook/pages/featureIntro.dart';
 import 'package:MealBook/provider/registerState.dart';
+import 'package:MealBook/provider/userState.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,9 @@ import 'package:provider/provider.dart';
 import '../../firebase/auth.dart';
 
 class Verification extends ConsumerStatefulWidget {
-  const Verification({super.key});
+  Verification({super.key, required this.user});
+
+  UserDataManager user;
 
   @override
   ConsumerState<Verification> createState() => _VerificationState();
@@ -34,7 +38,10 @@ class _VerificationState extends ConsumerState<Verification> {
   AuthClass auth = AuthClass();
   late Timer _timer;
 
-  void saveData() {
+  Future<void> saveData() async {
+    await UserState.insertUser(
+      userData: widget.user,
+    );
     ref.watch(booleanProvider.notifier).update(isVerified);
     print("done");
   }
@@ -42,26 +49,8 @@ class _VerificationState extends ConsumerState<Verification> {
   Future<bool> verificationSending() async {
     isVerified = await auth.sendVerification(context).then((value) {
       User? user = FirebaseAuth.instance.currentUser;
-
       auth.waitForEmailVerification(user!, context);
-      if (value == true && user.emailVerified == true)
-        Flushbar(
-          title: "Hey Ninja",
-          message:
-              "SignIn...${user?.displayName} is now signed in with Firebase Authentication.",
-          backgroundGradient: LinearGradient(colors: [
-            Color.fromARGB(255, 255, 106, 0),
-            Color.fromARGB(255, 240, 108, 0)
-          ]),
-          backgroundColor: Color.fromARGB(255, 247, 177, 0),
-          boxShadows: [
-            BoxShadow(
-              color: Color.fromARGB(255, 255, 196, 0),
-              offset: Offset(0.0, 2.0),
-              blurRadius: 3.0,
-            )
-          ],
-        )..show(context);
+
       return value;
     });
 
@@ -86,7 +75,7 @@ class _VerificationState extends ConsumerState<Verification> {
 
   void overLoadVanish() {
     Timer _overLoadVanish = Timer.periodic(
-      Duration(seconds: 7),
+      const Duration(seconds: 7),
       (Timer timer) => setState(
         () {
           isOverloadResend = false;
@@ -95,10 +84,36 @@ class _VerificationState extends ConsumerState<Verification> {
     );
   }
 
-  Future<void> deleteUser(AboutDialog aboutDialog) async {
-    AboutDialog d = aboutDialog;
+  Future<void> deleteUser() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).backgroundColor,
+          title: Text('Warning'),
+          content: Text(
+            'Are you sure to Register account again?',
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+
     FirebaseAuth.instance.currentUser!.delete();
-    Navigator.pop(context);
   }
 
   @override
@@ -123,20 +138,23 @@ class _VerificationState extends ConsumerState<Verification> {
         builder: (context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
               !snapshot.hasData) {
-            return mainPage(context, minutes, seconds, isVerified, isVerify);
+            return mainPage(
+                widget.user, context, minutes, seconds, isVerified, isVerify);
           } else if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData &&
               snapshot.data == true) {
             isVerified = snapshot.data!;
-            return mainPage(context, minutes, seconds, isVerified, isVerify);
+            return mainPage(
+                widget.user, context, minutes, seconds, isVerified, isVerify);
           }
 
-          return mainPage(context, minutes, seconds, isVerified, isVerify);
+          return mainPage(
+              widget.user, context, minutes, seconds, isVerified, isVerify);
         });
   }
 
-  Scaffold mainPage(BuildContext context, int minutes, int seconds,
-      bool isverified, bool isVerify) {
+  Scaffold mainPage(UserDataManager userData, BuildContext context, int minutes,
+      int seconds, bool isverified, bool isVerify) {
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -146,12 +164,7 @@ class _VerificationState extends ConsumerState<Verification> {
                 children: [
                   IconButton(
                       onPressed: () {
-                        deleteUser(AboutDialog(
-                          applicationName: "Reminder",
-                          children: [
-                            Text("If You get back,You have to register again!")
-                          ],
-                        ));
+                        deleteUser();
                       },
                       icon: Icon(Icons.arrow_back)),
                   const Text(
@@ -189,7 +202,7 @@ class _VerificationState extends ConsumerState<Verification> {
                     ),
               !isVerified
                   ? isTimeOff
-                      ? Text(
+                      ? const Text(
                           "Try resending Email",
                           style: TextStyle(fontSize: 20),
                         )
@@ -199,15 +212,15 @@ class _VerificationState extends ConsumerState<Verification> {
                         )
                   : Container(),
               !isVerified
-                  ? Text(" You will get email to verify email Id")
+                  ? const Text(" You will get email to verify email Id")
                   : AnimatedContainer(
-                      duration: Duration(seconds: 1),
+                      duration: const Duration(seconds: 1),
                       child: Text(
                         "Email Verified",
                         style: GoogleFonts.poppins(fontSize: 20),
                       ),
                     ),
-              Gap(20),
+              const Gap(20),
               !isVerified
                   ? ElevatedButton(
                       onPressed: () {
@@ -220,8 +233,8 @@ class _VerificationState extends ConsumerState<Verification> {
                           overLoadVanish();
                         }
                       },
-                      style: ButtonStyle(),
-                      child: Text("Resend Message"))
+                      style: const ButtonStyle(),
+                      child: const Text("Resend Message"))
                   : ElevatedButton(
                       onPressed: () {
                         saveData();
@@ -230,10 +243,10 @@ class _VerificationState extends ConsumerState<Verification> {
                             MaterialPageRoute(
                                 builder: (context) => FeatureStep()));
                       },
-                      child: Text("Continue with App!")),
-              Gap(4),
+                      child: const Text("Continue with App!")),
+              const Gap(4),
               AnimatedSwitcher(
-                duration: Duration(seconds: 1),
+                duration: const Duration(seconds: 1),
                 transitionBuilder: (Widget child, Animation<double> animation) {
                   return FadeTransition(child: child, opacity: animation);
                 },
@@ -243,17 +256,17 @@ class _VerificationState extends ConsumerState<Verification> {
                         style: GoogleFonts.poppins(
                             fontSize: 10,
                             color: Color.fromARGB(255, 223, 64, 6)),
-                        key: ValueKey<int>(1),
+                        key: const ValueKey<int>(1),
                       )
                     : Container(
-                        key: ValueKey<int>(2),
+                        key: const ValueKey<int>(2),
                       ),
               ),
-              Gap(40),
+              const Gap(40),
               !isverified
                   ? TextButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        deleteUser();
                       },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -268,7 +281,7 @@ class _VerificationState extends ConsumerState<Verification> {
                           Text(
                             "Back to register page!",
                             style: TextStyle(
-                              color: const Color.fromARGB(146, 0, 0, 0),
+                              color: Color.fromARGB(146, 0, 0, 0),
                               decoration: TextDecoration.underline,
                             ),
                           ),

@@ -25,13 +25,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Gap(50),
-            Text(
+            const Text(
               "Forgot Password",
               textAlign: TextAlign.start,
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             const Gap(20),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width,
               child: TextFormField(
                 controller: ctrl.emailController,
@@ -64,7 +64,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 onPressed: () {
                   ctrl.changepassword(context);
                 },
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ),
             const Gap(20),
@@ -75,7 +75,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 onPressed: () {
                   widget.onPressed();
                 },
-                child: Text('Back to login'),
+                child: const Text('Back to login'),
               ),
             ),
           ],

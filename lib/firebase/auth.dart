@@ -64,7 +64,7 @@ class AuthClass {
 
   Future<UserCredential> signInWithGitHub() async {
     final githubProvider = OAuthProvider('github.com');
-
+   
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInWithPopup(githubProvider);
 
@@ -155,7 +155,18 @@ class AuthClass {
   Future<void> sendPasswordResetEmail(
       String email, BuildContext context, Function sd) async {
     try {
-      await _auth.sendPasswordResetEmail(email: email.trim());
+      await _auth.sendPasswordResetEmail(
+        email: email.trim(),
+        actionCodeSettings: ActionCodeSettings(
+          url: 'https://example.com/usermgmt',
+          handleCodeInApp: true,
+          iOSBundleId: 'com.example.ios',
+          androidPackageName: 'com.example.android',
+          androidInstallApp: true,
+          androidMinimumVersion: '12',
+        ),
+      );
+
       sd;
       snackbarCon(context, "Password reset email sent, check your email.");
     } on FirebaseAuthException catch (error) {

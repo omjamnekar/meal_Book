@@ -48,10 +48,9 @@ dependencies:
   firebase_storage: ^11.6.6
   cloud_firestore: ^4.15.5
   firebase_database: ^10.4.6
-  http: ^1.2.0
+ 
   flutter_riverpod: ^2.4.10
   shared_preferences: ^2.2.2
-
   
 # authentication google apple 
   firebase_auth: ^4.17.4
@@ -64,6 +63,11 @@ dependencies:
   shimmer: ^3.0.0
   popover: ^0.3.0
   another_flushbar: ^1.12.30
+  uuid: ^4.3.3
+  showcaseview: ^2.0.3
+  smooth_page_indicator: ^1.1.0
+
+
   
 
  
@@ -118,12 +122,16 @@ flutter:
     - assets/image/introPage/
     - assets/image/feature/
     - assets/image/productsALL/
+    - assets/image/productsALL/category/
     - assets/image/combos/
     - assets/image/boat/
     - assets/image/auth/
     - assets/image/register/
     - assets/logo/
     - assets/lottie/
+    - assets/lottie/darkMode/
+    - assets/logo/ 
+    - assets/logo/burgur.png
   # An image asset can refer to one or more resolution-specific "variants", see
   #   - images/a_dot_ham.jpeg
 

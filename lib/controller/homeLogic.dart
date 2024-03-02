@@ -1,9 +1,10 @@
 import 'package:MealBook/firebase/auth.dart';
 import 'package:MealBook/model/user.dart';
+
 import 'package:MealBook/pages/actuator.dart';
-import 'package:MealBook/pages/auth.dart';
+
 import 'package:MealBook/pages/loading.dart';
-import 'package:MealBook/pages/register/register.dart';
+import 'package:MealBook/pages/registration/register.dart';
 import 'package:MealBook/provider/registerState.dart';
 import 'package:MealBook/provider/userState.dart';
 import 'package:another_flushbar/flushbar.dart';
@@ -14,12 +15,13 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 class homeController extends GetxController {
   AuthClass _authenticate = AuthClass();
-  UserDataManager user = UserDataManager(
-    email: "abc@gmail.com",
-    name: "abc",
-    password: "12345568",
-    phone: "3456789",
-  );
+
+  // UserState userData = UserState();
+
+  Future<UserDataManager> adder() async =>
+      await UserState.getUser().then((value) {
+        return value;
+      });
 
   Future<void> signOut(WidgetRef ref, BuildContext context) async {
     print("Coming signout");
@@ -27,7 +29,7 @@ class homeController extends GetxController {
       title: "Sign Out",
       message: "Do you want to sign out?",
       mainButton: TextButton(
-        child: Text(
+        child: const Text(
           "Sign Out",
           style: TextStyle(color: Colors.white),
         ),
@@ -35,10 +37,10 @@ class homeController extends GetxController {
           Navigator.of(context).pop(true);
         },
       ),
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       flushbarStyle: FlushbarStyle.FLOATING,
-      margin: EdgeInsets.all(8),
-      borderRadius: BorderRadius.all(Radius.circular(8)),
+      margin: const EdgeInsets.all(8),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
       icon: Icon(
         Icons.info_outline,
         size: 28.0,
@@ -50,7 +52,8 @@ class homeController extends GetxController {
     if (confirmSignOut == true) {
       try {
         _authenticate.signOut(context);
-        ref.read(userProvider.notifier).deleteUser();
+
+        UserState().deleteUser();
         ref.read(booleanProvider.notifier).update(false);
 
         snackbarCon(context, "Sign out successful");
@@ -69,14 +72,24 @@ class homeController extends GetxController {
     }
   }
 
-  Future<void> getUserData(WidgetRef ref) async {
-    user = (await ref.read(userProvider.notifier).getUser()) ??
-        UserDataManager(
-          email: "abc@gmail.com",
-          name: "abc",
-          password: "12345568",
-          phone: "3456789",
-        );
+  // Future<List<String>> getUserData(WidgetRef ref) async {
+  //   user = await UserState.getUser();
+  //   return [user.name!, user.email!];
+  //   //nikename = extractFirstWord(user.name!);
+  //   //print(user.name);
+  // }
+
+  String extractFirstWord(String input) {
+    // Split the input string by spaces
+    List<String> words = input.split(' ');
+
+    // Take the first word (if any)
+    if (words.isNotEmpty) {
+      return words.first;
+    } else {
+      // If the input string is empty, return an empty string
+      return '';
+    }
   }
 
   snackbarCon(BuildContext context, String message) {

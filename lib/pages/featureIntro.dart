@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:MealBook/pages/homePage/homePage.dart';
+import 'package:MealBook/pages/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -185,7 +185,7 @@ class _FeatureStepState extends State<FeatureStep>
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
-            return HomePage(); // Replace 'NextPage' with the actual widget/page you want to navigate to
+            return MainPage(); // Replace 'NextPage' with the actual widget/page you want to navigate to
           },
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(0.0, 1.0);

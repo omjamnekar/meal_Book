@@ -1,5 +1,5 @@
-import 'package:MealBook/pages/homePage/homePage.dart';
-import 'package:MealBook/pages/register/register.dart';
+import 'package:MealBook/pages/mainPage.dart';
+import 'package:MealBook/pages/registration/register.dart';
 import 'package:MealBook/provider/actuatorState.dart';
 import 'package:MealBook/provider/registerState.dart';
 import 'package:flutter/material.dart';
@@ -49,14 +49,15 @@ class _ActuatorState extends ConsumerState<Actuator> {
     //  2)// locate to ragistration page
     print(booleanState.value.toString());
     return AnimatedSwitcher(
-      duration: Duration(seconds: 1), // Define the duration of the animation
+      duration:
+          const Duration(seconds: 1), // Define the duration of the animation
       transitionBuilder: (Widget child, Animation<double> animation) {
         return FadeTransition(child: child, opacity: animation);
       },
       child: booleanState.value
           ? _isLoading
               ? widget.child
-              : HomePage()
+              : MainPage()
           : ref.watch(imageListProvider).dataCame
               ? widget.Register
               : widget.child,

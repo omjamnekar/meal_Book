@@ -19,9 +19,7 @@ class ComboSlider extends StatelessWidget {
   final AsyncSnapshot<List<String>> snapshot;
   @override
   Widget build(BuildContext context) {
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    print(comboDataManager);
-    return Container(
+    return SizedBox(
       width: MediaQuery.sizeOf(context).width,
       height: 230,
       child: Swiper(
@@ -69,7 +67,7 @@ class ComboSlider extends StatelessWidget {
                   Positioned(
                     top: 20,
                     left: 15,
-                    child: Container(
+                    child: SizedBox(
                       width: 260,
                       child: Text(
                         "${(comboDataManager[0] as List)[index]["name"]}",
@@ -86,11 +84,11 @@ class ComboSlider extends StatelessWidget {
                   Positioned(
                     top: 90,
                     left: 20,
-                    child: Container(
+                    child: SizedBox(
                         width: 205,
                         height: 80,
                         child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: (comboDataManager[0] as List)[index]
                                   ["dish"]
                               .length,
