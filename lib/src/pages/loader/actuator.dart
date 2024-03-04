@@ -1,7 +1,7 @@
-import 'package:MealBook/pages/mainPage.dart';
-import 'package:MealBook/pages/registration/register.dart';
-import 'package:MealBook/provider/actuatorState.dart';
-import 'package:MealBook/provider/registerState.dart';
+import 'package:MealBook/src/pages/mainPage.dart';
+import 'package:MealBook/src/pages/registration/register.dart';
+import 'package:MealBook/respository/provider/actuatorState.dart';
+import 'package:MealBook/respository/provider/registerState.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,20 +1,22 @@
 import 'dart:core';
 
-import 'package:MealBook/Theme/theme_provider.dart';
+import 'package:MealBook/src/Theme/theme_preference.dart';
+import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/controller/homeLogic.dart';
 import 'package:MealBook/data.dart';
 import 'package:MealBook/firebase/image.dart';
-import 'package:MealBook/json/combo.dart';
-import 'package:MealBook/model/user.dart';
-import 'package:MealBook/pages/comCollection/combo.dart';
-import 'package:MealBook/pages/homePage/homeItem/comboSlider.dart';
-import 'package:MealBook/pages/homePage/footer.dart';
-import 'package:MealBook/pages/homePage/homeItem/menuItem.dart';
-import 'package:MealBook/pages/homePage/homePage.dart';
-import 'package:MealBook/pages/searchPage/search.dart';
-import 'package:MealBook/provider/actuatorState.dart';
-import 'package:MealBook/provider/userState.dart';
-import 'package:MealBook/showCase/showHome.dart';
+import 'package:MealBook/respository/json/combo.dart';
+import 'package:MealBook/respository/model/user.dart';
+import 'package:MealBook/src/pages/account/account.dart';
+import 'package:MealBook/src/pages/combo/combo.dart';
+import 'package:MealBook/src/pages/homePage/homeItem/comboSlider.dart';
+import 'package:MealBook/src/pages/homePage/footer.dart';
+import 'package:MealBook/src/pages/homePage/homeItem/menuItem.dart';
+import 'package:MealBook/src/pages/homePage/homePage.dart';
+import 'package:MealBook/src/pages/searchPage/search.dart';
+import 'package:MealBook/respository/provider/actuatorState.dart';
+import 'package:MealBook/respository/provider/userState.dart';
+import 'package:MealBook/src/showCase/showHome.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -62,11 +64,16 @@ class _HomePageState extends ConsumerState<MainPage> {
     }
   }
 
+  bool isDark = false;
+  setter() async {
+    isDark = await ThemePreferences.isDarkMode();
+  }
+
   @override
   void initState() {
     super.initState();
     snapshot();
-
+    setter();
     imageListModel = ref.read(imageListProvider.notifier).currentImageState;
   }
 
@@ -235,7 +242,7 @@ class _HomePageState extends ConsumerState<MainPage> {
                   comboDataManager: comboDataManager),
               ComboStore(),
               SearchPage(),
-              ComboStore(),
+              AccountManager(),
             ];
             return SafeArea(
                 child: PageView.builder(

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:MealBook/model/user.dart';
+import 'package:MealBook/respository/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 

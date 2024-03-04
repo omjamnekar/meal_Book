@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:MealBook/pages/featureIntro.dart';
+import 'package:MealBook/src/pages/loader/featureIntro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';

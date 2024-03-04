@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:MealBook/model/user.dart';
-import 'package:MealBook/pages/auth.dart';
-import 'package:MealBook/pages/featureIntro.dart';
-import 'package:MealBook/provider/registerState.dart';
-import 'package:MealBook/provider/userState.dart';
+import 'package:MealBook/respository/model/user.dart';
+import 'package:MealBook/src/pages/loader/auth.dart';
+import 'package:MealBook/src/pages/loader/featureIntro.dart';
+import 'package:MealBook/respository/provider/registerState.dart';
+import 'package:MealBook/respository/provider/userState.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../../firebase/auth.dart';
+import '../../../firebase/auth.dart';
 
 class Verification extends ConsumerStatefulWidget {
   Verification({super.key, required this.user});

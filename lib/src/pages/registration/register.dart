@@ -1,7 +1,7 @@
 import 'package:MealBook/controller/authLogic.dart';
-import 'package:MealBook/model/user.dart';
-import 'package:MealBook/pages/registration/forgotPassword.dart';
-import 'package:MealBook/pages/registration/verification.dart';
+import 'package:MealBook/respository/model/user.dart';
+import 'package:MealBook/src/pages/registration/forgotPassword.dart';
+import 'package:MealBook/src/pages/registration/verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';

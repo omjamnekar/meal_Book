@@ -1,5 +1,5 @@
-import 'package:MealBook/json/combo.dart';
-import 'package:MealBook/provider/actuatorState.dart';
+import 'package:MealBook/respository/json/combo.dart';
+import 'package:MealBook/respository/provider/actuatorState.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

@@ -1,5 +1,5 @@
-import 'package:MealBook/model/user.dart';
-import 'package:MealBook/provider/userState.dart';
+import 'package:MealBook/respository/model/user.dart';
+import 'package:MealBook/respository/provider/userState.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

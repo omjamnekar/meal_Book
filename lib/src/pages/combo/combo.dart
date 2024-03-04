@@ -1,5 +1,6 @@
-import 'package:MealBook/pages/homePage/homeItem/comboSlider.dart';
-import 'package:MealBook/pages/homePage/loaderAnimation.dart';
+import 'package:MealBook/src/Theme/theme_preference.dart';
+import 'package:MealBook/src/pages/homePage/homeItem/comboSlider.dart';
+import 'package:MealBook/src/pages/homePage/loaderAnimation.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -65,22 +66,22 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
     "Dish",
   ];
   bool isDarkMode = false;
+  themSetter() async {
+    isDarkMode = await ThemePreferences.isDarkMode();
+  }
+
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    // TODO: implement initState
+    super.initState();
 
-    // Access inherited widget (e.g., MediaQuery) here
-    final brightness = MediaQuery.of(context).platformBrightness;
-
-    // Update state based on inherited widget
-    setState(() {
-      isDarkMode = brightness == Brightness.dark;
-    });
+    themSetter();
   }
 
   int selectedCategoryIndex = 0;
   @override
   Widget build(BuildContext context) {
+    themSetter();
     Color theme = Theme.of(context).colorScheme.primaryContainer;
 
     Color theme2 = Theme.of(context).colorScheme.background;

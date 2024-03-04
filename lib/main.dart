@@ -1,10 +1,10 @@
-import 'package:MealBook/Theme/theme_provider.dart';
+import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/controller/authLogic.dart';
 
 import 'package:MealBook/firebase_options.dart';
-import 'package:MealBook/pages/actuator.dart';
-import 'package:MealBook/pages/loading.dart';
-import 'package:MealBook/pages/registration/register.dart';
+import 'package:MealBook/src/pages/loader/actuator.dart';
+import 'package:MealBook/src/pages/loader/loading.dart';
+import 'package:MealBook/src/pages/registration/register.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';

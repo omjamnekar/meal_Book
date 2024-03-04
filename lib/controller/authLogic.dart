@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:MealBook/firebase/auth.dart';
-import 'package:MealBook/model/user.dart';
-import 'package:MealBook/pages/featureIntro.dart';
+import 'package:MealBook/respository/model/user.dart';
+import 'package:MealBook/src/pages/loader/featureIntro.dart';
 
-import 'package:MealBook/pages/registration/verification.dart';
-import 'package:MealBook/provider/registerState.dart';
-import 'package:MealBook/provider/userState.dart';
+import 'package:MealBook/src/pages/registration/verification.dart';
+import 'package:MealBook/respository/provider/registerState.dart';
+import 'package:MealBook/respository/provider/userState.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
