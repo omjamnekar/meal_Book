@@ -66,6 +66,7 @@ dependencies:
   uuid: ^4.3.3
   showcaseview: ^2.0.3
   smooth_page_indicator: ^1.1.0
+  syncfusion_flutter_sliders: ^24.2.9
 
 
 

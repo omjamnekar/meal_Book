@@ -1,3 +1,5 @@
+import 'package:MealBook/respository/model/filter.dart';
+import 'package:MealBook/src/pages/searchPage/filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -15,12 +17,12 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   bool isFrontFilter = false;
   String _selectedItem = 'All';
   bool isSearch = false;
+  FilterManager? filter;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
           width: MediaQuery.sizeOf(context).width,
-          height: MediaQuery.sizeOf(context).height,
           child: Column(
             children: [
               Container(
@@ -64,17 +66,34 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                           ),
                           Gap(10),
                           // Filter
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer
-                                  .withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(10),
+                          GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return FilterDialog(callback: (value) {
+                                    setState(() {
+                                      filter = value;
+                                    });
+
+                                    print(filter!.maxPrice);
+                                    print(filter!.minPrice);
+                                  });
+                                },
+                              );
+                            },
+                            child: Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer
+                                    .withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(Icons.dashboard_outlined),
                             ),
-                            child: Icon(Icons.dashboard_outlined),
                           ),
                         ],
                       ),

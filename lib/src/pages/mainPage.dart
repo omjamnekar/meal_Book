@@ -3,37 +3,28 @@ import 'dart:core';
 import 'package:MealBook/src/Theme/theme_preference.dart';
 import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/controller/homeLogic.dart';
-import 'package:MealBook/data.dart';
 import 'package:MealBook/firebase/image.dart';
-import 'package:MealBook/respository/json/combo.dart';
 import 'package:MealBook/respository/model/user.dart';
 import 'package:MealBook/src/pages/account/account.dart';
 import 'package:MealBook/src/pages/combo/combo.dart';
-import 'package:MealBook/src/pages/homePage/homeItem/comboSlider.dart';
+
 import 'package:MealBook/src/pages/homePage/footer.dart';
-import 'package:MealBook/src/pages/homePage/homeItem/menuItem.dart';
 import 'package:MealBook/src/pages/homePage/homePage.dart';
 import 'package:MealBook/src/pages/searchPage/search.dart';
 import 'package:MealBook/respository/provider/actuatorState.dart';
 import 'package:MealBook/respository/provider/userState.dart';
-import 'package:MealBook/src/showCase/showHome.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:http/http.dart' as http;
-import 'package:popover/popover.dart';
 
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:showcaseview/showcaseview.dart';
 import 'package:uuid/uuid.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -99,7 +90,7 @@ class _HomePageState extends ConsumerState<MainPage> {
         actions: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
-            width: MediaQuery.sizeOf(context).width,
+            width: MediaQuery.sizeOf(context).width / 1.04,
             height: 50,
             child: Row(
               children: [
@@ -133,60 +124,7 @@ class _HomePageState extends ConsumerState<MainPage> {
                         surfaceTintColor:
                             Theme.of(context).colorScheme.tertiaryContainer,
                         itemBuilder: (BuildContext bc) {
-                          return [
-                            PopupMenuItem(
-                              value: '/contact',
-                              child: Container(
-                                width: 200,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        width: 140,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "${user.name ?? "UserName"}",
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: 20,
-                                                  height: 1,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSecondary,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Gap(5),
-                                            Text(
-                                              "${user.email ?? "abc@gmail.com"}",
-                                              maxLines: 1,
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: 10,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSecondary,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ],
-                                        )),
-                                    Container(
-                                        width: 60,
-                                        child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            child: Image.network(
-                                              user.image ??
-                                                  "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-                                              width: 60,
-                                              height: 60,
-                                            ))),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ];
+                          return [AccountPop(context)];
                         },
                       ),
                     ],
@@ -286,6 +224,54 @@ class _HomePageState extends ConsumerState<MainPage> {
               height: 50,
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  PopupMenuItem<String> AccountPop(BuildContext context) {
+    return PopupMenuItem(
+      value: '/contact',
+      child: Container(
+        width: 200,
+        child: Row(
+          children: [
+            Container(
+                width: 140,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${user.name ?? "UserName"}",
+                      style: GoogleFonts.poppins(
+                          fontSize: 20,
+                          height: 1,
+                          color: Theme.of(context).colorScheme.onSecondary,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Gap(5),
+                    Text(
+                      "${user.email ?? "abc@gmail.com"}",
+                      maxLines: 1,
+                      style: GoogleFonts.poppins(
+                          fontSize: 10,
+                          color: Theme.of(context).colorScheme.onSecondary,
+                          fontWeight: FontWeight.w300),
+                    ),
+                  ],
+                )),
+            Container(
+                width: 60,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Image.network(
+                      user.image ??
+                          "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+                      width: 60,
+                      height: 60,
+                    ))),
+          ],
         ),
       ),
     );
