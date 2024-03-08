@@ -84,6 +84,19 @@ class _HomePageState extends ConsumerState<MainPage> {
   final List<String> imageUrls = [];
   @override
   Widget build(BuildContext context) {
+    List<Widget> list = [
+      HomePageWidget(
+          user: user,
+          ref: ref,
+          storage: storage,
+          imageListModel: imageListModel,
+          imageUrls: imageUrls,
+          comboDataManager: comboDataManager),
+      ComboStore(),
+      SearchPage(),
+      AccountManager(),
+    ];
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -166,47 +179,30 @@ class _HomePageState extends ConsumerState<MainPage> {
           ),
         ],
       ),
-      body: GetBuilder<homeController>(
-          init: homeController(),
-          builder: (ctrl) {
-            List<Widget> list = [
-              HomePageWidget(
-                  ctrl: ctrl,
-                  user: user,
-                  ref: ref,
-                  storage: storage,
-                  imageListModel: imageListModel,
-                  imageUrls: imageUrls,
-                  comboDataManager: comboDataManager),
-              ComboStore(),
-              SearchPage(),
-              AccountManager(),
-            ];
-            return SafeArea(
-                child: PageView.builder(
-                    onPageChanged: (int page) {
-                      print(page);
-                      setState(() {
-                        indexPage = page;
-                      });
-                    },
-                    scrollBehavior: ScrollBehavior(),
-                    controller: pageController,
-                    itemCount: list.length,
-                    itemBuilder: (context, indexPAGE) {
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          await Future.delayed(const Duration(seconds: 1));
-                          setState(() {
-                            imageListModel = ref
-                                .read(imageListProvider.notifier)
-                                .currentImageState;
-                          });
-                        },
-                        child: list[indexPAGE],
-                      );
-                    }));
-          }),
+      body: SafeArea(
+          child: PageView.builder(
+              onPageChanged: (int page) {
+                print(page);
+                setState(() {
+                  indexPage = page;
+                });
+              },
+              scrollBehavior: ScrollBehavior(),
+              controller: pageController,
+              itemCount: list.length,
+              itemBuilder: (context, indexPAGE) {
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    await Future.delayed(const Duration(seconds: 1));
+                    setState(() {
+                      imageListModel = ref
+                          .read(imageListProvider.notifier)
+                          .currentImageState;
+                    });
+                  },
+                  child: list[indexPAGE],
+                );
+              })),
       bottomNavigationBar: Footer(
           indexPage: indexPage,
           onTabTapped: (index) {

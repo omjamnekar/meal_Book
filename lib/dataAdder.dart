@@ -18,7 +18,7 @@ class _CartState extends State<Cart> {
   String displayText = 'Results go here!';
 
   snapshot() async {
-    await ref.child('comboData/').set(comboData);
+    await ref.child('diet/').set(diet);
     print("object");
     // productList = [];
     // if (snapshot.exists) {

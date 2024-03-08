@@ -1,3 +1,5 @@
+import 'package:MealBook/dataAdder.dart';
+import 'package:MealBook/demo.dart';
 import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/controller/authLogic.dart';
 
@@ -64,9 +66,7 @@ class _MyAppState extends State<MyApp> {
               Register: RegisterPage(),
             ),
 
-            //  home: PopoverExample(),
-            //  home: Cdeom(),
-            //  home: Verification(),
+            // home: Cart(),
           );
         },
       ),
