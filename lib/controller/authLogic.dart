@@ -7,7 +7,6 @@ import 'package:MealBook/src/pages/loader/featureIntro.dart';
 import 'package:MealBook/src/pages/registration/verification.dart';
 import 'package:MealBook/respository/provider/registerState.dart';
 import 'package:MealBook/respository/provider/userState.dart';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {

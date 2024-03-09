@@ -72,11 +72,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   Padding ragister(BuildContext context, AuthController ctrl) {
     var styleFrom = ElevatedButton.styleFrom(
+      foregroundColor: const Color.fromARGB(255, 0, 0, 0),
       padding: const EdgeInsets.symmetric(
         vertical: 16,
       ),
-      primary: const Color.fromARGB(255, 255, 255, 255),
-      onPrimary: const Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),

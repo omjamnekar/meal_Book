@@ -25,15 +25,6 @@ class SubRecommed extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.black
-                //         .withOpacity(0.2), // Shadow color
-                //     spreadRadius: 3, // Spread radius
-                //     blurRadius: 10, // Blur radius
-                //     offset: Offset(0, 3), // Offset in x and y
-                //   ),
-                // ],
                 border: Border.all(
                     width: 1, color: const Color.fromARGB(137, 39, 39, 39)),
                 borderRadius: BorderRadius.circular(10),

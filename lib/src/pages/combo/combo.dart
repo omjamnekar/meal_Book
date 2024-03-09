@@ -1,16 +1,11 @@
-import 'dart:async';
-
-import 'package:MealBook/controller/searchLogic.dart';
+import 'package:MealBook/controller/comboLogic.dart';
 import 'package:MealBook/src/Theme/theme_preference.dart';
-import 'package:MealBook/src/pages/homePage/homeItem/comboSlider.dart';
 import 'package:MealBook/src/components/loaderAnimation.dart';
-import 'package:card_swiper/card_swiper.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:MealBook/src/pages/combo/recommends.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -26,6 +21,7 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
   int navigatorIndex = 0;
   int isfoodTypeSelect = 0;
 
+  String _selectedFoodCategory = "all";
   PageController _controller = PageController();
   // List<String> catagory = [
   //   "Pizza",
@@ -88,12 +84,13 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
   @override
   Widget build(BuildContext context) {
     themSetter();
+
     Color theme = Theme.of(context).colorScheme.primaryContainer;
 
     Color theme2 = Theme.of(context).colorScheme.background;
 
-    return GetBuilder<SearchLogic>(
-        init: SearchLogic(),
+    return GetBuilder<ComboLogic>(
+        init: ComboLogic(),
         builder: (ctrl) {
           ctrl.fetchvariety();
           return SingleChildScrollView(
@@ -125,7 +122,6 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                               scrollDirection: Axis.horizontal,
                               itemCount: vername.data!.length,
                               itemBuilder: (context, index) {
-                                print(vername.data!.length);
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
@@ -174,8 +170,8 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                 Gap(24),
 
                 // category detail swiper
-                FutureBuilder(
-                    future: ctrl.fetchvarietyData(ctrl.selectVariety),
+                FutureBuilder<List<dynamic>>(
+                    future: ctrl.fetchvarietyData(ctrl.selectVariety ?? ""),
                     builder: (context, AsyncSnapshot<List> verData) {
                       if (verData.connectionState == ConnectionState.waiting) {
                         return Column(
@@ -201,134 +197,176 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                               Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: 200,
-                                child: PageView.builder(
-                                  controller: _controller,
-                                  itemCount: verData.data!.length,
-                                  itemBuilder: (context, index) {
-                                    // print(" datta sdd ${verData.data!}");
-                                    return Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 200,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              "assets/image/productsALL/category/maisure_dosa.jpg"),
-                                          colorFilter: ColorFilter.mode(
-                                            Colors.black.withOpacity(
-                                                0.5), // Adjust the opacity here
-                                            BlendMode.srcATop,
+                                child: FutureBuilder(
+                                    future: ctrl.fetchImage(
+                                        (ctrl.selectVariety).isEmpty
+                                            ? "chat-kamal"
+                                            : ctrl.selectVariety
+                                                .toLowerCase()
+                                                .replaceAll(' ', ''),
+                                        verData.data!),
+                                    builder: (context,
+                                        AsyncSnapshot<List<dynamic>> imageUrl) {
+                                      if (imageUrl.connectionState ==
+                                              ConnectionState.waiting &&
+                                          !imageUrl.hasData) {
+                                        return AnimatedSwitcher(
+                                          duration: Duration(milliseconds: 500),
+                                          child: LoadinAnimation2(
+                                            mainFrame: 200,
+                                            scale: 0.5,
+                                            viewportFraction: 0.9,
                                           ),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Container(
-                                        padding: const EdgeInsets.only(
-                                            left: 15, bottom: 15),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Container(
-                                                  margin: const EdgeInsets.only(
-                                                      right: 17, top: 17),
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.stars_rounded,
-                                                        color: Colors.white,
-                                                        size: 18,
-                                                      ),
-                                                      Text(
-                                                        "${verData.data![index]["OVERALL_RATING"]}",
-                                                        style: TextStyle(
+                                        );
+                                      }
+
+                                      return PageView.builder(
+                                          controller: _controller,
+                                          itemCount: imageUrl.data!.length,
+                                          itemBuilder: (context, index) {
+                                            return Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 10, right: 10),
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              height: 200,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      "${imageUrl.data![index]}"),
+                                                  colorFilter: ColorFilter.mode(
+                                                    Colors.black.withOpacity(
+                                                        0.5), // Adjust the opacity here
+                                                    BlendMode.srcATop,
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              child: Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15, bottom: 15),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 17,
+                                                                  top: 17),
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons
+                                                                    .stars_rounded,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 18,
+                                                              ),
+                                                              Text(
+                                                                "${verData.data![index]["OVERALL_RATING"]}",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 15,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Spacer(),
+                                                    Gap(20),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2,
+                                                      child: Text(
+                                                        "${verData.data![index]["ITEMS"]}",
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 2,
+                                                        style:
+                                                            GoogleFonts.poppins(
                                                           color: Colors.white,
-                                                          fontSize: 15,
+                                                          fontSize: 30,
+                                                          wordSpacing:
+                                                              0.01, // word spacing
+                                                          fontWeight:
+                                                              FontWeight.w900,
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Spacer(),
-                                            Gap(20),
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2,
-                                              child: Text(
-                                                "${verData.data![index]["ITEMS"]}",
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
-                                                style: GoogleFonts.poppins(
-                                                  color: Colors.white,
-                                                  fontSize: 30,
-                                                  wordSpacing:
-                                                      0.01, // word spacing
-                                                  fontWeight: FontWeight.w900,
+                                                    ),
+                                                    Gap(10),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          width: 300,
+                                                          child: Text(
+                                                            "${verData.data![index]["DESCRIPTION"]}",
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 1,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 12,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Spacer(),
+                                                        Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 10,
+                                                                  right: 10,
+                                                                  top: 5,
+                                                                  bottom: 5),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          ),
+                                                          child: Text(
+                                                            "Order Now",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 12,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Gap(10),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ),
-                                            Gap(10),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Container(
-                                                  width: 300,
-                                                  child: Text(
-                                                    "${verData.data![index]["DESCRIPTION"]}",
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Spacer(),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10,
-                                                          right: 10,
-                                                          top: 5,
-                                                          bottom: 5),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: Text(
-                                                    "Order Now",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Gap(10),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                            );
+                                          });
+                                    }),
                               ),
                               Gap(20),
 
@@ -434,6 +472,7 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                       }),
                 ),
 
+// recommendation section
                 Gap(10),
                 Container(
                   width: MediaQuery.of(context).size.width,
@@ -471,6 +510,7 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                   ),
                 ),
                 Gap(10),
+
                 Container(
                   width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.only(left: 20, right: 20),
@@ -485,7 +525,7 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                         child: TextButton(
                           style: isfoodTypeSelect == index
                               ? TextButton.styleFrom(
-                                  primary:
+                                  foregroundColor:
                                       Theme.of(context).colorScheme.secondary,
                                   backgroundColor: Theme.of(context)
                                       .colorScheme
@@ -498,6 +538,7 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                               : TextButton.styleFrom(),
                           onPressed: () {
                             setState(() {
+                              _selectedFoodCategory = foodType[index];
                               isfoodTypeSelect = index;
                             });
                           },
@@ -515,177 +556,9 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                   ),
                 ),
 
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 179 * 20,
-                  child: ListView.builder(
-                    itemCount: 20,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin:
-                            const EdgeInsets.only(left: 20, right: 20, top: 20),
-                        width: MediaQuery.of(context).size.width,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: Colors.white10,
-                          border: Border.all(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .tertiary
-                                  .withOpacity(0.2)),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 120,
-                              height: 120,
-                              margin: const EdgeInsets.only(left: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        "assets/image/productsALL/category/maisure_dosa.jpg"),
-                                    fit: BoxFit.cover),
-                              ),
-                            ),
-                            //Details
-                            Container(
-                              margin: const EdgeInsets.only(
-                                left: 15,
-                                top: 13,
-                                bottom: 13,
-                              ),
-                              width: 230,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Maisur Dosa",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "Mysore masala dosa is a spicy dosa made with a batter that includes onion, red chili, tomato paste, and coconut.",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .tertiary),
-                                  ),
-                                  Gap(4),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "50.Rs",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                      ),
-                                      Text(
-                                        " / 1 Piece",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                      ),
-                                      Text(
-                                        " | 101 likes",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSecondary),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    width: 230,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary
-                                        .withOpacity(0.1),
-                                    height: 1,
-                                    margin: const EdgeInsets.only(
-                                        top: 3, bottom: 1),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          TextButton(
-                                              style: TextButton.styleFrom(
-                                                primary: Theme.of(context)
-                                                    .colorScheme
-                                                    .tertiaryContainer,
-                                                backgroundColor:
-                                                    Theme.of(context)
-                                                        .colorScheme
-                                                        .tertiary,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                              ),
-                                              onPressed: () {},
-                                              child: Text(
-                                                "Order",
-                                                style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .background),
-                                              )),
-                                          Gap(6),
-                                          TextButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                "Add",
-                                                style: GoogleFonts.poppins(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .tertiary,
-                                                ),
-                                              )),
-                                        ],
-                                      ),
-                                      Spacer(),
-                                      Icon(Icons.star,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary
-                                              .withOpacity(0.5)),
-                                      Gap(2),
-                                      Text("4.8"),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                OptionBuilder(
+                    ctrl: ctrl, selectedFoodCategory: _selectedFoodCategory),
+
                 Container(
                     child: Text(
                   "see more ->",

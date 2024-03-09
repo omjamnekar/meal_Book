@@ -100,6 +100,7 @@ class _HomePageState extends ConsumerState<MainPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
