@@ -269,23 +269,17 @@ class OptionBuilder extends StatelessWidget {
               ),
             );
           } else {
-            return AnimatedContainer(
-              duration: Duration(seconds: 1),
-              width: MediaQuery.of(context).size.width / 1.4,
-              height: 200 * 10,
-              margin: EdgeInsets.only(top: 20),
-              child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      width: MediaQuery.of(context).size.width,
-                      height: 400,
-                      color: Theme.of(context).focusColor,
-                    );
-                  }),
-            );
+            return ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    width: MediaQuery.of(context).size.width,
+                    height: 400,
+                    color: Theme.of(context).focusColor,
+                  );
+                });
           }
         });
   }

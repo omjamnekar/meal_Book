@@ -1,5 +1,3 @@
-import 'package:MealBook/dataAdder.dart';
-import 'package:MealBook/display.dart';
 import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/controller/authLogic.dart';
 

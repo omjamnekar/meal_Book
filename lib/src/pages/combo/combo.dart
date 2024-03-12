@@ -111,7 +111,7 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                                 ConnectionState.waiting &&
                             !vername.hasData) {
                           return Container(
-                            height: 40,
+                            height: 70,
                           );
                         } else if (vername.connectionState ==
                                 ConnectionState.done &&
@@ -157,11 +157,8 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                             ),
                           );
                         } else {
-                          return AnimatedSwitcher(
-                            duration: Duration(milliseconds: 500),
-                            child: Container(
-                              height: 40,
-                            ),
+                          return Container(
+                            height: 70,
                           );
                         }
                       }),
@@ -176,13 +173,10 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                       if (verData.connectionState == ConnectionState.waiting) {
                         return Column(
                           children: [
-                            AnimatedSwitcher(
-                              duration: Duration(milliseconds: 500),
-                              child: LoadinAnimation2(
-                                mainFrame: 200,
-                                scale: 0.5,
-                                viewportFraction: 0.9,
-                              ),
+                            LoadinAnimation2(
+                              mainFrame: 200,
+                              scale: 0.5,
+                              viewportFraction: 0.9,
                             ),
                             Gap(20),
                           ],
@@ -218,154 +212,173 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                                             viewportFraction: 0.9,
                                           ),
                                         );
-                                      }
+                                      } else if (imageUrl.connectionState ==
+                                              ConnectionState.done &&
+                                          imageUrl.hasData) {
+                                        return PageView.builder(
+                                            controller: _controller,
+                                            itemCount: imageUrl.data!.length,
+                                            itemBuilder: (context, index) {
+                                              print(index);
 
-                                      return PageView.builder(
-                                          controller: _controller,
-                                          itemCount: imageUrl.data!.length,
-                                          itemBuilder: (context, index) {
-                                            return Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 10, right: 10),
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              height: 200,
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: NetworkImage(
-                                                      "${imageUrl.data![index]}"),
-                                                  colorFilter: ColorFilter.mode(
-                                                    Colors.black.withOpacity(
-                                                        0.5), // Adjust the opacity here
-                                                    BlendMode.srcATop,
+                                              return Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: 200,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        "${imageUrl.data![index]}"),
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                      Colors.black.withOpacity(
+                                                          0.5), // Adjust the opacity here
+                                                      BlendMode.srcATop,
+                                                    ),
+                                                    fit: BoxFit.cover,
                                                   ),
-                                                  fit: BoxFit.cover,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                              child: Container(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15, bottom: 15),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 17,
-                                                                  top: 17),
-                                                          child: Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons
-                                                                    .stars_rounded,
-                                                                color: Colors
-                                                                    .white,
-                                                                size: 18,
-                                                              ),
-                                                              Text(
-                                                                "${verData.data![index]["OVERALL_RATING"]}",
-                                                                style:
-                                                                    TextStyle(
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 15, bottom: 15),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    right: 17,
+                                                                    top: 17),
+                                                            child: Row(
+                                                              children: [
+                                                                Icon(
+                                                                  Icons
+                                                                      .stars_rounded,
                                                                   color: Colors
                                                                       .white,
-                                                                  fontSize: 15,
+                                                                  size: 18,
                                                                 ),
-                                                              ),
-                                                            ],
+                                                                Text(
+                                                                  "${verData.data![index]["OVERALL_RATING"]}",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        15,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Spacer(),
-                                                    Gap(20),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              2,
-                                                      child: Text(
-                                                        "${verData.data![index]["ITEMS"]}",
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        maxLines: 2,
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          color: Colors.white,
-                                                          fontSize: 30,
-                                                          wordSpacing:
-                                                              0.01, // word spacing
-                                                          fontWeight:
-                                                              FontWeight.w900,
+                                                        ],
+                                                      ),
+                                                      Spacer(),
+                                                      Gap(20),
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width /
+                                                            2,
+                                                        child: Text(
+                                                          "${verData.data![index]["ITEMS"]}",
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 2,
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                            color: Colors.white,
+                                                            fontSize: 30,
+                                                            wordSpacing:
+                                                                0.01, // word spacing
+                                                            fontWeight:
+                                                                FontWeight.w900,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Gap(10),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          width: 300,
-                                                          child: Text(
-                                                            "${verData.data![index]["DESCRIPTION"]}",
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            maxLines: 1,
-                                                            style: TextStyle(
+                                                      Gap(10),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Container(
+                                                            width: 300,
+                                                            child: Text(
+                                                              "${verData.data![index]["DESCRIPTION"]}",
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              maxLines: 1,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Spacer(),
+                                                          Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 10,
+                                                                    right: 10,
+                                                                    top: 5,
+                                                                    bottom: 5),
+                                                            decoration:
+                                                                BoxDecoration(
                                                               color:
                                                                   Colors.white,
-                                                              fontSize: 12,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                            ),
+                                                            child: Text(
+                                                              "Order Now",
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 12,
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        Spacer(),
-                                                        Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 10,
-                                                                  right: 10,
-                                                                  top: 5,
-                                                                  bottom: 5),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.white,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                          ),
-                                                          child: Text(
-                                                            "Order Now",
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 12,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Gap(10),
-                                                      ],
-                                                    ),
-                                                  ],
+                                                          Gap(10),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          });
+                                              );
+                                            });
+                                      } else {
+                                        return AnimatedSwitcher(
+                                          duration: Duration(milliseconds: 500),
+                                          child: LoadinAnimation2(
+                                            mainFrame: 200,
+                                            scale: 0.5,
+                                            viewportFraction: 0.9,
+                                          ),
+                                        );
+                                      }
                                     }),
                               ),
                               Gap(20),
@@ -391,13 +404,10 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                       } else {
                         return Column(
                           children: [
-                            AnimatedSwitcher(
-                              duration: Duration(milliseconds: 500),
-                              child: LoadinAnimation2(
-                                mainFrame: 200,
-                                scale: 0.5,
-                                viewportFraction: 0.9,
-                              ),
+                            LoadinAnimation2(
+                              mainFrame: 200,
+                              scale: 0.5,
+                              viewportFraction: 0.9,
                             ),
                             Gap(20),
                           ],

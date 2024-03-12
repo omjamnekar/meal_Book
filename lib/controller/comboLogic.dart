@@ -1,3 +1,4 @@
+import 'package:MealBook/respository/provider/imageProvider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -22,11 +23,11 @@ class ComboLogic extends GetxController {
 
   Future<List<dynamic>> fetchImage(
       String variety, List<dynamic> verData) async {
-    imageUrlCombo.clear();
     try {
       Reference storageReference =
           FirebaseStorage.instance.ref().child("products/${variety}/");
       ListResult result = await storageReference.listAll();
+      imageUrlCombo.clear();
 
       for (var element in verData) {
         String imageName = element["IMAGE"];
@@ -127,13 +128,15 @@ class ComboLogic extends GetxController {
   //         await ImageDataProvider.fetchImagePaths(category, foodname);
 
   //     // Check if there are any image paths available
+  //     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
   //     if (imagePaths.isNotEmpty) {
-  //       print("${imagePaths.first}");
+  //       print("Image Path: ${imagePaths.first}");
   //       // If paths are available, return the first one (or any logic based on your requirements)
   //       return imagePaths.first;
   //     }
 
   //     // If no paths available, handle accordingly (e.g., return a default URL or an empty string)
+  //     print("No Image Paths Available");
   //     return "";
   //   } catch (e, stackTrace) {
   //     print("Error getting image URL: $e");
