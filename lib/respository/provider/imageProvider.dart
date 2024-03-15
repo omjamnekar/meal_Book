@@ -26,7 +26,7 @@ class ImageDataProvider {
     // Check if image paths are stored in SharedPreferences
     List<String> cachedImagePaths =
         await getImagePathsFromSharedPreferences(category, foodname);
-    print(cachedImagePaths);
+
     if (cachedImagePaths.isNotEmpty) {
       // If paths are available in SharedPreferences, return them
       return cachedImagePaths;

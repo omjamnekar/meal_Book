@@ -4,10 +4,12 @@ import 'package:MealBook/firebase/image.dart';
 import 'package:MealBook/respository/json/combo.dart';
 import 'package:MealBook/respository/model/user.dart';
 import 'package:MealBook/src/pages/homePage/homeItem/comboSlider.dart';
+import 'package:MealBook/src/pages/homePage/homeItem/general.dart';
 import 'package:MealBook/src/pages/homePage/homeItem/recommend.dart';
 import 'package:MealBook/src/components/loaderAnimation.dart';
 import 'package:MealBook/src/pages/mainPage.dart';
 import 'package:MealBook/respository/provider/actuatorState.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -15,7 +17,7 @@ import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class HomePageWidget extends StatelessWidget {
+class HomePageWidget extends StatefulWidget {
   const HomePageWidget({
     super.key,
     required this.user,
@@ -34,6 +36,12 @@ class HomePageWidget extends StatelessWidget {
   final List<Object?> comboDataManager;
 
   @override
+  State<HomePageWidget> createState() => _HomePageWidgetState();
+}
+
+class _HomePageWidgetState extends State<HomePageWidget> {
+  bool isRecommend = true;
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<homeController>(
         init: homeController(),
@@ -42,19 +50,18 @@ class HomePageWidget extends StatelessWidget {
             child: Column(
               children: [
                 FutureBuilder(
-                    future: storage.downloadURLs(),
+                    future: widget.storage.downloadURLs(),
                     builder: (BuildContext builer,
                         AsyncSnapshot<List<String>> snapshot) {
                       if (snapshot.connectionState == ConnectionState.done &&
                           snapshot.hasData) {
                         /// return Container();
-                        print("object1");
-                        //print(comboDataManager);
+
                         return ComboSlider(
-                          imageListModel: imageListModel,
-                          imageUrls: imageUrls,
+                          imageListModel: widget.imageListModel,
+                          imageUrls: widget.imageUrls,
                           snapshot: snapshot,
-                          comboDataManager: comboDataManager,
+                          comboDataManager: widget.comboDataManager,
                         );
                         // return Container();
                       }
@@ -80,7 +87,7 @@ class HomePageWidget extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "${ctrl.extractFirstWord(user.name ?? "Username")}, What do plan for eating?",
+                      "${ctrl.extractFirstWord(widget.user.name ?? "Username")}, What do plan for eating?",
                       style: GoogleFonts.poppins(
                           letterSpacing: 0.7,
                           color: Theme.of(context).colorScheme.secondary,
@@ -149,40 +156,76 @@ class HomePageWidget extends StatelessWidget {
                   width: MediaQuery.sizeOf(context).width,
                   child: Row(
                     children: [
-                      ElevatedButton(
-                          onPressed: () {}, child: Text("Recommended")),
+                      isRecommend
+                          ? ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  isRecommend = true;
+                                });
+                              },
+                              child: Text("Recommended"))
+                          : TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  isRecommend = true;
+                                });
+                              },
+                              child: Text("Recommended"),
+                            ),
                       Gap(10),
-                      TextButton(onPressed: () {}, child: Text("General")),
+                      isRecommend
+                          ? TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  isRecommend = false;
+                                });
+                              },
+                              child: Text("General"),
+                            )
+                          : ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  isRecommend = false;
+                                });
+                              },
+                              child: Text("General")),
                     ],
                   ),
                 ),
                 Gap(20),
-                FutureBuilder(
-                    future: storage.downloadURLs2(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<String>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done &&
-                          snapshot.hasData) {
-                        return SubRecommed(
-                          snapshot: snapshot,
-                        );
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting ||
-                          !snapshot.hasData) {
-                        return LoadinAnimation(
-                          mainFrame: 200,
-                          scale: 0.5,
-                          viewportFraction: 0.4,
-                        );
-                      }
+                isRecommend
+                    ? FutureBuilder(
+                        future: widget.storage.downloadURLs2(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<String>> snapshot) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              snapshot.hasData) {
+                            return SubRecommed(
+                              snapshot: snapshot,
+                            );
+                          }
+                          if (snapshot.connectionState ==
+                                  ConnectionState.waiting ||
+                              !snapshot.hasData) {
+                            return LoadinAnimation(
+                              mainFrame: 200,
+                              scale: 0.5,
+                              viewportFraction: 0.4,
+                            );
+                          }
 
-                      if (snapshot.connectionState == ConnectionState.waiting ||
-                          !snapshot.hasData) {
-                        return const CircularProgressIndicator();
-                      }
+                          if (snapshot.connectionState ==
+                                  ConnectionState.waiting ||
+                              !snapshot.hasData) {
+                            return const CircularProgressIndicator();
+                          }
 
-                      return const CircularProgressIndicator();
-                    }),
+                          return const CircularProgressIndicator();
+                        })
+                    : GeneralItem(
+                        cntr: ctrl,
+                      ),
                 Gap(30),
               ],
             ),

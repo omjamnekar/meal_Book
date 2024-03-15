@@ -1,6 +1,7 @@
 import 'package:MealBook/respository/model/filter.dart';
 import 'package:MealBook/src/pages/searchPage/category.dart';
 import 'package:MealBook/src/pages/searchPage/filter.dart';
+import 'package:MealBook/src/pages/searchPage/foodMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -77,9 +78,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                     setState(() {
                                       filter = value;
                                     });
-
-                                    print(filter!.maxPrice);
-                                    print(filter!.minPrice);
                                   });
                                 },
                               );
@@ -252,159 +250,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   ?
                   // search Content or Filter Content
                   Container()
-                  : Column(
-                      children: [
-                        Gap(50),
-                        Container(
-                          margin: const EdgeInsets.only(left: 27, right: 27),
-                          width: MediaQuery.sizeOf(context).width,
-                          child: Text(
-                            "FOOD MENU",
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimaryContainer
-                                  .withOpacity(0.5),
-                            ),
-                          ),
-                        ),
-                        Gap(20),
-                        Container(
-                          width: MediaQuery.sizeOf(context).width,
-                          height: 150,
-                          alignment: Alignment.center,
-                          child: ListView.builder(
-                            itemCount: 5,
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.only(left: 35),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                width: 130,
-                                height: 110,
-                                padding: const EdgeInsets.all(10),
-                                margin: const EdgeInsets.only(right: 20),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSecondaryContainer
-                                      .withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "PAV BHAJI",
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground,
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        Icon(
-                                          Icons.favorite_border,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        Gap(40),
-                        Container(
-                          margin: const EdgeInsets.only(left: 27, right: 27),
-                          width: MediaQuery.sizeOf(context).width,
-                          alignment: Alignment.centerLeft,
-                          child: Text("Populars Entries",
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer
-                                    .withOpacity(0.5),
-                              )),
-                        ),
-                        Gap(20),
-                        Container(
-                          width: MediaQuery.sizeOf(context).width,
-                          height: 100,
-                          child: ListView.builder(
-                            itemCount: 10,
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.only(left: 35),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                width: 100,
-                                height: 20,
-                                margin: const EdgeInsets.only(right: 20),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSecondaryContainer
-                                      .withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        Gap(30),
-                        Container(
-                          width: MediaQuery.sizeOf(context).width,
-                          height: 240,
-                          child: ListView.builder(
-                            padding: const EdgeInsets.only(left: 15),
-                            itemCount: 10,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Container(
-                                    width: 350,
-                                    height: 100,
-                                    margin: const EdgeInsets.only(right: 20),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSecondaryContainer
-                                          .withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                  Gap(20),
-                                  Container(
-                                    width: 350,
-                                    height: 100,
-                                    margin: const EdgeInsets.only(right: 20),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSecondaryContainer
-                                          .withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        )
-                      ],
-                    ),
+                  : FoodMenu(),
             ],
           )),
     );

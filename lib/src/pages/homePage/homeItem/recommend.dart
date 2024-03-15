@@ -15,18 +15,19 @@ class SubRecommed extends StatelessWidget {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       height: 200,
+      margin: const EdgeInsets.only(bottom: 20),
       child: Swiper(
-        containerHeight: 440,
+        containerHeight: 420,
         itemCount: comboData.length,
         itemBuilder: (context, index) {
           return Transform.translate(
-            offset: Offset(-40, 3),
+            offset: Offset(-40, 0),
             child: Container(
               width: 40,
               height: 40,
               decoration: BoxDecoration(
                 border: Border.all(
-                    width: 1, color: const Color.fromARGB(137, 39, 39, 39)),
+                    width: 1, color: Color.fromARGB(136, 62, 62, 62)),
                 borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).colorScheme.tertiaryContainer,
               ),

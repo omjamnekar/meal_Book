@@ -9,6 +9,8 @@ import 'package:MealBook/respository/provider/registerState.dart';
 import 'package:MealBook/respository/provider/userState.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
@@ -24,7 +26,6 @@ class homeController extends GetxController {
       });
 
   Future<void> signOut(WidgetRef ref, BuildContext context) async {
-    print("Coming signout");
     final confirmSignOut = await Flushbar<bool>(
       title: "Sign Out",
       message: "Do you want to sign out?",
@@ -103,5 +104,34 @@ class homeController extends GetxController {
         ),
       ),
     );
+  }
+
+  Future<List<dynamic>> generalLoading() async {
+    DataSnapshot _variety;
+    final ref = FirebaseDatabase.instance.reference();
+    final snapshot = ref.child('general/');
+    _variety = await snapshot.get();
+
+    List recData = [];
+
+    for (var i in _variety.value as List<dynamic>) {
+      recData.add(i);
+    }
+
+    //  print(recData);
+    return recData;
+  }
+
+  Future<String> listImage(String imageName) async {
+    print(imageName);
+    final ref = FirebaseStorage.instance.ref().child('genaral/${imageName}');
+    String url = await ref.getDownloadURL();
+
+    return url;
+  }
+
+  Future<Widget> loadAnimation(String imageNamw) async {
+    String sd = await listImage(imageNamw);
+    return Image.network(sd);
   }
 }

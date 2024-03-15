@@ -1,10 +1,10 @@
 import 'package:MealBook/controller/accountLogic.dart';
 import 'package:MealBook/respository/model/user.dart';
+import 'package:MealBook/src/Theme/theme_preference.dart';
 import 'package:MealBook/src/Theme/theme_provider.dart';
+import 'package:MealBook/src/pages/account/option/profile.dart';
 import 'package:MealBook/src/util/user.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -24,11 +24,13 @@ class _AccountManagerState extends ConsumerState<AccountManager>
   bool _visible = false;
   late final AnimationController _controller;
   late final Animation<double> _animation;
+  UserDataManager? userDataManager;
+  String sd = "";
 
   @override
   void initState() {
     super.initState();
-
+    sd = UserExcess.userDefault;
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -52,11 +54,18 @@ class _AccountManagerState extends ConsumerState<AccountManager>
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> _accountOption = [
-      {"label": "Profile Information", "icon": Icons.person},
+    String str =
+        provider.Provider.of<ThemeProvider>(context).themeData.brightness ==
+                Brightness.dark
+            ? "Dark"
+            : "Light";
+    List<Map<String, dynamic>> accountOption = [
       {
-        "label":
-            "Display Theme: ${provider.Provider.of<ThemeProvider>(context).themeData.brightness == Brightness.dark ? "Dark" : "Light"}",
+        "label": "Profile Information",
+        "icon": Icons.person,
+      },
+      {
+        "label": "Display Theme: ${str}",
         "icon": Icons
             .brightness_6 // You can choose a suitable icon for theme display
       },
@@ -68,6 +77,8 @@ class _AccountManagerState extends ConsumerState<AccountManager>
       {"label": "payments History", "icon": Icons.payment_sharp},
       {"label": "Logout/Sign Out", "icon": Icons.exit_to_app},
     ];
+
+    ThemePreferences themePreferences = ThemePreferences();
 
     return GetBuilder<AccountLogic>(
         init: AccountLogic(),
@@ -125,6 +136,14 @@ class _AccountManagerState extends ConsumerState<AccountManager>
                                 future: ctrl.getUser(),
                                 builder: (context,
                                     AsyncSnapshot<UserDataManager> imageURL) {
+                                  userDataManager = imageURL.data;
+                                  String imageUrl = str;
+                                  if (imageURL.data != null &&
+                                      imageURL.data!.image != null &&
+                                      imageURL.data!.image!.isNotEmpty) {
+                                    imageUrl = imageURL.data!.image!;
+                                  }
+
                                   return Container(
                                     width: 150,
                                     height: 150,
@@ -140,12 +159,14 @@ class _AccountManagerState extends ConsumerState<AccountManager>
                                               child: ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(100),
-                                                child: Image.network(
-                                                  imageURL.data!.image ??
-                                                      UserExcess.userDefault,
-                                                  fit: BoxFit.cover,
-                                                  width: 110,
-                                                  height: 110,
+                                                child: Hero(
+                                                  tag: "profileImage",
+                                                  child: Image.network(
+                                                    imageUrl,
+                                                    fit: BoxFit.cover,
+                                                    width: 110,
+                                                    height: 110,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -210,7 +231,7 @@ class _AccountManagerState extends ConsumerState<AccountManager>
                               ),
                               Spacer(),
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: userAccount,
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Theme.of(context)
@@ -251,32 +272,61 @@ class _AccountManagerState extends ConsumerState<AccountManager>
                       Expanded(
                         child: ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: _accountOption.length,
+                            itemCount: accountOption.length,
                             itemBuilder: (context, index) {
-                              return ListTile(
-                                  title: Text(
-                                    _accountOption[index]["label"],
-                                    style: _accountOption[index]["label"] !=
-                                            "Logout/Sign Out"
-                                        ? Theme.of(context).textTheme.subtitle1!
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimaryContainer
-                                                    .withOpacity(0.7)),
-                                  ),
-                                  leading: Icon(
-                                    _accountOption[index]["icon"] as IconData,
-                                  ),
-                                  onTap: () {
-                                    if (_accountOption[index]["label"] ==
-                                        "Logout/Sign Out") {
-                                      ctrl.signOut(context, ref);
-                                    }
-                                  });
+                              return GestureDetector(
+                                onTap: () {
+                                  if (accountOption[index]["label"] ==
+                                          "Display Theme: Dark" ||
+                                      accountOption[index]["label"] ==
+                                          "Display Theme: Light") {
+                                    context.read<ThemeProvider>().toggleTheme();
+                                  }
+                                },
+                                child: ListTile(
+                                    title: Text(
+                                      accountOption[index]["label"],
+                                      style: accountOption[index]["label"] !=
+                                              "Logout/Sign Out"
+                                          ? Theme.of(context)
+                                              .textTheme
+                                              .subtitle1!
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .subtitle1!
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimaryContainer
+                                                      .withOpacity(0.7)),
+                                    ),
+                                    leading: Icon(
+                                      accountOption[index]["icon"] as IconData,
+                                    ),
+                                    onTap: () {
+                                      if (accountOption[index]["label"] ==
+                                          "Logout/Sign Out") {
+                                        ctrl.signOut(context, ref);
+                                      }
+
+                                      if (accountOption[index]["label"] ==
+                                          "Profile Information") {
+                                        userAccount();
+                                      }
+
+                                      if (accountOption[index]["label"] ==
+                                          "Display Theme: ${str}") {
+                                        bool sd =
+                                            Theme.of(context).brightness ==
+                                                Brightness.dark;
+
+                                        ThemePreferences.setDarkMode(!sd);
+                                        context
+                                            .read<ThemeProvider>()
+                                            .toggleTheme();
+                                      }
+                                    }),
+                              );
                             }),
                       ),
                     ],
@@ -286,5 +336,29 @@ class _AccountManagerState extends ConsumerState<AccountManager>
             ),
           );
         });
+  }
+
+  userAccount() {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => Profile(
+            imageUrl: userDataManager!.image!,
+            userDataManager: userDataManager!),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = Offset(1.0, 0.0);
+          var end = Offset.zero;
+          var curve = Curves.ease;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    );
   }
 }

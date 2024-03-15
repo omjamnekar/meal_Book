@@ -5,6 +5,7 @@ import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/controller/homeLogic.dart';
 import 'package:MealBook/firebase/image.dart';
 import 'package:MealBook/respository/model/user.dart';
+import 'package:MealBook/src/chat/chatPage.dart';
 import 'package:MealBook/src/pages/account/account.dart';
 import 'package:MealBook/src/pages/combo/combo.dart';
 
@@ -13,6 +14,8 @@ import 'package:MealBook/src/pages/homePage/homePage.dart';
 import 'package:MealBook/src/pages/searchPage/search.dart';
 import 'package:MealBook/respository/provider/actuatorState.dart';
 import 'package:MealBook/respository/provider/userState.dart';
+import 'package:MealBook/src/util/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,9 +53,7 @@ class _HomePageState extends ConsumerState<MainPage> {
     final snapshot = await references.child('combo/').get();
     if (snapshot.exists) {
       comboDataManager.add(snapshot.value);
-    } else {
-      print('No Data Available');
-    }
+    } else {}
   }
 
   bool isDark = false;
@@ -60,11 +61,15 @@ class _HomePageState extends ConsumerState<MainPage> {
     isDark = await ThemePreferences.isDarkMode();
   }
 
+  String str = "";
+  String userImage = "";
   @override
   void initState() {
     super.initState();
     snapshot();
     setter();
+    userImage = user.image ?? "";
+    str = UserExcess.userDefault;
     imageListModel = ref.read(imageListProvider.notifier).currentImageState;
   }
 
@@ -84,6 +89,7 @@ class _HomePageState extends ConsumerState<MainPage> {
   final List<String> imageUrls = [];
   @override
   Widget build(BuildContext context) {
+    print(userImage);
     List<Widget> list = [
       HomePageWidget(
           user: user,
@@ -129,7 +135,7 @@ class _HomePageState extends ConsumerState<MainPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        offset: Offset(-97, 24),
+                        offset: const Offset(-97, 24),
                         child: const Icon(
                           Icons.arrow_drop_down_circle_outlined,
                           size: 20.0,
@@ -211,7 +217,10 @@ class _HomePageState extends ConsumerState<MainPage> {
           }),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).canvasColor,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ChatPage()));
+        },
         child: Transform.translate(
           offset: Offset(-2, 1),
           child: Center(
@@ -227,6 +236,7 @@ class _HomePageState extends ConsumerState<MainPage> {
   }
 
   PopupMenuItem<String> AccountPop(BuildContext context) {
+    print(user.image);
     return PopupMenuItem(
       value: '/contact',
       child: Container(
@@ -263,8 +273,7 @@ class _HomePageState extends ConsumerState<MainPage> {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(30),
                     child: Image.network(
-                      user.image ??
-                          "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+                      userImage.isNotEmpty ? userImage : str,
                       width: 60,
                       height: 60,
                     ))),

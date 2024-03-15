@@ -64,7 +64,7 @@ class AuthClass {
 
   Future<UserCredential> signInWithGitHub() async {
     final githubProvider = OAuthProvider('github.com');
-   
+
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInWithPopup(githubProvider);
 
@@ -90,7 +90,6 @@ class AuthClass {
 
       // Check if the user's email is already verified.
       if (currentUser.emailVerified) {
-        print('User\'s email is already verified.');
         return true;
       }
 
@@ -124,13 +123,10 @@ class AuthClass {
         await user.reload();
 
         if (user.emailVerified) {
-          print('Your email has been verified.');
           return true;
         }
       }
 
-      print(
-          'Email verification timeout. Your email has not been verified yet.');
       return false;
     } catch (e) {
       print('Error checking email verification: $e');

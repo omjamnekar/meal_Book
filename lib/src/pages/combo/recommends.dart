@@ -15,23 +15,24 @@ class OptionBuilder extends StatelessWidget {
   final ComboLogic ctrl;
   @override
   Widget build(BuildContext context) {
+    print(_selectedFoodCategory);
     return FutureBuilder<List<dynamic>>(
         future: ctrl.fullData(_selectedFoodCategory),
         builder: (context, AsyncSnapshot<List> _recData) {
           if (_recData.connectionState == ConnectionState.waiting &&
               !_recData.hasData) {
             return AnimatedContainer(
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               width: MediaQuery.of(context).size.width,
               height: 200 * 10,
-              margin: EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 20),
               child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   itemCount: 10,
                   itemBuilder: (context, index) {
                     return AnimatedContainer(
-                      duration: Duration(seconds: 1),
-                      margin: EdgeInsets.only(bottom: 20),
+                      duration: const Duration(seconds: 1),
+                      margin: const EdgeInsets.only(bottom: 20),
                       width: MediaQuery.of(context).size.width / 1.1,
                       height: 200,
                       color: Theme.of(context).focusColor,
@@ -41,12 +42,12 @@ class OptionBuilder extends StatelessWidget {
           } else if (_recData.connectionState == ConnectionState.done &&
               _recData.hasData) {
             return AnimatedContainer(
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               width: MediaQuery.of(context).size.width,
               height: 170 * _recData.data!.length.toDouble(),
               child: ListView.builder(
                 itemCount: _recData.data!.length,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Container(
                     margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -73,10 +74,10 @@ class OptionBuilder extends StatelessWidget {
                                       ConnectionState.waiting &&
                                   !_imageData.hasData) {
                                 return AnimatedContainer(
-                                  duration: Duration(seconds: 1),
+                                  duration: const Duration(seconds: 1),
                                   width: 120,
                                   height: 150,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(20),
                                       bottomLeft: Radius.circular(20),
@@ -88,10 +89,10 @@ class OptionBuilder extends StatelessWidget {
                                       ConnectionState.active &&
                                   !_imageData.hasData) {
                                 return AnimatedContainer(
-                                  duration: Duration(seconds: 1),
+                                  duration: const Duration(seconds: 1),
                                   width: 120,
                                   height: 150,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(20),
                                       bottomLeft: Radius.circular(20),
@@ -103,7 +104,7 @@ class OptionBuilder extends StatelessWidget {
                                       ConnectionState.done &&
                                   _imageData.hasData) {
                                 return AnimatedContainer(
-                                  duration: Duration(seconds: 1),
+                                  duration: const Duration(seconds: 1),
                                   width: 120,
                                   height: 120,
                                   margin: const EdgeInsets.only(left: 10),
@@ -118,10 +119,10 @@ class OptionBuilder extends StatelessWidget {
                                 );
                               }
                               return AnimatedContainer(
-                                duration: Duration(seconds: 1),
+                                duration: const Duration(seconds: 1),
                                 width: 120,
                                 height: 150,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(20),
                                     bottomLeft: Radius.circular(20),
@@ -145,7 +146,7 @@ class OptionBuilder extends StatelessWidget {
                               Text(
                                 "${_recData.data![index]["ITEMS"]}",
                                 maxLines: 1,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     overflow: TextOverflow.ellipsis,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold),
@@ -160,7 +161,7 @@ class OptionBuilder extends StatelessWidget {
                                     color:
                                         Theme.of(context).colorScheme.tertiary),
                               ),
-                              Gap(4),
+                              const Gap(4),
                               Row(
                                 children: [
                                   Text(
@@ -216,10 +217,10 @@ class OptionBuilder extends StatelessWidget {
                                           .colorScheme
                                           .primary
                                           .withOpacity(0.5)),
-                                  Gap(2),
+                                  const Gap(2),
                                   Text(
                                       "${_recData.data![index]["OVERALL_RATING"]}"),
-                                  Spacer(),
+                                  const Spacer(),
                                   Row(
                                     children: [
                                       TextButton(
@@ -232,7 +233,7 @@ class OptionBuilder extends StatelessWidget {
                                                   .tertiary,
                                             ),
                                           )),
-                                      Gap(6),
+                                      const Gap(6),
                                       TextButton(
                                           style: TextButton.styleFrom(
                                             foregroundColor: Theme.of(context)
@@ -251,9 +252,10 @@ class OptionBuilder extends StatelessWidget {
                                           child: Text(
                                             "Order",
                                             style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .background),
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onTertiaryContainer,
+                                            ),
                                           )),
                                     ],
                                   ),
@@ -274,7 +276,7 @@ class OptionBuilder extends StatelessWidget {
                 itemCount: 10,
                 itemBuilder: (context, index) {
                   return Container(
-                    margin: EdgeInsets.only(bottom: 20),
+                    margin: const EdgeInsets.only(bottom: 20),
                     width: MediaQuery.of(context).size.width,
                     height: 400,
                     color: Theme.of(context).focusColor,

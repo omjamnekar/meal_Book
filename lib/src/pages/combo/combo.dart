@@ -68,26 +68,21 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
     "Dish",
   ];
   bool isDarkMode = false;
-  themSetter() async {
-    isDarkMode = await ThemePreferences.isDarkMode();
-  }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    themSetter();
   }
 
   int selectedCategoryIndex = 0;
   @override
   Widget build(BuildContext context) {
-    themSetter();
-
     Color theme = Theme.of(context).colorScheme.primaryContainer;
 
     Color theme2 = Theme.of(context).colorScheme.background;
+
+    var brightness = Theme.of(context).brightness;
+    isDarkMode = brightness == Brightness.dark;
 
     return GetBuilder<ComboLogic>(
         init: ComboLogic(),
@@ -219,8 +214,6 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                                             controller: _controller,
                                             itemCount: imageUrl.data!.length,
                                             itemBuilder: (context, index) {
-                                              print(index);
-
                                               return Container(
                                                 margin: const EdgeInsets.only(
                                                     left: 10, right: 10),
@@ -549,6 +542,8 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                           onPressed: () {
                             setState(() {
                               _selectedFoodCategory = foodType[index];
+
+                              print(_selectedFoodCategory);
                               isfoodTypeSelect = index;
                             });
                           },

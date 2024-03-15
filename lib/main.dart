@@ -1,7 +1,9 @@
+import 'package:MealBook/dataAdder.dart';
 import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/controller/authLogic.dart';
 
 import 'package:MealBook/firebase_options.dart';
+import 'package:MealBook/src/components/connectionPage.dart';
 import 'package:MealBook/src/pages/loader/actuator.dart';
 import 'package:MealBook/src/pages/loader/loading.dart';
 import 'package:MealBook/src/pages/registration/register.dart';
@@ -59,13 +61,15 @@ class _MyAppState extends State<MyApp> {
             title: 'Meal Book',
             theme: provider.Provider.of<ThemeProvider>(context).themeData,
             debugShowCheckedModeBanner: false,
-            home: Actuator(
-              child: IntroPage(),
-              Register: RegisterPage(),
+            home: const ConnectionPage(
+              widget: Actuator(
+                Register: RegisterPage(),
+                child: IntroPage(),
+              ),
             ),
 
             // home: Display()
-            //home: Cart(),
+            // home: Cart(),
           );
         },
       ),

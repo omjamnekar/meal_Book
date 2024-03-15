@@ -32,7 +32,6 @@ class AuthController extends GetxController {
     // String dd = validateEmail(emailController.text);
     if (emailController.text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
       try {
-        print(emailController.text);
         auth.sendPasswordResetEmail(emailController.text, context, () {
           pageController.animateToPage(0,
               duration: Duration(milliseconds: 500), curve: Curves.ease);
@@ -144,23 +143,24 @@ class AuthController extends GetxController {
 
             if (emailCheck.docs.isNotEmpty) {
               // Email already exists, handle accordingly (e.g., show an error message)
-              print("Email already exists in Firestore");
             } else {
               // Email does not exist, proceed to add the new user
-              await usersFire.doc(user.id).set({
-                'id': user.id,
-                'name': user.name,
-                'email': user.email,
-                'phone': user.phone,
-                'image': user.image,
-                'password': user.password,
-                "date": DateTime.now().toUtc(),
-                "male": user.male,
-              }).then((_) {
-                print("User added to Firestore");
-              }).catchError((error) {
-                print("Failed to add user: $error");
-              });
+              await usersFire
+                  .doc(user.id)
+                  .set({
+                    'id': user.id,
+                    'name': user.name,
+                    'email': user.email,
+                    'phone': user.phone,
+                    'image': user.image,
+                    'password': user.password,
+                    "date": DateTime.now().toUtc(),
+                    "male": user.male,
+                  })
+                  .then((_) {})
+                  .catchError((error) {
+                    print("Failed to add user: $error");
+                  });
             }
 
             Navigator.push(
@@ -269,23 +269,24 @@ class AuthController extends GetxController {
 
       if (emailCheck.docs.isNotEmpty) {
         // Email already exists, handle accordingly (e.g., show an error message)
-        print("Email already exists in Firestore");
       } else {
         // Email does not exist, proceed to add the new user
-        await usersFire.doc(user.id).set({
-          'id': user.id,
-          'name': user.name,
-          'email': user.email,
-          'phone': user.phone,
-          'image': user.image,
-          'password': user.password,
-          "date": DateTime.now().toUtc(),
-          "male": user.male,
-        }).then((_) {
-          print("User added to Firestore");
-        }).catchError((error) {
-          print("Failed to add user: $error");
-        });
+        await usersFire
+            .doc(user.id)
+            .set({
+              'id': user.id,
+              'name': user.name,
+              'email': user.email,
+              'phone': user.phone,
+              'image': user.image,
+              'password': user.password,
+              "date": DateTime.now().toUtc(),
+              "male": user.male,
+            })
+            .then((_) {})
+            .catchError((error) {
+              print("Failed to add user: $error");
+            });
       }
 
       snackbarCon(context, "Signed in with Google");

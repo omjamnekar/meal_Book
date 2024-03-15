@@ -43,7 +43,6 @@ class _VerificationState extends ConsumerState<Verification> {
       userData: widget.user,
     );
     ref.watch(booleanProvider.notifier).update(isVerified);
-    print("done");
   }
 
   Future<bool> verificationSending() async {
@@ -157,138 +156,141 @@ class _VerificationState extends ConsumerState<Verification> {
       int seconds, bool isverified, bool isVerify) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        deleteUser();
-                      },
-                      icon: Icon(Icons.arrow_back)),
-                  const Text(
-                    "Verification",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-              !isverified
-                  ? Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 400,
-                      alignment: Alignment.center,
-                      child: Center(
-                        child: Lottie.asset(
-                          "assets/lottie/verify.json",
-                          height: 300,
-                          repeat: true,
-                          animate: true,
-                        ),
-                      ),
-                    )
-                  : Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 400,
-                      alignment: Alignment.center,
-                      child: Center(
-                        child: Lottie.asset(
-                          "assets/lottie/done.json",
-                          height: 300,
-                          repeat: true,
-                          animate: true,
-                        ),
-                      ),
+        child: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          deleteUser();
+                        },
+                        icon: Icon(Icons.arrow_back)),
+                    const Text(
+                      "Verification",
+                      style: TextStyle(fontSize: 20),
                     ),
-              !isVerified
-                  ? isTimeOff
-                      ? const Text(
-                          "Try resending Email",
-                          style: TextStyle(fontSize: 20),
-                        )
-                      : Text(
-                          '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-                          style: GoogleFonts.poppins(fontSize: 20),
-                        )
-                  : Container(),
-              !isVerified
-                  ? const Text(" You will get email to verify email Id")
-                  : AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      child: Text(
-                        "Email Verified",
-                        style: GoogleFonts.poppins(fontSize: 20),
-                      ),
-                    ),
-              const Gap(20),
-              !isVerified
-                  ? ElevatedButton(
-                      onPressed: () {
-                        if (isTimeOff) {
-                          verificationSending();
-                          startTimer();
-                          isVerified = false;
-                        } else {
-                          isOverloadResend = true;
-                          overLoadVanish();
-                        }
-                      },
-                      style: const ButtonStyle(),
-                      child: const Text("Resend Message"))
-                  : ElevatedButton(
-                      onPressed: () {
-                        saveData();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FeatureStep()));
-                      },
-                      child: const Text("Continue with App!")),
-              const Gap(4),
-              AnimatedSwitcher(
-                duration: const Duration(seconds: 1),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return FadeTransition(child: child, opacity: animation);
-                },
-                child: isOverloadResend
-                    ? Text(
-                        "Resend message after 1 minutes",
-                        style: GoogleFonts.poppins(
-                            fontSize: 10,
-                            color: Color.fromARGB(255, 223, 64, 6)),
-                        key: const ValueKey<int>(1),
+                  ],
+                ),
+                !isverified
+                    ? Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 400,
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: Lottie.asset(
+                            "assets/lottie/verify.json",
+                            height: 300,
+                            repeat: true,
+                            animate: true,
+                          ),
+                        ),
                       )
                     : Container(
-                        key: const ValueKey<int>(2),
+                        width: MediaQuery.of(context).size.width,
+                        height: 400,
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: Lottie.asset(
+                            "assets/lottie/done.json",
+                            height: 300,
+                            repeat: true,
+                            animate: true,
+                          ),
+                        ),
                       ),
-              ),
-              const Gap(40),
-              !isverified
-                  ? TextButton(
-                      onPressed: () {
-                        deleteUser();
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            size: 15,
-                            color: Color.fromARGB(146, 0, 0, 0),
-                          ),
-                          Gap(10),
-                          Text(
-                            "Back to register page!",
-                            style: TextStyle(
-                              color: Color.fromARGB(146, 0, 0, 0),
-                              decoration: TextDecoration.underline,
+                !isVerified
+                    ? isTimeOff
+                        ? const Text(
+                            "Try resending Email",
+                            style: TextStyle(fontSize: 20),
+                          )
+                        : Text(
+                            '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
+                            style: GoogleFonts.poppins(fontSize: 20),
+                          )
+                    : Container(),
+                !isVerified
+                    ? const Text(" You will get email to verify email Id")
+                    : AnimatedContainer(
+                        duration: const Duration(seconds: 1),
+                        child: Text(
+                          "Email Verified",
+                          style: GoogleFonts.poppins(fontSize: 20),
+                        ),
+                      ),
+                const Gap(20),
+                !isVerified
+                    ? ElevatedButton(
+                        onPressed: () {
+                          if (isTimeOff) {
+                            verificationSending();
+                            startTimer();
+                            isVerified = false;
+                          } else {
+                            isOverloadResend = true;
+                            overLoadVanish();
+                          }
+                        },
+                        style: const ButtonStyle(),
+                        child: const Text("Resend Message"))
+                    : ElevatedButton(
+                        onPressed: () {
+                          saveData();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FeatureStep()));
+                        },
+                        child: const Text("Continue with App!")),
+                const Gap(4),
+                AnimatedSwitcher(
+                  duration: const Duration(seconds: 1),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    return FadeTransition(child: child, opacity: animation);
+                  },
+                  child: isOverloadResend
+                      ? Text(
+                          "Resend message after 1 minutes",
+                          style: GoogleFonts.poppins(
+                              fontSize: 10,
+                              color: Color.fromARGB(255, 223, 64, 6)),
+                          key: const ValueKey<int>(1),
+                        )
+                      : Container(
+                          key: const ValueKey<int>(2),
+                        ),
+                ),
+                const Gap(40),
+                !isverified
+                    ? TextButton(
+                        onPressed: () {
+                          deleteUser();
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.arrow_back_ios_new_rounded,
+                              size: 15,
+                              color: Theme.of(context).colorScheme.onTertiary,
                             ),
-                          ),
-                        ],
-                      ))
-                  : Container(),
-            ],
+                            Gap(10),
+                            Text(
+                              "Back to register page!",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onTertiary,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ],
+                        ))
+                    : Container(),
+              ],
+            ),
           ),
         ),
       ),

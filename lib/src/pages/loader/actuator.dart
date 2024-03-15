@@ -47,7 +47,6 @@ class _ActuatorState extends ConsumerState<Actuator> {
 
     // before checking is see data is loaded or not
     //  2)// locate to ragistration page
-    print(booleanState.value.toString());
     return AnimatedSwitcher(
       duration:
           const Duration(seconds: 1), // Define the duration of the animation

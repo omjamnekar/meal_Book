@@ -31,7 +31,7 @@ class ComboLogic extends GetxController {
 
       for (var element in verData) {
         String imageName = element["IMAGE"];
-        print(imageName);
+
         for (Reference ref in result.items) {
           if (ref.name == imageName) {
             String url = await ref.getDownloadURL();
@@ -93,19 +93,19 @@ class ComboLogic extends GetxController {
 
   Future<List<dynamic>> fullData(String _selectFoodType) async {
     final ref = FirebaseDatabase.instance.reference();
-    final snapshot = ref.child('all/');
+
+    print(_selectFoodType.toLowerCase().replaceAll(" ", ""));
+    final snapshot =
+        ref.child('${_selectFoodType.toLowerCase().replaceAll(" ", "")}/');
     _recommend = await snapshot.get();
 
     final value = _recommend!.value;
-
+    print(value);
     if (value is List) {
       // Assuming value is a List<dynamic>
       recData = List.from(value);
-    } else {
-      print("is not a list");
-    }
+    } else {}
 
-    print("recData: $recData");
     return recData;
   }
 
