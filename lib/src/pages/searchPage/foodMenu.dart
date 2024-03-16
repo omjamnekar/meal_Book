@@ -56,8 +56,9 @@ class FoodMenu extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 35),
                           itemBuilder: (context, index) {
                             return FutureBuilder(
-                                future: ctrl
-                                    .listImage(foodmenu.data![index]['IMAGE']),
+                                future: ctrl.listImage(
+                                  foodmenu.data![index]['IMAGE'],
+                                ),
                                 builder:
                                     (context, AsyncSnapshot<String> menuImage) {
                                   if (menuImage.connectionState ==
@@ -156,29 +157,85 @@ class FoodMenu extends StatelessWidget {
                     )),
               ),
               Gap(20),
-              Container(
-                width: MediaQuery.sizeOf(context).width,
-                height: 100,
-                child: ListView.builder(
-                  itemCount: 10,
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.only(left: 35),
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: 100,
-                      height: 20,
-                      margin: const EdgeInsets.only(right: 20),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSecondaryContainer
-                            .withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    );
-                  },
-                ),
-              ),
+              FutureBuilder(
+                  future: ctrl.search(),
+                  builder: (context,
+                      AsyncSnapshot<List<Map<String, dynamic>>> foodmenu) {
+                    if (foodmenu.connectionState == ConnectionState.waiting &&
+                        !foodmenu.hasData) {
+                      return Default();
+                    } else if (foodmenu.connectionState ==
+                            ConnectionState.active &&
+                        !foodmenu.hasData) {
+                      return Default();
+                    } else if (foodmenu.connectionState ==
+                            ConnectionState.done &&
+                        foodmenu.hasData) {
+                      return Container(
+                        width: MediaQuery.sizeOf(context).width,
+                        height: 100,
+                        child: ListView.builder(
+                          itemCount: foodmenu.data!.length,
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.only(left: 35),
+                          itemBuilder: (context, index) {
+                            return FutureBuilder(
+                                future: ctrl.searchImage(
+                                    foodmenu.data![index]['TYPE'],
+                                    foodmenu.data![index]['IMAGE']),
+                                builder:
+                                    (context, AsyncSnapshot<String> menuImage) {
+                                  if (menuImage.connectionState ==
+                                          ConnectionState.waiting &&
+                                      menuImage.hasData) {
+                                    return Container();
+                                  } else if (menuImage.connectionState ==
+                                          ConnectionState.done &&
+                                      menuImage.hasData) {
+                                    return ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Container(
+                                        width: 100,
+                                        height: 100,
+                                        margin:
+                                            const EdgeInsets.only(right: 20),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSecondaryContainer
+                                              .withOpacity(0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: ColorFiltered(
+                                            colorFilter: ColorFilter.mode(
+                                              Colors.black.withOpacity(0.1),
+                                              BlendMode.darken,
+                                            ),
+                                            child: Image.network(
+                                              menuImage.data!,
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                });
+                          },
+                        ),
+                      );
+                    }
+
+                    return Default();
+                  }),
               Gap(30),
               Container(
                 width: MediaQuery.sizeOf(context).width,
@@ -223,5 +280,38 @@ class FoodMenu extends StatelessWidget {
             ],
           );
         });
+  }
+}
+
+class Default extends StatelessWidget {
+  const Default({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.sizeOf(context).width,
+      height: 100,
+      child: ListView.builder(
+        itemCount: 20,
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(left: 35),
+        itemBuilder: (context, index) {
+          return Container(
+            width: 100,
+            height: 20,
+            margin: const EdgeInsets.only(right: 20),
+            decoration: BoxDecoration(
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSecondaryContainer
+                  .withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

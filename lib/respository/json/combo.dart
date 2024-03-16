@@ -2123,6 +2123,7 @@ List<Map<String, dynamic>> all = [
     "IMAGE": "sada-dosa.jpeg",
     "IS_VEG": "true",
     "TYPE": "DOSA",
+    "POPULAR": "true",
     "INGREDIENTS": ["Rice", "Urad dal", "Salt", "Water"]
   },
   {
@@ -2137,6 +2138,7 @@ List<Map<String, dynamic>> all = [
     "IMAGE": "cheese-dosa.jpg",
     "IS_VEG": "true",
     "TYPE": "DOSA",
+    "POPULAR": "false",
     "INGREDIENTS": ["Rice", "Urad dal", "Salt", "Water", "Cheese"]
   },
   {
@@ -2151,6 +2153,7 @@ List<Map<String, dynamic>> all = [
     "OVERALL_RATING": 4.5,
     "IMAGE": "butter-dosa.jpg",
     "IS_VEG": "true",
+    "POPULAR": "true",
     "INGREDIENTS": ["Rice", "Urad dal", "Salt", "Water", "Butter"]
   },
   {
@@ -2162,6 +2165,7 @@ List<Map<String, dynamic>> all = [
     "DESCRIPTION": "Dosa stuffed with spiced potato filling",
     "CATEGORY": "Cuisine",
     "LIKES": 180,
+    "POPULAR": "true",
     "OVERALL_RATING": 4.6,
     "IMAGE": "masala-dosa.jpg",
     "IS_VEG": "true",
@@ -2178,6 +2182,7 @@ List<Map<String, dynamic>> all = [
     "LIKES": 250,
     "OVERALL_RATING": 4.9,
     "IS_VEG": "true",
+    "POPULAR": "true",
     "TYPE": "DOSA",
     "INGREDIENTS": [
       "Rice",
@@ -2196,6 +2201,7 @@ List<Map<String, dynamic>> all = [
     "DESCRIPTION": "Spicy dosa variant from Mysore with masala filling",
     "CATEGORY": "Cuisine",
     "LIKES": 220,
+    "POPULAR": "false",
     "AVAILABLE": "true",
     "OVERALL_RATING": 4.7,
     "IMAGE": "mysore-masala-dosa.png",
@@ -2215,10 +2221,11 @@ List<Map<String, dynamic>> all = [
     "ID": 7,
     "ITEMS": "MYSORE SADA",
     "RATE": 40,
+    "POPULAR": "true",
     "DESCRIPTION": "Sada dosa with Mysore-style spicy chutney",
     "CATEGORY": "Cuisine",
     "LIKES": 180,
-    "AVAILABLE": "true",
+    "AVAILABLE": "false",
     "OVERALL_RATING": 4.6,
     "TYPE": "DOSA",
     "IMAGE": "mysore-sada-dosa.png",
@@ -2230,6 +2237,7 @@ List<Map<String, dynamic>> all = [
     "ITEMS": "CHEES MYSORE SADA",
     "RATE": 45,
     "TYPE": "DOSA",
+    "POPULAR": "true",
     "DESCRIPTION": "Mysore sada dosa with cheese",
     "CATEGORY": "Treat",
     "LIKES": 210,
@@ -2246,6 +2254,7 @@ List<Map<String, dynamic>> all = [
     "TYPE": "DOSA",
     "DESCRIPTION": "Mysore masala dosa with generous cheese topping",
     "CATEGORY": "Dish",
+    "POPULAR": "false",
     "AVAILABLE": "true",
     "LIKES": 280,
     "IMAGE": "cheese-mysore-masala-dosa.jpg",
@@ -2270,6 +2279,7 @@ List<Map<String, dynamic>> all = [
     "DESCRIPTION": "Dosa with a filling made of spring vegetables",
     "CATEGORY": "Nourish",
     "LIKES": 150,
+    "POPULAR": "true",
     "OVERALL_RATING": 4.5,
     "IS_VEG": "true",
     "AVAILABLE": "true",
@@ -2293,6 +2303,7 @@ List<Map<String, dynamic>> all = [
     "LIKES": 300,
     "OVERALL_RATING": 5.0,
     "IS_VEG": "true",
+    "POPULAR": "false",
     "AVAILABLE": "true",
     "IMAGE": "cheese-spring-dosa.jpg",
     "INGREDIENTS": [
@@ -2316,6 +2327,7 @@ List<Map<String, dynamic>> all = [
     "OVERALL_RATING": 4.7,
     "IMAGE": "rava_dosa.jpg",
     "IS_VEG": "true",
+    "POPULAR": "false",
     "AVAILABLE": "true",
     "INGREDIENTS": [
       "Semolina",
@@ -2335,11 +2347,11 @@ List<Map<String, dynamic>> all = [
     "LIKES": 90,
     "OVERALL_RATING": 4.0,
     "IS_VEG": "true",
+    "POPULAR": "false",
     "TYPE": "UTTAPAM",
     "AVAILABLE": "true",
     "IMAGE": "uttapam.jpg",
     "INGREDIENTS": ["Rice", "Urad dal", "Salt", "Water"],
-    "POPULAR": "false"
   },
   {
     "ID": 2,

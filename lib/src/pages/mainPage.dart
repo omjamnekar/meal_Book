@@ -154,17 +154,17 @@ class _HomePageState extends ConsumerState<MainPage> {
                 Container(
                   child: Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          context.read<ThemeProvider>().toggleTheme();
-                        },
-                        child: Container(
-                          child: Icon(
-                            Icons.nightlight_outlined,
-                            color: Theme.of(context).dividerColor,
-                          ),
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     context.read<ThemeProvider>().toggleTheme();
+                      //   },
+                      //   child: Container(
+                      //     child: Icon(
+                      //       Icons.nightlight_outlined,
+                      //       color: Theme.of(context).dividerColor,
+                      //     ),
+                      //   ),
+                      // ),
                       Gap(20),
                       GestureDetector(
                         onTap: () {

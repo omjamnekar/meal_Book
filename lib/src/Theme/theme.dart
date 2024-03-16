@@ -12,6 +12,7 @@ ThemeData lightMode = ThemeData(
         fontWeight: FontWeight.bold,
       ),
     ),
+    splashColor: Color.fromARGB(255, 255, 255, 255),
     textTheme: TextTheme(),
     buttonTheme: ButtonThemeData(
       textTheme: ButtonTextTheme.primary,

@@ -1,11 +1,15 @@
 import 'package:MealBook/respository/model/filter.dart';
 import 'package:MealBook/src/pages/searchPage/category.dart';
+import 'package:MealBook/src/pages/searchPage/controller/searchCon.dart';
 import 'package:MealBook/src/pages/searchPage/filter.dart';
 import 'package:MealBook/src/pages/searchPage/foodMenu.dart';
+import 'package:MealBook/src/pages/searchPage/searchFilter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,243 +21,325 @@ class SearchPage extends ConsumerStatefulWidget {
 }
 
 class _SearchPageState extends ConsumerState<SearchPage> {
+  SearchPageController searchPageController = SearchPageController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    sd();
+  }
+
+  bool isSearchClick = false;
+  List<dynamic> filterData = [];
+
+  Future<void> sd() async {
+    searchPageController.search();
+  }
+
   bool isFrontFilter = false;
   String _selectedItem = 'All';
   bool isSearch = false;
   FilterManager? filter;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-          width: MediaQuery.sizeOf(context).width,
-          child: Column(
-            children: [
-              Container(
+    return GetBuilder<SearchPageController>(
+        init: SearchPageController(),
+        builder: (ctrl) {
+          return SingleChildScrollView(
+            child: Container(
+                width: MediaQuery.sizeOf(context).width,
                 child: Column(
                   children: [
-                    Gap(50),
-
-                    //  Search bar
                     Container(
-                      width: MediaQuery.sizeOf(context).width,
-                      height: 70,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      child: Column(
                         children: [
+                          isSearchClick == true ? Gap(20) : Gap(50),
+
+                          //  Search bar
+
                           Container(
-                            width: MediaQuery.sizeOf(context).width / 1.4,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer
-                                    .withOpacity(0.1),
-                                hintText: "Search",
-                                hintStyle: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSecondary,
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.search,
-                                  color:
-                                      Theme.of(context).colorScheme.onTertiary,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Gap(10),
-                          // Filter
-                          GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) {
-                                  return FilterDialog(callback: (value) {
-                                    setState(() {
-                                      filter = value;
-                                    });
-                                  });
-                                },
-                              );
-                            },
-                            child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer
-                                    .withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Icon(Icons.dashboard_outlined),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Gap(10),
-                    Container(
-                      margin: const EdgeInsets.only(left: 27, right: 27),
-                      width: MediaQuery.sizeOf(context).width,
-                      height: 90,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedItem = "Breakfast";
-                                isFrontFilter = true;
-                              });
-                            },
-                            child: CategorySearch(
-                              icon: Icons.emoji_food_beverage,
-                              title: "Breakfast",
-                              isSelected: _selectedItem == "Breakfast",
-                            ),
-                          ),
-                          Gap(20),
-                          // Dessert
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedItem = "Dessert";
-                                isFrontFilter = true;
-                              });
-                            },
-                            child: CategorySearch(
-                              icon: Icons.icecream,
-                              title: "Dessert",
-                              isSelected: _selectedItem == "Dessert",
-                            ),
-                          ),
-
-                          Gap(20),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedItem = "Meal";
-                                isFrontFilter = true;
-                              });
-                            },
-                            child: CategorySearch(
-                              icon: Icons.fastfood_rounded,
-                              title: "Meal",
-                              isSelected: _selectedItem == "Meal",
-                            ),
-                          ),
-
-                          Gap(20),
-                          Column(
-                            children: [
-                              Material(
-                                color: Colors.transparent,
-                                child: TextButton(
-                                    style: TextButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 35, vertical: 20),
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .onSecondaryContainer
-                                          .withOpacity(0.7),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      if (isFrontFilter == true) {
+                            width: MediaQuery.sizeOf(context).width,
+                            height: 70,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.sizeOf(context).width / 1.4,
+                                  child: TextField(
+                                    onTap: () {
+                                      setState(() {
+                                        isSearchClick = true;
+                                      });
+                                    },
+                                    onTapOutside: (value) {
+                                      if (!isSearch) {
                                         setState(() {
-                                          isFrontFilter = false;
+                                          isSearchClick = false;
+                                        });
+                                      } else {
+                                        ctrl.deleter();
+                                      }
+                                    },
+                                    onSubmitted: (value) {
+                                      if (!isSearch) {
+                                        setState(() {
+                                          isSearchClick = false;
                                         });
                                       }
 
-                                      filterDialog(context, (value) {
+                                      if (value.isEmpty) {
                                         setState(() {
-                                          _selectedItem = value;
-                                          isFrontFilter = true;
+                                          isSearch = false;
+                                          isSearchClick = false;
                                         });
-                                      });
+                                        ctrl.deleter();
+                                      }
                                     },
-                                    child: Text(
-                                      "More",
-                                      style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.w600,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isSearch = true;
+                                        ctrl.searchController.text = value;
+                                      });
+                                      //  ctrl.search();
+                                      if (value.isEmpty) {
+                                        setState(() {
+                                          isSearch = false;
+                                        });
+
+                                        filterData = ctrl.searchfilteredData;
+                                      }
+                                    },
+                                    controller: ctrl.searchController,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondaryContainer
+                                          .withOpacity(0.1),
+                                      hintText: "Search",
+                                      hintStyle: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .tertiaryContainer,
+                                            .onSecondary,
                                       ),
-                                    )),
-                              ),
-                              isFrontFilter == true
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          isFrontFilter = false;
+                                      prefixIcon: Icon(
+                                        Icons.search,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onTertiary,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Gap(10),
+                                // Filter
+                                GestureDetector(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) {
+                                        return FilterDialog(callback: (value) {
+                                          setState(() {
+                                            filter = value;
+                                            isFrontFilter = true;
+                                          });
 
-                                          _selectedItem = "All";
+                                          ctrl.filterCategory(filter!);
                                         });
                                       },
-                                      child: Container(
-                                        width: 100,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                            color: Theme.of(context)
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondaryContainer
+                                          .withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Icon(Icons.dashboard_outlined),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Gap(10),
+                          Container(
+                            margin: const EdgeInsets.only(left: 27, right: 27),
+                            width: MediaQuery.sizeOf(context).width,
+                            height: 90,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedItem = "Breakfast";
+                                      isFrontFilter = true;
+                                    });
+                                  },
+                                  child: CategorySearch(
+                                    icon: Icons.emoji_food_beverage,
+                                    title: "Breakfast",
+                                    isSelected: _selectedItem == "Breakfast",
+                                  ),
+                                ),
+                                Gap(20),
+                                // Dessert
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedItem = "Dessert";
+                                      isFrontFilter = true;
+                                    });
+                                  },
+                                  child: CategorySearch(
+                                    icon: Icons.icecream,
+                                    title: "Dessert",
+                                    isSelected: _selectedItem == "Dessert",
+                                  ),
+                                ),
+
+                                Gap(20),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedItem = "Meal";
+                                      isFrontFilter = true;
+                                    });
+                                  },
+                                  child: CategorySearch(
+                                    icon: Icons.fastfood_rounded,
+                                    title: "Meal",
+                                    isSelected: _selectedItem == "Meal",
+                                  ),
+                                ),
+
+                                Gap(20),
+                                Column(
+                                  children: [
+                                    Material(
+                                      color: Colors.transparent,
+                                      child: TextButton(
+                                          style: TextButton.styleFrom(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 35, vertical: 20),
+                                            backgroundColor: Theme.of(context)
                                                 .colorScheme
                                                 .onSecondaryContainer
-                                                .withOpacity(0.1),
-                                            borderRadius: BorderRadius.only(
-                                                bottomLeft: Radius.circular(20),
-                                                bottomRight:
-                                                    Radius.circular(20))),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "$_selectedItem",
-                                              overflow: TextOverflow.ellipsis,
+                                                .withOpacity(0.7),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
-                                            Icon(Icons.cancel,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSecondaryContainer
-                                                    .withOpacity(0.7),
-                                                size: 20),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : Container(),
-                            ],
+                                          ),
+                                          onPressed: () {
+                                            if (isFrontFilter == true) {
+                                              setState(() {
+                                                isFrontFilter = false;
+                                              });
+                                            }
+
+                                            filterDialog(context, (value) {
+                                              setState(() {
+                                                _selectedItem = value;
+                                                isFrontFilter = true;
+                                              });
+
+                                              // ctrl.
+                                            });
+                                          },
+                                          child: Text(
+                                            "More",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w600,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .tertiaryContainer,
+                                            ),
+                                          )),
+                                    ),
+                                    isFrontFilter == true
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                isFrontFilter = false;
+
+                                                _selectedItem = "All";
+                                              });
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              height: 30,
+                                              decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSecondaryContainer
+                                                      .withOpacity(0.1),
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  20),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  20))),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "$_selectedItem",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  Icon(Icons.cancel,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSecondaryContainer
+                                                          .withOpacity(0.7),
+                                                      size: 20),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
+                          //heading
                         ],
                       ),
                     ),
-                    //heading
-                  ],
-                ),
-              ),
-              // Content from here
-              // will get changed
+                    // Content from here
+                    // will get changed
 
-              isSearch == true || isFrontFilter == true
-                  ?
-                  // search Content or Filter Content
-                  Container()
-                  : FoodMenu(),
-            ],
-          )),
-    );
+                    isSearch == true || isFrontFilter == true
+                        ?
+                        // search Content or Filter Content
+                        SearchAndFilterContent(
+                            allData: ctrl.searchfilteredData,
+                          )
+                        : FoodMenu(),
+                  ],
+                )),
+          );
+        });
   }
 
   Future<dynamic> filterDialog(
