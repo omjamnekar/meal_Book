@@ -20,6 +20,11 @@ class homeController extends GetxController {
 
   // UserState userData = UserState();
 
+  Future<String> getImage(String imageUrl) {
+    final ref = FirebaseStorage.instance.ref().child('genaral/$imageUrl');
+    return ref.getDownloadURL();
+  }
+
   Future<UserDataManager> adder() async =>
       await UserState.getUser().then((value) {
         return value;
@@ -72,13 +77,6 @@ class homeController extends GetxController {
       }
     }
   }
-
-  // Future<List<String>> getUserData(WidgetRef ref) async {
-  //   user = await UserState.getUser();
-  //   return [user.name!, user.email!];
-  //   //nikename = extractFirstWord(user.name!);
-  //   //print(user.name);
-  // }
 
   String extractFirstWord(String input) {
     // Split the input string by spaces
@@ -133,5 +131,23 @@ class homeController extends GetxController {
   Future<Widget> loadAnimation(String imageNamw) async {
     String sd = await listImage(imageNamw);
     return Image.network(sd);
+  }
+
+  Future<String> fetchProductImage(String imageName) async {
+    final ref = FirebaseStorage.instance.ref().child('combos/$imageName');
+    String url = await ref.getDownloadURL();
+    return url;
+  }
+
+  Future<List<Map<dynamic, dynamic>>> fetchComboData() async {
+    DataSnapshot snapshot;
+    final ref = FirebaseDatabase.instance.reference();
+    final comboRef = ref.child('combo/');
+    snapshot = await comboRef.get();
+    List<dynamic> comboData = [];
+    if (snapshot.value != null) {
+      comboData = snapshot.value as List<dynamic>;
+    }
+    return comboData.cast<Map<dynamic, dynamic>>();
   }
 }

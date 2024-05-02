@@ -69,6 +69,8 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
   ];
   bool isDarkMode = false;
 
+  bool isDataCame = true;
+
   @override
   void initState() {
     super.initState();
@@ -87,7 +89,6 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
     return GetBuilder<ComboLogic>(
         init: ComboLogic(),
         builder: (ctrl) {
-          ctrl.fetchvariety();
           return SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -99,64 +100,97 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                   height: 40,
                   padding: const EdgeInsets.only(left: 20),
                   // color: Colors.grey[200],
-                  child: FutureBuilder(
-                      future: ctrl.fetchvariety(),
-                      builder: (context, AsyncSnapshot<List> vername) {
-                        if (vername.connectionState ==
-                                ConnectionState.waiting &&
-                            !vername.hasData) {
-                          return Container(
-                            height: 70,
-                          );
-                        } else if (vername.connectionState ==
-                                ConnectionState.done &&
-                            vername.hasData) {
-                          return AnimatedSwitcher(
-                            duration: Duration(milliseconds: 500),
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: vername.data!.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      selectedCategoryIndex = index;
-
-                                      setState(() {
-                                        ctrl.selectVariety =
-                                            vername.data![index];
-                                      });
-                                    });
+                  child: isDataCame
+                      ? FutureBuilder(
+                          future: ctrl.fetchvariety(),
+                          builder: (context, AsyncSnapshot<List> vername) {
+                            if (vername.connectionState ==
+                                    ConnectionState.waiting &&
+                                !vername.hasData) {
+                              return AnimatedSwitcher(
+                                duration: Duration(milliseconds: 500),
+                                child: LoadinAnimation2(
+                                  mainFrame: 200,
+                                  scale: 0.5,
+                                  viewportFraction: 0.9,
+                                ),
+                              );
+                            } else if (vername.connectionState ==
+                                ConnectionState.none) {
+                              return AnimatedSwitcher(
+                                  duration: Duration(milliseconds: 500),
+                                  child: LoadinAnimation2(
+                                    mainFrame: 200,
+                                    scale: 0.5,
+                                    viewportFraction: 0.9,
+                                  ));
+                            } else if (vername.connectionState ==
+                                    ConnectionState.done &&
+                                vername.hasData) {
+                              return AnimatedSwitcher(
+                                duration: Duration(milliseconds: 500),
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: vername.data!.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedCategoryIndex = index;
+                                          isDataCame = false;
+                                          setState(() {
+                                            ctrl.selectVariety =
+                                                vername.data![index];
+                                            isDataCame = true;
+                                          });
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 70,
+                                        alignment: Alignment.center,
+                                        height: 40,
+                                        margin:
+                                            const EdgeInsets.only(right: 30),
+                                        decoration: BoxDecoration(
+                                          color: selectedCategoryIndex == index
+                                              ? theme
+                                              : theme2,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          vername.data![index]
+                                              .toLowerCase()
+                                              .trim(),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 1,
+                                          style: TextStyle(),
+                                        )),
+                                      ),
+                                    );
                                   },
-                                  child: Container(
-                                    width: 70,
-                                    alignment: Alignment.center,
-                                    height: 40,
-                                    margin: const EdgeInsets.only(right: 30),
-                                    decoration: BoxDecoration(
-                                      color: selectedCategoryIndex == index
-                                          ? theme
-                                          : theme2,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                      vername.data![index].toLowerCase().trim(),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 1,
-                                      style: TextStyle(),
-                                    )),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        } else {
-                          return Container(
-                            height: 70,
-                          );
-                        }
-                      }),
+                                ),
+                              );
+                            } else {
+                              return AnimatedSwitcher(
+                                duration: Duration(milliseconds: 500),
+                                child: LoadinAnimation2(
+                                  mainFrame: 200,
+                                  scale: 0.5,
+                                  viewportFraction: 0.9,
+                                ),
+                              );
+                            }
+                          })
+                      : AnimatedSwitcher(
+                          duration: Duration(milliseconds: 500),
+                          child: LoadinAnimation2(
+                            mainFrame: 200,
+                            scale: 0.5,
+                            viewportFraction: 0.9,
+                          ),
+                        ),
                 ), // category detail products
 
                 Gap(24),
@@ -320,7 +354,8 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                                                                   TextOverflow
                                                                       .ellipsis,
                                                               maxLines: 1,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 color: Colors
                                                                     .white,
                                                                 fontSize: 12,
@@ -514,52 +549,7 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                 ),
                 Gap(10),
 
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 20, right: 20),
-                  height: 50,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: foodType.length,
-                    padding: const EdgeInsets.only(right: 20),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 1.0),
-                        child: TextButton(
-                          style: isfoodTypeSelect == index
-                              ? TextButton.styleFrom(
-                                  foregroundColor:
-                                      Theme.of(context).colorScheme.secondary,
-                                  backgroundColor: Theme.of(context)
-                                      .colorScheme
-                                      .tertiary
-                                      .withOpacity(0.2),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                )
-                              : TextButton.styleFrom(),
-                          onPressed: () {
-                            setState(() {
-                              _selectedFoodCategory = foodType[index];
-
-                              print(_selectedFoodCategory);
-                              isfoodTypeSelect = index;
-                            });
-                          },
-                          child: Text(
-                            foodType[index],
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.tertiary,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                RecommendationPart(context),
 
                 OptionBuilder(
                     ctrl: ctrl, selectedFoodCategory: _selectedFoodCategory),
@@ -576,5 +566,52 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
             ),
           );
         });
+  }
+
+  Container RecommendationPart(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.only(left: 20, right: 20),
+      height: 50,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: foodType.length,
+        padding: const EdgeInsets.only(right: 20),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 1.0),
+            child: TextButton(
+              style: isfoodTypeSelect == index
+                  ? TextButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.secondary,
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .tertiary
+                          .withOpacity(0.2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    )
+                  : TextButton.styleFrom(),
+              onPressed: () {
+                setState(() {
+                  _selectedFoodCategory = foodType[index];
+
+                  isfoodTypeSelect = index;
+                });
+              },
+              child: Text(
+                foodType[index],
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

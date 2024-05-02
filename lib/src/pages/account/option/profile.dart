@@ -29,73 +29,77 @@ class _ProfileState extends ConsumerState<Profile> {
         body: GetBuilder<AccountInfo>(
             init: AccountInfo(),
             builder: (ctlr) {
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    const Gap(30),
+              return SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Column(
+                    children: [
+                      const Gap(30),
 
-                    // image and edit icon
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Hero(
-                          tag: "profileImage",
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.network(widget.imageUrl,
-                                width: 100, height: 100, fit: BoxFit.cover),
+                      // image and edit icon
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Hero(
+                            tag: "profileImage",
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: Image.network(widget.imageUrl,
+                                  width: 100, height: 100, fit: BoxFit.cover),
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 70,
-                          alignment: AlignmentDirectional.bottomStart,
-                          child: Icon(
-                            Icons.edit,
-                            color: Theme.of(context).colorScheme.primary,
+                          Container(
+                            height: 70,
+                            alignment: AlignmentDirectional.bottomStart,
+                            child: Icon(
+                              Icons.edit,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
+                        ],
+                      ),
+
+                      // Username and email
+                      const Gap(40),
+
+                      Container(
+                        width: MediaQuery.of(context).size.width / 1.2,
+                        child: TextField(
+                          controller: usernameController,
                         ),
-                      ],
-                    ),
-
-                    // Username and email
-                    const Gap(40),
-
-                    Container(
-                      width: MediaQuery.of(context).size.width / 1.2,
-                      child: TextField(
-                        controller: usernameController,
                       ),
-                    ),
-                    const Gap(30),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 1.2,
-                      child: TextField(
-                        controller: emailController,
+                      const Gap(30),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 1.2,
+                        child: TextField(
+                          controller: emailController,
+                        ),
                       ),
-                    ),
-                    const Spacer(),
+                      const Spacer(),
 
-                    Container(
-                      width: MediaQuery.of(context).size.width / 1.2,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          ctlr.insertUser(
-                              userData: UserDataManager(
-                            widget.userDataManager.id,
-                            email: emailController.text,
-                            name: usernameController.text,
-                            password: widget.userDataManager.password,
-                            phone: widget.userDataManager.phone,
-                            image: widget.userDataManager.image,
-                          ));
-                        },
-                        child: Text('Save'),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 1.2,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            ctlr.insertUser(
+                                userData: UserDataManager(
+                              widget.userDataManager.id,
+                              email: emailController.text,
+                              name: usernameController.text,
+                              password: widget.userDataManager.password,
+                              phone: widget.userDataManager.phone,
+                              image: widget.userDataManager.image,
+                            ));
+                          },
+                          child: Text('Save'),
+                        ),
                       ),
-                    ),
-                  ],
+                      Gap(20),
+                    ],
+                  ),
                 ),
               );
             }));

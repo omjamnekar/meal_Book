@@ -7,33 +7,22 @@ import 'package:MealBook/src/pages/homePage/homeItem/comboSlider.dart';
 import 'package:MealBook/src/pages/homePage/homeItem/general.dart';
 import 'package:MealBook/src/pages/homePage/homeItem/recommend.dart';
 import 'package:MealBook/src/components/loaderAnimation.dart';
-import 'package:MealBook/src/pages/mainPage.dart';
 import 'package:MealBook/respository/provider/actuatorState.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({
     super.key,
     required this.user,
-    required this.ref,
-    required this.storage,
-    required this.imageListModel,
-    required this.imageUrls,
-    required this.comboDataManager,
   });
 
   final UserDataManager user;
-  final WidgetRef ref;
-  final FireStoreDataBase storage;
-  final ImageListModel imageListModel;
-  final List<String> imageUrls;
-  final List<Object?> comboDataManager;
 
   @override
   State<HomePageWidget> createState() => _HomePageWidgetState();
@@ -50,20 +39,17 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             child: Column(
               children: [
                 FutureBuilder(
-                    future: widget.storage.downloadURLs(),
+                    future: ctrl.fetchComboData(),
                     builder: (BuildContext builer,
-                        AsyncSnapshot<List<String>> snapshot) {
+                        AsyncSnapshot<List<Map<dynamic, dynamic>>> snapshot) {
                       if (snapshot.connectionState == ConnectionState.done &&
-                          snapshot.hasData) {
+                          snapshot.hasData &&
+                          snapshot.data != null) {
                         /// return Container();
 
                         return ComboSlider(
-                          imageListModel: widget.imageListModel,
-                          imageUrls: widget.imageUrls,
-                          snapshot: snapshot,
-                          comboDataManager: widget.comboDataManager,
-                        );
-                        // return Container();
+                            snapshot:
+                                snapshot.data! as List<Map<dynamic, dynamic>>);
                       }
                       if (snapshot.connectionState == ConnectionState.waiting ||
                           !snapshot.hasData) {
@@ -81,7 +67,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
                       return const CircularProgressIndicator();
                     }),
-                Gap(80),
+                const Gap(80),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Align(
@@ -96,8 +82,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     ),
                   ),
                 ),
-                Gap(35),
-                Container(
+                const Gap(35),
+                SizedBox(
                   width: MediaQuery.sizeOf(context).width,
                   height: 150,
                   child: ListView.builder(
@@ -110,9 +96,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                               width: 120,
                               height: 100,
                               "assets/image/productsALL/${featuredFood1[index]}"),
-                          Gap(9),
+                          const Gap(9),
                           Text(
-                            "${featuredFoodName1[index]}",
+                            featuredFoodName1[index],
                             style: GoogleFonts.poppins(
                                 fontSize: 17,
                                 color:
@@ -123,8 +109,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     },
                   ),
                 ),
-                Gap(4),
-                Container(
+                const Gap(4),
+                SizedBox(
                   width: MediaQuery.sizeOf(context).width,
                   height: 150,
                   child: ListView.builder(
@@ -137,9 +123,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                               width: 120,
                               height: 100,
                               "assets/image/productsALL/${featureFood2[index]}"),
-                          Gap(9),
+                          const Gap(9),
                           Text(
-                            "${featureFoodName2[index]}",
+                            featureFoodName2[index],
                             style: GoogleFonts.poppins(
                                 fontSize: 17,
                                 color:
@@ -163,16 +149,16 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   isRecommend = true;
                                 });
                               },
-                              child: Text("Recommended"))
+                              child: const Text("Recommended"))
                           : TextButton(
                               onPressed: () {
                                 setState(() {
                                   isRecommend = true;
                                 });
                               },
-                              child: Text("Recommended"),
+                              child: const Text("Recommended"),
                             ),
-                      Gap(10),
+                      const Gap(10),
                       isRecommend
                           ? TextButton(
                               onPressed: () {
@@ -180,7 +166,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   isRecommend = false;
                                 });
                               },
-                              child: Text("General"),
+                              child: const Text("General"),
                             )
                           : ElevatedButton(
                               onPressed: () {
@@ -188,45 +174,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   isRecommend = false;
                                 });
                               },
-                              child: Text("General")),
+                              child: const Text("General")),
                     ],
                   ),
                 ),
-                Gap(20),
-                isRecommend
-                    ? FutureBuilder(
-                        future: widget.storage.downloadURLs2(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<String>> snapshot) {
-                          if (snapshot.connectionState ==
-                                  ConnectionState.done &&
-                              snapshot.hasData) {
-                            return SubRecommed(
-                              snapshot: snapshot,
-                            );
-                          }
-                          if (snapshot.connectionState ==
-                                  ConnectionState.waiting ||
-                              !snapshot.hasData) {
-                            return LoadinAnimation(
-                              mainFrame: 200,
-                              scale: 0.5,
-                              viewportFraction: 0.4,
-                            );
-                          }
-
-                          if (snapshot.connectionState ==
-                                  ConnectionState.waiting ||
-                              !snapshot.hasData) {
-                            return const CircularProgressIndicator();
-                          }
-
-                          return const CircularProgressIndicator();
-                        })
-                    : GeneralItem(
-                        cntr: ctrl,
-                      ),
-                Gap(30),
+                const Gap(20),
+                isRecommend ? Recommed() : GeneralItem(),
+                const Gap(30),
               ],
             ),
           );

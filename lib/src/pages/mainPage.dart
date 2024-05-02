@@ -1,7 +1,6 @@
 import 'dart:core';
 
 import 'package:MealBook/src/Theme/theme_preference.dart';
-import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/controller/homeLogic.dart';
 import 'package:MealBook/firebase/image.dart';
 import 'package:MealBook/respository/model/user.dart';
@@ -15,19 +14,16 @@ import 'package:MealBook/src/pages/searchPage/search.dart';
 import 'package:MealBook/respository/provider/actuatorState.dart';
 import 'package:MealBook/respository/provider/userState.dart';
 import 'package:MealBook/src/util/user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:http/http.dart' as http;
 
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -41,19 +37,38 @@ class _HomePageState extends ConsumerState<MainPage> {
   int indexPage = 0;
   late ImageListModel imageListModel;
   DatabaseReference references = FirebaseDatabase.instance.ref();
-  List<Object?> comboDataManager = [];
-  UserDataManager user = UserDataManager(Uuid().v4());
+  List<Map<dynamic, dynamic>> comboDataManager = [];
+  UserDataManager user = UserDataManager(const Uuid().v4());
   UserState userData = UserState();
+
   void snapshot() async {
     await UserState.getUser().then((value) {
       setState(() {
         user = value;
       });
     });
+
     final snapshot = await references.child('combo/').get();
+    print(snapshot.value);
+
     if (snapshot.exists) {
-      comboDataManager.add(snapshot.value);
-    } else {}
+      if (snapshot.value is List) {
+        List<dynamic> dataList = snapshot.value as List<dynamic>;
+        comboDataManager = dataList.map((item) {
+          if (item is Map<dynamic, dynamic>) {
+            return item;
+          } else {
+            // Handle invalid data or return a default value
+            return {}; // or throw an error, depending on your use case
+          }
+        }).toList();
+        print(comboDataManager);
+      } else {
+        // Handle the case where snapshot.value is not a List
+      }
+    } else {
+      // Handle the case where snapshot does not exist
+    }
   }
 
   bool isDark = false;
@@ -75,7 +90,6 @@ class _HomePageState extends ConsumerState<MainPage> {
 
   homeController ctrla = homeController();
 
-  FireStoreDataBase storage = FireStoreDataBase();
   PageController pageController = PageController();
 
   void changePage(int pageIndex) {
@@ -89,18 +103,13 @@ class _HomePageState extends ConsumerState<MainPage> {
   final List<String> imageUrls = [];
   @override
   Widget build(BuildContext context) {
-    print(userImage);
     List<Widget> list = [
       HomePageWidget(
-          user: user,
-          ref: ref,
-          storage: storage,
-          imageListModel: imageListModel,
-          imageUrls: imageUrls,
-          comboDataManager: comboDataManager),
-      ComboStore(),
-      SearchPage(),
-      AccountManager(),
+        user: user,
+      ),
+      const ComboStore(),
+      const SearchPage(),
+      const AccountManager(),
     ];
 
     return Scaffold(
@@ -114,7 +123,7 @@ class _HomePageState extends ConsumerState<MainPage> {
             height: 50,
             child: Row(
               children: [
-                Container(
+                SizedBox(
                   width: 150,
                   height: 30,
                   child: Row(
@@ -127,7 +136,7 @@ class _HomePageState extends ConsumerState<MainPage> {
                           fontSize: 17,
                         ),
                       ),
-                      Gap(10),
+                      const Gap(10),
                       PopupMenuButton(
                         onSelected: (value) {
                           //   Navigator.push(context, MaterialPageRoute(builder: (context) =>Account)
@@ -136,50 +145,48 @@ class _HomePageState extends ConsumerState<MainPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         offset: const Offset(-97, 24),
-                        child: const Icon(
-                          Icons.arrow_drop_down_circle_outlined,
-                          size: 20.0,
-                          color: Color.fromARGB(221, 76, 76, 76),
-                        ),
                         surfaceTintColor:
                             Theme.of(context).colorScheme.tertiaryContainer,
                         itemBuilder: (BuildContext bc) {
                           return [AccountPop(context)];
                         },
+                        child: const Icon(
+                          Icons.arrow_drop_down_circle_outlined,
+                          size: 20.0,
+                          color: Color.fromARGB(221, 76, 76, 76),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 const Spacer(),
-                Container(
-                  child: Row(
-                    children: [
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     context.read<ThemeProvider>().toggleTheme();
-                      //   },
-                      //   child: Container(
-                      //     child: Icon(
-                      //       Icons.nightlight_outlined,
-                      //       color: Theme.of(context).dividerColor,
-                      //     ),
-                      //   ),
-                      // ),
-                      Gap(20),
-                      GestureDetector(
-                        onTap: () {
-                          //  Future<SignUpPlatform> signUpPlatformManager() async {
+                Row(
+                  children: [
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     context.read<ThemeProvider>().toggleTheme();
+                    //   },
+                    //   child: Container(
+                    //     child: Icon(
+                    //       Icons.nightlight_outlined,
+                    //       color: Theme.of(context).dividerColor,
+                    //     ),
+                    //   ),
+                    // ),
+                    const Gap(20),
+                    GestureDetector(
+                      onTap: () {
+                        //  Future<SignUpPlatform> signUpPlatformManager() async {
 
-                          ctrla.signOut(ref, context);
-                        },
-                        child: Transform.scale(
-                          scale: 2,
-                          child: Image.asset("assets/logo/burgur.png",
-                              width: 20, height: 20),
-                        ), // Increase the width and height values to scale up the image
-                      ),
-                    ],
-                  ),
+                        ctrla.signOut(ref, context);
+                      },
+                      child: Transform.scale(
+                        scale: 2,
+                        child: Image.asset("assets/logo/burgur.png",
+                            width: 20, height: 20),
+                      ), // Increase the width and height values to scale up the image
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -189,12 +196,11 @@ class _HomePageState extends ConsumerState<MainPage> {
       body: SafeArea(
           child: PageView.builder(
               onPageChanged: (int page) {
-                print(page);
                 setState(() {
                   indexPage = page;
                 });
               },
-              scrollBehavior: ScrollBehavior(),
+              scrollBehavior: const ScrollBehavior(),
               controller: pageController,
               itemCount: list.length,
               itemBuilder: (context, indexPAGE) {
@@ -218,11 +224,11 @@ class _HomePageState extends ConsumerState<MainPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).canvasColor,
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ChatPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ChatPage()));
         },
         child: Transform.translate(
-          offset: Offset(-2, 1),
+          offset: const Offset(-2, 1),
           child: Center(
             child: Image.asset(
               "assets/image/boat/boat.png",
@@ -235,31 +241,31 @@ class _HomePageState extends ConsumerState<MainPage> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   PopupMenuItem<String> AccountPop(BuildContext context) {
-    print(user.image);
     return PopupMenuItem(
       value: '/contact',
-      child: Container(
+      child: SizedBox(
         width: 200,
         child: Row(
           children: [
-            Container(
+            SizedBox(
                 width: 140,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${user.name ?? "UserName"}",
+                      user.name ?? "UserName",
                       style: GoogleFonts.poppins(
                           fontSize: 20,
                           height: 1,
                           color: Theme.of(context).colorScheme.onSecondary,
                           fontWeight: FontWeight.bold),
                     ),
-                    Gap(5),
+                    const Gap(5),
                     Text(
-                      "${user.email ?? "abc@gmail.com"}",
+                      user.email ?? "abc@gmail.com",
                       maxLines: 1,
                       style: GoogleFonts.poppins(
                           fontSize: 10,
@@ -268,12 +274,12 @@ class _HomePageState extends ConsumerState<MainPage> {
                     ),
                   ],
                 )),
-            Container(
+            SizedBox(
                 width: 60,
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(30),
                     child: Image.network(
-                      userImage.isNotEmpty ? userImage : str,
+                      user.image!.isNotEmpty ? user.image! : str,
                       width: 60,
                       height: 60,
                     ))),

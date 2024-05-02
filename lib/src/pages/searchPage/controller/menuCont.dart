@@ -123,9 +123,9 @@ class MenuFoodController extends GetxController {
     return url;
   }
 
-  void deleter() {
-    searchfilteredData.clear();
-    allData.clear();
-    mainData.clear();
-  }
+  // void deleter() {
+  //   searchfilteredData.clear();
+  //   allData.clear();
+  //   mainData.clear();
+  // }
 }

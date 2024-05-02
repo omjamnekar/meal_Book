@@ -3,6 +3,7 @@ import 'package:MealBook/respository/model/user.dart';
 import 'package:MealBook/src/Theme/theme_preference.dart';
 import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/src/pages/account/option/profile.dart';
+import 'package:MealBook/src/pages/account/option/security.dart';
 import 'package:MealBook/src/util/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
@@ -304,6 +305,14 @@ class _AccountManagerState extends ConsumerState<AccountManager>
                                       accountOption[index]["icon"] as IconData,
                                     ),
                                     onTap: () {
+                                      if (accountOption[index]["label"] ==
+                                          "Security and Privacy Settings") {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SecurityCheck()));
+                                      }
                                       if (accountOption[index]["label"] ==
                                           "Logout/Sign Out") {
                                         ctrl.signOut(context, ref);

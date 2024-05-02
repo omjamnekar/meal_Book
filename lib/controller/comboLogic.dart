@@ -1,7 +1,5 @@
-import 'package:MealBook/respository/provider/imageProvider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
@@ -15,7 +13,7 @@ class ComboLogic extends GetxController {
 
   Future<void> loader() async {
     final ref = FirebaseDatabase.instance.reference();
-    final snapshot = ref.child('products/');
+    final snapshot = ref.child('variety/');
     _variety = await snapshot.get();
   }
 
@@ -54,7 +52,6 @@ class ComboLogic extends GetxController {
     await loader();
     final value = _variety!.value;
     if (value is Map) {
-      // print(value.values);
       vername.clear();
       value.forEach((key, value) {
         vername.add(key);
@@ -66,7 +63,7 @@ class ComboLogic extends GetxController {
 
   Future<List> fetchvarietyData(String varietyName) async {
     await loader(); // Move loader outside the try block
-    // await fetchImage("CHAT KAMAL");
+    await fetchImage("CHAT KAMAL", vername);
     try {
       Map value = _variety!.value as Map;
       List? list;
@@ -94,13 +91,12 @@ class ComboLogic extends GetxController {
   Future<List<dynamic>> fullData(String _selectFoodType) async {
     final ref = FirebaseDatabase.instance.reference();
 
-    print(_selectFoodType.toLowerCase().replaceAll(" ", ""));
     final snapshot =
         ref.child('${_selectFoodType.toLowerCase().replaceAll(" ", "")}/');
     _recommend = await snapshot.get();
 
     final value = _recommend!.value;
-    print(value);
+
     if (value is List) {
       // Assuming value is a List<dynamic>
       recData = List.from(value);
@@ -121,27 +117,4 @@ class ComboLogic extends GetxController {
       return "";
     }
   }
-
-  // Future<String> fullDataImage(String category, String foodname) async {
-  //   try {
-  //     List<String> imagePaths =
-  //         await ImageDataProvider.fetchImagePaths(category, foodname);
-
-  //     // Check if there are any image paths available
-  //     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-  //     if (imagePaths.isNotEmpty) {
-  //       print("Image Path: ${imagePaths.first}");
-  //       // If paths are available, return the first one (or any logic based on your requirements)
-  //       return imagePaths.first;
-  //     }
-
-  //     // If no paths available, handle accordingly (e.g., return a default URL or an empty string)
-  //     print("No Image Paths Available");
-  //     return "";
-  //   } catch (e, stackTrace) {
-  //     print("Error getting image URL: $e");
-  //     print("Stack Trace: $stackTrace");
-  //     return "";
-  //   }
-  // }
 }

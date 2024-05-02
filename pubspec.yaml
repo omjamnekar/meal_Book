@@ -35,70 +35,75 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+ 
+ #widgets for shows
+ 
   gap: ^3.0.1
   google_fonts: ^6.2.0
   hexcolor: ^3.0.1
   flutter_animate: ^4.5.0
-  riverpod: ^2.5.0
-  provider: ^6.1.1
   card_swiper: ^3.0.1
+  lottie: ^3.1.0
+  animated_text_kit: ^4.2.2
+  flutter_chat_ui: ^1.6.12
+  file_picker: ^6.2.0
+  open_filex: ^4.4.0
+  image_picker: ^1.0.7
   
-  get: ^4.6.6
-  firebase_core: ^2.25.4
-  firebase_storage: ^11.6.6
-  cloud_firestore: ^4.15.5
-  firebase_database: ^10.4.6
- 
-  flutter_riverpod: ^2.4.10
+
+# state management
   shared_preferences: ^2.2.2
+  get: ^4.6.6
+  provider: ^6.1.1
+  riverpod: ^2.5.0
+
+# database management
+  firebase_core: ^2.25.4
+  cloud_firestore: ^4.15.5
+  firebase_storage: ^11.6.6
+  firebase_database: ^10.4.6
+  flutter_riverpod: ^2.4.10
   
+# network 
+  connectivity_plus: ^5.0.2
+  cached_network_image: ^3.3.1
+
+
 # authentication google apple 
   firebase_auth: ^4.17.4
   google_sign_in: ^6.2.1
 
   flutter_launcher_icons: ^0.13.1
-  lottie: ^3.1.0
   flutter_native_splash: ^2.3.10
   flutter_secure_storage: ^9.0.0
   shimmer: ^3.0.0
   popover: ^0.3.0
   another_flushbar: ^1.12.30
   uuid: ^4.3.3
-  showcaseview: ^2.0.3
+  # showcaseview: ^2.0.3
   smooth_page_indicator: ^1.1.0
   syncfusion_flutter_sliders: ^24.2.9
-  cached_network_image: ^3.3.1
-  connectivity_plus: ^5.0.2
-  animated_text_kit: ^4.2.2
-  flutter_chat_ui: ^1.6.12
-  file_picker: ^6.2.0
-  open_filex: ^4.4.0
-  image_picker: ^1.0.7
-  flutter_gemini: ^2.0.3
-
-  
-
  
 
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/logo/meal_book.png" 
+  image_path: "assets/logo/main.png" 
   adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/logo/adaptive_meal_book.jpg"
+  adaptive_icon_foreground: "assets/logo/ad2.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "assets/logo/meal_book.png"
+    image_path: "assets/logo/main.png"
     background_color: "#ffffff"
     theme_color: "#FD8D3C"
   windows:
     generate: true
-    image_path: "assets/logo/meal_book.png"
+    image_path: "assets/logo/main.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/logo/meal_book.png"
+    image_path: "assets/logo/main.png"
  
 
 dev_dependencies:

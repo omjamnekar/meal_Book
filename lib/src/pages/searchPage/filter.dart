@@ -18,10 +18,10 @@ class FilterDialog extends ConsumerStatefulWidget {
 
 class _FilterDialogState extends ConsumerState<FilterDialog> {
   bool onStateChange = false;
-  SfRangeValues _currentValues = SfRangeValues(50.0, 150.0);
+  SfRangeValues _currentValues = SfRangeValues(0.0, 75.0);
   @override
   Widget build(BuildContext context) {
-    return Flexible(
+    return Expanded(
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
@@ -77,7 +77,7 @@ class _FilterDialogState extends ConsumerState<FilterDialog> {
                   Gap(10),
                   SfRangeSlider(
                     min: 0.0,
-                    max: 200.0,
+                    max: 80.0,
                     values: _currentValues,
                     interval: 50.0,
                     showLabels: true,

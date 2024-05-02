@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -44,38 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDm_tnCHz6-MGu3fU4DgKtRt54HZC4X2Ec',
-    appId: '1:48308461876:web:c7b0b7225d3af241854561',
-    messagingSenderId: '48308461876',
-    projectId: 'meal-book-1d355',
-    authDomain: 'meal-book-1d355.firebaseapp.com',
-    storageBucket: 'meal-book-1d355.appspot.com',
-    measurementId: 'G-E95V6GGGJK',
+    apiKey: 'AIzaSyDpJhV523MQNZ2IzFN7BYjIHR0xZ2_ZsTU',
+    appId: '1:275691630070:web:6129f68afa686cc8d26bd7',
+    messagingSenderId: '275691630070',
+    projectId: 'mealbook-78c31',
+    authDomain: 'mealbook-78c31.firebaseapp.com',
+    storageBucket: 'mealbook-78c31.appspot.com',
+    measurementId: 'G-47NGNBML23',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCx5bJ4HD9KnjbQZ61R5vG6uOvepEiYVto',
-    appId: '1:48308461876:android:3311077beae92d59854561',
-    messagingSenderId: '48308461876',
-    projectId: 'meal-book-1d355',
-    storageBucket: 'meal-book-1d355.appspot.com',
+    apiKey: 'AIzaSyDEje4B5ftZQGWdwdSQobVxFEbm_d6DD4I',
+    appId: '1:275691630070:android:c791c3b0e6533156d26bd7',
+    messagingSenderId: '275691630070',
+    projectId: 'mealbook-78c31',
+    storageBucket: 'mealbook-78c31.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA0upvfVK_DpUyZAiv0hfKgO9eIu1z0g6Q',
-    appId: '1:48308461876:ios:12c603eeab66631b854561',
-    messagingSenderId: '48308461876',
-    projectId: 'meal-book-1d355',
-    storageBucket: 'meal-book-1d355.appspot.com',
+    apiKey: 'AIzaSyBorNnw_u2vM0hhEISOxYwuW2R_JcUkXdA',
+    appId: '1:275691630070:ios:78e0e1ca069628d9d26bd7',
+    messagingSenderId: '275691630070',
+    projectId: 'mealbook-78c31',
+    storageBucket: 'mealbook-78c31.appspot.com',
     iosBundleId: 'com.example.mealBook',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyA0upvfVK_DpUyZAiv0hfKgO9eIu1z0g6Q',
-    appId: '1:48308461876:ios:674545feaaa4e041854561',
-    messagingSenderId: '48308461876',
-    projectId: 'meal-book-1d355',
-    storageBucket: 'meal-book-1d355.appspot.com',
-    iosBundleId: 'com.example.mealBook.RunnerTests',
+    apiKey: 'AIzaSyBorNnw_u2vM0hhEISOxYwuW2R_JcUkXdA',
+    appId: '1:275691630070:ios:78e0e1ca069628d9d26bd7',
+    messagingSenderId: '275691630070',
+    projectId: 'mealbook-78c31',
+    storageBucket: 'mealbook-78c31.appspot.com',
+    iosBundleId: 'com.example.mealBook',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDpJhV523MQNZ2IzFN7BYjIHR0xZ2_ZsTU',
+    appId: '1:275691630070:web:e38d6b7ab48dc942d26bd7',
+    messagingSenderId: '275691630070',
+    projectId: 'mealbook-78c31',
+    authDomain: 'mealbook-78c31.firebaseapp.com',
+    storageBucket: 'mealbook-78c31.appspot.com',
+    measurementId: 'G-T7QMN4RE62',
+  );
+
 }

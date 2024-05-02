@@ -1,4 +1,3 @@
-import 'package:MealBook/dataAdder.dart';
 import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/controller/authLogic.dart';
 
@@ -22,6 +21,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   Get.put(AuthController());
   runApp(
     riverpod.ProviderScope(
@@ -34,7 +34,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -43,7 +43,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     Future.delayed(const Duration(seconds: 3), () {
@@ -68,8 +67,11 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
 
+            // home: SecurityCheck(),
+            // home: ProductDetail(),
             // home: Display()
             // home: Cart(),
+            // home: Display(),
           );
         },
       ),

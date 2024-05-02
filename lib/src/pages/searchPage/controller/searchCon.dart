@@ -59,20 +59,34 @@ class SearchPageController extends GetxController {
     return url;
   }
 
+  Future<void> categoryFilter(String category) async {
+    searchfilteredData.clear();
+    await loader();
+
+    if (category == "All") {
+      searchfilteredData = mainData;
+    } else {
+      searchfilteredData =
+          mainData.where((element) => element['CATEGORY'] == category).toList();
+      // print(searchfilteredData);
+    }
+  }
+
   Future<void> filterCategory(
     FilterManager filter,
   ) async {
+    searchfilteredData.clear();
     if (searchfilteredData.isEmpty) {
       await loader();
 
       searchfilteredData.addAll(mainData);
     }
-    print(searchfilteredData);
     searchfilteredData = searchfilteredData
         .where((element) =>
             element['RATE'] <= filter.maxPrice! &&
             element['RATE'] >= filter.minPrice!)
         .toList();
+    print(searchfilteredData);
   }
 
   Future<List<dynamic>> loader() async {

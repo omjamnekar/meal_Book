@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:MealBook/src/components/loaderAnimation.dart';
 import 'package:MealBook/src/pages/searchPage/controller/MenuCont.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +33,7 @@ class FoodMenu extends StatelessWidget {
                     color: Theme.of(context)
                         .colorScheme
                         .onPrimaryContainer
-                        .withOpacity(0.5),
+                        .withOpacity(1),
                   ),
                 ),
               ),
@@ -43,6 +46,13 @@ class FoodMenu extends StatelessWidget {
                     } else if (foodmenu.connectionState ==
                             ConnectionState.active &&
                         !foodmenu.hasData) {
+                      return Container(
+                        child: LoadinAnimation2(
+                          mainFrame: 150,
+                          scale: 0.4,
+                          viewportFraction: .3,
+                        ),
+                      );
                     } else if (foodmenu.connectionState ==
                             ConnectionState.done &&
                         foodmenu.hasData) {
@@ -91,18 +101,23 @@ class FoodMenu extends StatelessWidget {
                                                     const EdgeInsets.all(10),
                                                 child: Row(
                                                   children: [
-                                                    Text(
-                                                      "${foodmenu.data![index]['TYPE']}",
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onBackground,
+                                                    Container(
+                                                      width: 70,
+                                                      child: Text(
+                                                        "${foodmenu.data![index]['TYPE']}",
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .colorScheme
+                                                              .onBackground
+                                                              .withOpacity(0.5),
+                                                        ),
                                                       ),
                                                     ),
                                                     const Spacer(),
@@ -110,7 +125,8 @@ class FoodMenu extends StatelessWidget {
                                                       Icons.favorite_border,
                                                       color: Theme.of(context)
                                                           .colorScheme
-                                                          .onBackground,
+                                                          .onBackground
+                                                          .withOpacity(0.6),
                                                     ),
                                                   ],
                                                 ),
@@ -138,7 +154,13 @@ class FoodMenu extends StatelessWidget {
                         ),
                       );
                     }
-                    return Container();
+                    return Container(
+                      child: LoadinAnimation2(
+                        mainFrame: 150,
+                        scale: 0.4,
+                        viewportFraction: .3,
+                      ),
+                    );
                   }),
               Gap(40),
               Container(
@@ -153,7 +175,7 @@ class FoodMenu extends StatelessWidget {
                       color: Theme.of(context)
                           .colorScheme
                           .onPrimaryContainer
-                          .withOpacity(0.5),
+                          .withOpacity(.8),
                     )),
               ),
               Gap(20),
@@ -163,15 +185,15 @@ class FoodMenu extends StatelessWidget {
                       AsyncSnapshot<List<Map<String, dynamic>>> foodmenu) {
                     if (foodmenu.connectionState == ConnectionState.waiting &&
                         !foodmenu.hasData) {
-                      return Default();
+                      return const Default();
                     } else if (foodmenu.connectionState ==
                             ConnectionState.active &&
                         !foodmenu.hasData) {
-                      return Default();
+                      return const Default();
                     } else if (foodmenu.connectionState ==
                             ConnectionState.done &&
                         foodmenu.hasData) {
-                      return Container(
+                      return SizedBox(
                         width: MediaQuery.sizeOf(context).width,
                         height: 100,
                         child: ListView.builder(
@@ -179,64 +201,74 @@ class FoodMenu extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.only(left: 35),
                           itemBuilder: (context, index) {
-                            return FutureBuilder(
-                                future: ctrl.searchImage(
-                                    foodmenu.data![index]['TYPE'],
-                                    foodmenu.data![index]['IMAGE']),
-                                builder:
-                                    (context, AsyncSnapshot<String> menuImage) {
-                                  if (menuImage.connectionState ==
-                                          ConnectionState.waiting &&
-                                      menuImage.hasData) {
-                                    return Container();
-                                  } else if (menuImage.connectionState ==
-                                          ConnectionState.done &&
-                                      menuImage.hasData) {
-                                    return ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        width: 100,
-                                        height: 100,
-                                        margin:
-                                            const EdgeInsets.only(right: 20),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSecondaryContainer
-                                              .withOpacity(0.1),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: ColorFiltered(
-                                            colorFilter: ColorFilter.mode(
-                                              Colors.black.withOpacity(0.1),
-                                              BlendMode.darken,
-                                            ),
-                                            child: Image.network(
-                                              menuImage.data!,
-                                              width: 100,
-                                              height: 100,
+                            if (index > 1) {
+                              return FutureBuilder(
+                                  future: ctrl.searchImage(
+                                      foodmenu.data![index]['TYPE'],
+                                      foodmenu.data![index]['IMAGE']),
+                                  builder: (context,
+                                      AsyncSnapshot<String> menuImage) {
+                                    if (menuImage.connectionState ==
+                                            ConnectionState.waiting &&
+                                        menuImage.hasData) {
+                                      return Container();
+                                    } else if (menuImage.connectionState ==
+                                            ConnectionState.done &&
+                                        menuImage.hasData) {
+                                      return ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          width: 100,
+                                          height: 100,
+                                          margin:
+                                              const EdgeInsets.only(right: 20),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                              image:
+                                                  NetworkImage(menuImage.data!),
                                               fit: BoxFit.cover,
+                                              filterQuality: FilterQuality.high,
+                                              colorFilter: ColorFilter.mode(
+                                                  Colors.black.withOpacity(0.2),
+                                                  BlendMode.darken),
                                             ),
                                           ),
+                                          child: Stack(children: [
+                                            Positioned(
+                                              bottom: 10,
+                                              left: 10,
+                                              child: SizedBox(
+                                                width: 100,
+                                                child: Text(
+                                                  "${foodmenu.data![index]['ITEMS']}",
+                                                  maxLines: 1,
+                                                  style: GoogleFonts.poppins(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ]),
                                         ),
-                                      ),
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
-                                });
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  });
+                            }
+                            return Container();
                           },
                         ),
                       );
                     }
 
-                    return Default();
+                    return const Default();
                   }),
-              Gap(30),
+              const Gap(30),
               Container(
                 width: MediaQuery.sizeOf(context).width,
                 height: 240,

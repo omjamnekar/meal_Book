@@ -13,51 +13,50 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
   DatabaseReference ref = FirebaseDatabase.instance.ref();
 
-  Object? products;
-  List productList = [];
   String displayText = 'Results go here!';
 
-  snapshot() async {
-    await ref.child('all/').set(all);
-    print("object");
-    // productList = [];
-    // if (snapshot.exists) {
-    //   productList.add(snapshot.value);
-    //   products = (snapshot.value);
-    //   print(snapshot);
-    //   print(snapshot.value);
-    // } else {
-    //   print('No Data Available');
-    // }
+  Future<void> snapshot() async {
+    // Assuming you want to retrieve data
+    //from Firebase
+    DataSnapshot snapshot = await ref.child('asf/').get();
+    await call();
+    setState(() {
+      displayText = snapshot.value.toString(); // Update the display text
+    });
   }
 
-  call() async {
-    final snapshot = ref.child('comboData/');
-    snapshot.set(comboData).then((value) => print("work is done"));
+  Future<void> call() async {
+    print("a");
+    await ref.child('combo/').set(products);
+    print("work is done");
   }
 
   @override
   void initState() {
     super.initState();
-    call();
+
     snapshot();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        Gap(50),
-        ElevatedButton(
-          onPressed: () async {
-            // await ref.set({"name": "Tyler"});
-            snapshot();
-          },
-          child: const Text("Add Data"),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Gap(50),
+            ElevatedButton(
+              onPressed: () {
+                snapshot(); // Call the snapshot function to update the data
+              },
+              child: const Text("Add Data"),
+            ),
+            Text(displayText,
+                style: const TextStyle(
+                    color: Colors.white)), // Display the updated text
+          ],
         ),
-        Text("${snapshot()}", style: TextStyle(color: Colors.white))
-      ],
-    ));
+      ),
+    );
   }
 }

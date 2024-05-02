@@ -1,4 +1,4 @@
-Map<int, Map<String, dynamic>> asf = {
+Map<int, Map<String, dynamic>> products = {
   0: {
     "containerColor": "87CEEB",
     "headerColor": "FFB800",

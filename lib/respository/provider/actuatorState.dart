@@ -19,6 +19,7 @@ class ImageListNotifier extends StateNotifier<ImageListModel> {
 
     try {
       final ListResult result = await storageRef.listAll();
+
       final List<String> imageUrls = [];
 
       for (var item in result.items) {

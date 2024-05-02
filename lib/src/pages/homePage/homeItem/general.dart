@@ -1,134 +1,136 @@
-import 'package:MealBook/controller/homeLogic.dart';
+import 'package:MealBook/controller/generalControler.dart';
+import 'package:MealBook/respository/json/combo.dart';
+import 'package:MealBook/respository/model/combo.dart';
 import 'package:MealBook/src/components/loaderAnimation.dart';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
-class GeneralItem extends StatefulWidget {
+class GeneralItem extends StatelessWidget {
   GeneralItem({
     super.key,
-    required this.cntr,
   });
-  homeController cntr;
 
-  @override
-  State<GeneralItem> createState() => _GeneralItemState();
-}
-
-class _GeneralItemState extends State<GeneralItem> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.sizeOf(context).width,
-      height: 200,
-      margin: const EdgeInsets.only(bottom: 20),
-      child: FutureBuilder(
-          future: widget.cntr.generalLoading(),
-          builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snp) {
-            if (snp.connectionState == ConnectionState.done && snp.hasData) {
-              return Swiper(
+    return FutureBuilder(
+        future: GeneralData().imageURlList(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<String>> snapListImage) {
+          if (snapListImage.connectionState == ConnectionState.waiting) {
+            return LoadinAnimation(
+              mainFrame: 200,
+              scale: 0.5,
+              viewportFraction: 0.4,
+            );
+          } else if (snapListImage.connectionState == ConnectionState.none) {
+            return LoadinAnimation(
+              mainFrame: 200,
+              scale: 0.5,
+              viewportFraction: 0.4,
+            );
+          } else if (snapListImage.connectionState == ConnectionState.done &&
+              snapListImage.hasData) {
+            return Container(
+              width: MediaQuery.sizeOf(context).width,
+              height: 200,
+              margin: const EdgeInsets.only(bottom: 20),
+              child: Swiper(
                 containerHeight: 420,
-                itemCount: snp.data!.length,
+                itemCount: snapListImage.data!.length,
                 itemBuilder: (context, index) {
-                  return Transform.translate(
-                    offset: Offset(-40, 0),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 1, color: Color.fromARGB(136, 62, 62, 62)),
-                        borderRadius: BorderRadius.circular(10),
-                        color: Theme.of(context).colorScheme.tertiaryContainer,
-                      ),
-                      child: Stack(
-                        children: [
-                          const Positioned(
+                  if (snapListImage.connectionState ==
+                      ConnectionState.waiting) {
+                    return _imageLoading();
+                  } else if (snapListImage.connectionState ==
+                      ConnectionState.done) {
+                    return Transform.translate(
+                      offset: Offset(-40, 0),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 1, color: Color.fromARGB(136, 62, 62, 62)),
+                          borderRadius: BorderRadius.circular(10),
+                          color:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                        ),
+                        child: Stack(
+                          children: [
+                            const Positioned(
+                                top: 10,
+                                right: 10,
+                                child: Icon(Icons.arrow_forward)),
+                            Positioned(
                               top: 10,
-                              right: 10,
-                              child: Icon(Icons.arrow_forward)),
-                          Positioned(
-                            top: 10,
-                            left: 10,
-                            child: Container(
+                              left: 10,
+                              child: Container(
+                                  margin:
+                                      const EdgeInsets.only(top: 20, left: 10),
+                                  width: 110,
+                                  child: Text(
+                                    comboData[index]!["name"],
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        height: 1,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onTertiary),
+                                  )),
+                            ),
+                            Positioned(
+                              bottom: -9,
+                              right: -10,
+                              child: Container(
                                 margin:
                                     const EdgeInsets.only(top: 20, left: 10),
-                                width: 110,
-                                child: Text(
-                                  "${snp.data![index]!["ITEMS"]}",
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      height: 1,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onTertiary),
-                                )),
-                          ),
-                        ],
+                                width: 140,
+                                height: 140,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        snapListImage.data![index]),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
+
+                  return _imageLoading();
                 },
                 viewportFraction: 0.4,
                 scale: 0.5,
-              );
-            }
-            if (snp.connectionState == ConnectionState.waiting ||
-                !snp.hasData) {
-              return LoadinAnimation(
-                mainFrame: 200,
-                scale: 0.5,
-                viewportFraction: 0.4,
-              );
-            }
+              ),
+            );
+          }
 
-            if (snp.connectionState == ConnectionState.waiting ||
-                !snp.hasData) {
-              return const CircularProgressIndicator();
-            }
+          return LoadinAnimation(
+            mainFrame: 200,
+            scale: 0.5,
+            viewportFraction: 0.4,
+          );
+        });
+  }
 
-            return const CircularProgressIndicator();
-          }),
+  Widget _imageLoading() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(30),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          width: 250, //250
+          height: 200, //200
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }
-
-
-
-  //  FutureBuilder(
-  //                             future: widget.cntr
-  //                                 .listImage(snp.data![index]!["IMAGE"]),
-  //                             builder: (context, AsyncSnapshot<String> image) {
-  //                               print(image.data);
-  //                               if (image.connectionState ==
-  //                                       ConnectionState.waiting &&
-  //                                   !image.hasData) {
-  //                                 return Container();
-  //                               } else if (image.connectionState ==
-  //                                       ConnectionState.done &&
-  //                                   image.hasData) {
-  //                                 return Positioned(
-  //                                   bottom: -70,
-  //                                   right: -5,
-  //                                   child: Container(
-  //                                     margin: const EdgeInsets.only(
-  //                                         top: 20, left: 10),
-  //                                     width: 150,
-  //                                     child: Image.network(
-  //                                       image.data!,
-  //                                       width: 200,
-  //                                       height: 200,
-  //                                     ),
-  //                                   ),
-  //                                 );
-  //                               } else {
-  //                                 return Container(
-  //                                   child: Text("No Image"),
-  //                                 );
-  //                               }
-  //                             }),
-            
-            

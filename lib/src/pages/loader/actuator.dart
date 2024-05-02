@@ -1,5 +1,6 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:MealBook/src/pages/mainPage.dart';
-import 'package:MealBook/src/pages/registration/register.dart';
 import 'package:MealBook/respository/provider/actuatorState.dart';
 import 'package:MealBook/respository/provider/registerState.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,9 @@ class Actuator extends ConsumerStatefulWidget {
 class _ActuatorState extends ConsumerState<Actuator> {
   @override
   void initState() {
-    // TODO: implement initState
     ref.read(imageListProvider.notifier).fetchData();
     super.initState();
-    Future.delayed(Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -51,12 +51,13 @@ class _ActuatorState extends ConsumerState<Actuator> {
       duration:
           const Duration(seconds: 1), // Define the duration of the animation
       transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(child: child, opacity: animation);
+        return FadeTransition(opacity: animation, child: child);
       },
+      //  child: widget.Register,
       child: booleanState.value
           ? _isLoading
               ? widget.child
-              : MainPage()
+              : const MainPage()
           : ref.watch(imageListProvider).dataCame
               ? widget.Register
               : widget.child,

@@ -104,7 +104,7 @@ class _IntroPageState extends State<IntroPage>
                                 height: 100,
                                 decoration: const BoxDecoration(),
                                 child: Image.asset(
-                                  "assets/logo/meal_book.png",
+                                  "assets/logo/main.png",
                                   width: 190,
                                   height: 90,
                                   fit: BoxFit.contain,
@@ -112,6 +112,8 @@ class _IntroPageState extends State<IntroPage>
                           ),
                         );
                       }),
+
+                  Gap(7),
 
                   Animate(
                     delay: Duration(seconds: 1),

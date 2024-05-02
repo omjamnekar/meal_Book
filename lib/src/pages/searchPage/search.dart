@@ -5,12 +5,10 @@ import 'package:MealBook/src/pages/searchPage/filter.dart';
 import 'package:MealBook/src/pages/searchPage/foodMenu.dart';
 import 'package:MealBook/src/pages/searchPage/searchFilter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
@@ -29,6 +27,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     sd();
   }
 
+  List<Map<String, dynamic>> filterpattern = [];
   bool isSearchClick = false;
   List<dynamic> filterData = [];
 
@@ -46,18 +45,18 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         init: SearchPageController(),
         builder: (ctrl) {
           return SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
                 width: MediaQuery.sizeOf(context).width,
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       child: Column(
                         children: [
-                          isSearchClick == true ? Gap(20) : Gap(50),
+                          isSearchClick == true ? const Gap(20) : const Gap(50),
 
                           //  Search bar
 
-                          Container(
+                          SizedBox(
                             width: MediaQuery.sizeOf(context).width,
                             height: 70,
                             child: Row(
@@ -73,12 +72,12 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                       });
                                     },
                                     onTapOutside: (value) {
-                                      if (!isSearch) {
+                                      if (value.isBlank == true) {
                                         setState(() {
                                           isSearchClick = false;
                                         });
                                       } else {
-                                        ctrl.deleter();
+                                        //   ctrl.deleter();
                                       }
                                     },
                                     onSubmitted: (value) {
@@ -93,7 +92,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                           isSearch = false;
                                           isSearchClick = false;
                                         });
-                                        ctrl.deleter();
+                                        //  ctrl.deleter();
                                       }
                                     },
                                     onChanged: (value) {
@@ -106,8 +105,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                         setState(() {
                                           isSearch = false;
                                         });
-
-                                        filterData = ctrl.searchfilteredData;
                                       }
                                     },
                                     controller: ctrl.searchController,
@@ -136,20 +133,25 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                     ),
                                   ),
                                 ),
-                                Gap(10),
+                                const Gap(10),
                                 // Filter
                                 GestureDetector(
                                   onTap: () {
                                     showModalBottomSheet(
                                       context: context,
+                                      // scrollControlDisabledMaxHeightRatio: 0.01,
+                                      //   isScrollControlled: true,
                                       builder: (context) {
                                         return FilterDialog(callback: (value) {
                                           setState(() {
                                             filter = value;
-                                            isFrontFilter = true;
                                           });
 
-                                          ctrl.filterCategory(filter!);
+                                          ctrl
+                                              .filterCategory(value)
+                                              .then((value) => setState(() {
+                                                    isFrontFilter = true;
+                                                  }));
                                         });
                                       },
                                     );
@@ -164,14 +166,14 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                           .withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: Icon(Icons.dashboard_outlined),
+                                    child: const Icon(Icons.dashboard_outlined),
                                   ),
                                 ),
                               ],
                             ),
                           ),
 
-                          Gap(10),
+                          const Gap(10),
                           Container(
                             margin: const EdgeInsets.only(left: 27, right: 27),
                             width: MediaQuery.sizeOf(context).width,
@@ -184,7 +186,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                   onTap: () {
                                     setState(() {
                                       _selectedItem = "Breakfast";
-                                      isFrontFilter = true;
+                                    });
+                                    ctrl
+                                        .categoryFilter(_selectedItem)
+                                        .then((value) {
+                                      setState(() {
+                                        isFrontFilter = true;
+                                      });
                                     });
                                   },
                                   child: CategorySearch(
@@ -193,13 +201,19 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                     isSelected: _selectedItem == "Breakfast",
                                   ),
                                 ),
-                                Gap(20),
+                                const Gap(20),
                                 // Dessert
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
                                       _selectedItem = "Dessert";
-                                      isFrontFilter = true;
+                                    });
+                                    ctrl
+                                        .categoryFilter(_selectedItem)
+                                        .then((value) {
+                                      setState(() {
+                                        isFrontFilter = true;
+                                      });
                                     });
                                   },
                                   child: CategorySearch(
@@ -209,12 +223,18 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                   ),
                                 ),
 
-                                Gap(20),
+                                const Gap(20),
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
                                       _selectedItem = "Meal";
-                                      isFrontFilter = true;
+                                    });
+                                    ctrl
+                                        .categoryFilter(_selectedItem)
+                                        .then((value) {
+                                      setState(() {
+                                        isFrontFilter = true;
+                                      });
                                     });
                                   },
                                   child: CategorySearch(
@@ -224,7 +244,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                   ),
                                 ),
 
-                                Gap(20),
+                                const Gap(20),
                                 Column(
                                   children: [
                                     Material(
@@ -252,8 +272,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                             filterDialog(context, (value) {
                                               setState(() {
                                                 _selectedItem = value;
-                                                isFrontFilter = true;
                                               });
+
+                                              ctrl
+                                                  .categoryFilter(_selectedItem)
+                                                  .then((value) => setState(() {
+                                                        isFrontFilter = true;
+                                                      }));
 
                                               // ctrl.
                                             });
@@ -273,7 +298,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                                             onTap: () {
                                               setState(() {
                                                 isFrontFilter = false;
-
+                                                ctrl.deleter();
                                                 _selectedItem = "All";
                                               });
                                             },
@@ -323,6 +348,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                             ),
                           ),
                           //heading
+                          Gap(20),
                         ],
                       ),
                     ),
