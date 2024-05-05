@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+
 class Combo {
   final int id;
   final String items;

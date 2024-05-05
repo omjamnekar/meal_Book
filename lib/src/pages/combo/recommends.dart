@@ -1,7 +1,7 @@
 import 'package:MealBook/controller/comboLogic.dart';
 import 'package:MealBook/respository/model/combo.dart';
 import 'package:MealBook/src/components/navigateTodetail.dart';
-import 'package:MealBook/src/pages/proD/proDetail.dart';
+import 'package:MealBook/src/pages/proD/productDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -250,7 +250,7 @@ class OptionBuilder extends StatelessWidget {
                                             style: TextButton.styleFrom(
                                               foregroundColor: Theme.of(context)
                                                   .colorScheme
-                                                  .tertiaryContainer,
+                                                  .onPrimaryContainer,
                                               backgroundColor: Theme.of(context)
                                                   .colorScheme
                                                   .onPrimaryContainer
@@ -266,7 +266,7 @@ class OptionBuilder extends StatelessWidget {
                                               style: TextStyle(
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .onTertiaryContainer,
+                                                    .background,
                                               ),
                                             )),
                                       ],

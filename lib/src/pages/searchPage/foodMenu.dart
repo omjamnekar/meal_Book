@@ -1,7 +1,11 @@
 import 'dart:ffi';
 
+import 'package:MealBook/respository/model/combo.dart';
+import 'package:MealBook/src/components/comboToNavigator.dart';
 import 'package:MealBook/src/components/loaderAnimation.dart';
+import 'package:MealBook/src/components/navigateTodetail.dart';
 import 'package:MealBook/src/pages/searchPage/controller/MenuCont.dart';
+import 'package:MealBook/src/pages/searchPage/otherConnections/foodMenu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -78,71 +82,91 @@ class FoodMenu extends StatelessWidget {
                                   } else if (menuImage.connectionState ==
                                           ConnectionState.done &&
                                       menuImage.hasData) {
-                                    return ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        width: 130,
-                                        height: 110,
-                                        margin:
-                                            const EdgeInsets.only(right: 20),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSecondaryContainer
-                                              .withOpacity(0.03),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            Positioned(
-                                              child: Container(
-                                                margin:
-                                                    const EdgeInsets.all(10),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      width: 70,
-                                                      child: Text(
-                                                        "${foodmenu.data![index]['TYPE']}",
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .colorScheme
-                                                              .onBackground
-                                                              .withOpacity(0.5),
+                                    return GestureDetector(
+                                      onTap: () {
+                                        List<String> optionFoodVer = foodmenu
+                                            .data!
+                                            .map<String>(
+                                                (e) => e['TYPE'] as String)
+                                            .toList();
+
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    FoodMenuShower(
+                                                      title: foodmenu
+                                                          .data![index]['TYPE'],
+                                                      items: optionFoodVer,
+                                                    )));
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          width: 130,
+                                          height: 110,
+                                          margin:
+                                              const EdgeInsets.only(right: 20),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer
+                                                .withOpacity(0.03),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Stack(
+                                            children: [
+                                              Positioned(
+                                                child: Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        width: 70,
+                                                        child: Text(
+                                                          "${foodmenu.data![index]['TYPE']}",
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onBackground
+                                                                .withOpacity(
+                                                                    0.5),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    const Spacer(),
-                                                    Icon(
-                                                      Icons.favorite_border,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onBackground
-                                                          .withOpacity(0.6),
-                                                    ),
-                                                  ],
+                                                      const Spacer(),
+                                                      Icon(
+                                                        Icons.favorite_border,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onBackground
+                                                            .withOpacity(0.6),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Spacer(),
-                                            Positioned(
-                                              bottom: -50,
-                                              right: -50,
-                                              child: Image.network(
-                                                menuImage.data!,
-                                                width: 150,
-                                                height: 150,
+                                              Spacer(),
+                                              Positioned(
+                                                bottom: -50,
+                                                right: -50,
+                                                child: Image.network(
+                                                  menuImage.data!,
+                                                  width: 150,
+                                                  height: 150,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     );
@@ -217,42 +241,55 @@ class FoodMenu extends StatelessWidget {
                                         menuImage.hasData) {
                                       return ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: Container(
-                                          width: 100,
-                                          height: 100,
-                                          margin:
-                                              const EdgeInsets.only(right: 20),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image:
-                                                  NetworkImage(menuImage.data!),
-                                              fit: BoxFit.cover,
-                                              filterQuality: FilterQuality.high,
-                                              colorFilter: ColorFilter.mode(
-                                                  Colors.black.withOpacity(0.2),
-                                                  BlendMode.darken),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Combo _combo = Combo.fromMap(
+                                                foodmenu.data![index]);
+
+                                            NavigatorToDetail()
+                                                .navigatorToProDetail(context,
+                                                    [_combo], foodmenu.data!);
+                                          },
+                                          child: Container(
+                                            width: 100,
+                                            height: 100,
+                                            margin: const EdgeInsets.only(
+                                                right: 20),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                    menuImage.data!),
+                                                fit: BoxFit.cover,
+                                                filterQuality:
+                                                    FilterQuality.high,
+                                                colorFilter: ColorFilter.mode(
+                                                    Colors.black
+                                                        .withOpacity(0.2),
+                                                    BlendMode.darken),
+                                              ),
                                             ),
-                                          ),
-                                          child: Stack(children: [
-                                            Positioned(
-                                              bottom: 10,
-                                              left: 10,
-                                              child: SizedBox(
-                                                width: 100,
-                                                child: Text(
-                                                  "${foodmenu.data![index]['ITEMS']}",
-                                                  maxLines: 1,
-                                                  style: GoogleFonts.poppins(
-                                                    color: Colors.white,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
+                                            child: Stack(children: [
+                                              Positioned(
+                                                bottom: 10,
+                                                left: 10,
+                                                child: SizedBox(
+                                                  width: 100,
+                                                  child: Text(
+                                                    "${foodmenu.data![index]['ITEMS']}",
+                                                    maxLines: 1,
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.white,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ]),
+                                            ]),
+                                          ),
                                         ),
                                       );
                                     } else {
@@ -268,47 +305,47 @@ class FoodMenu extends StatelessWidget {
 
                     return const Default();
                   }),
-              const Gap(30),
-              Container(
-                width: MediaQuery.sizeOf(context).width,
-                height: 240,
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(left: 15),
-                  itemCount: 10,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        Container(
-                          width: 350,
-                          height: 100,
-                          margin: const EdgeInsets.only(right: 20),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer
-                                .withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        Gap(20),
-                        Container(
-                          width: 350,
-                          height: 100,
-                          margin: const EdgeInsets.only(right: 20),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer
-                                .withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              )
+              // const Gap(30),
+              // Container(
+              //   width: MediaQuery.sizeOf(context).width,
+              //   height: 240,
+              //   child: ListView.builder(
+              //     padding: const EdgeInsets.only(left: 15),
+              //     itemCount: 10,
+              //     scrollDirection: Axis.horizontal,
+              //     itemBuilder: (context, index) {
+              //       return Column(
+              //         children: [
+              //           Container(
+              //             width: 350,
+              //             height: 100,
+              //             margin: const EdgeInsets.only(right: 20),
+              //             decoration: BoxDecoration(
+              //               color: Theme.of(context)
+              //                   .colorScheme
+              //                   .onSecondaryContainer
+              //                   .withOpacity(0.1),
+              //               borderRadius: BorderRadius.circular(20),
+              //             ),
+              //           ),
+              //           Gap(20),
+              //           Container(
+              //             width: 350,
+              //             height: 100,
+              //             margin: const EdgeInsets.only(right: 20),
+              //             decoration: BoxDecoration(
+              //               color: Theme.of(context)
+              //                   .colorScheme
+              //                   .onSecondaryContainer
+              //                   .withOpacity(0.1),
+              //               borderRadius: BorderRadius.circular(20),
+              //             ),
+              //           ),
+              //         ],
+              //       );
+              //     },
+              //   ),
+              // )
             ],
           );
         });

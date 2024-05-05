@@ -1,5 +1,7 @@
 import 'package:MealBook/respository/json/combo.dart';
+import 'package:MealBook/respository/model/combo.dart';
 import 'package:MealBook/src/components/loaderAnimation.dart';
+import 'package:MealBook/src/components/navigateTodetail.dart';
 import 'package:MealBook/src/pages/searchPage/controller/searchCon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -86,99 +88,107 @@ class _SearchAndFilterContentState extends State<SearchAndFilterContent>
               padding: const EdgeInsets.only(bottom: 690),
               itemCount: widget.allData.length,
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      FutureBuilder(
-                          future: SearchPageController.searchImage(
-                              widget.allData[index]['TYPE'],
-                              widget.allData[index]['IMAGE']),
-                          builder:
-                              (context, AsyncSnapshot<String> imageSnapShot) {
-                            if (imageSnapShot.connectionState ==
-                                    ConnectionState.waiting &&
-                                !imageSnapShot.hasData) {
-                              return EasyAnimater();
-                            } else if (imageSnapShot.connectionState ==
-                                    ConnectionState.done &&
-                                imageSnapShot.hasData) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: Image.network(
-                                  imageSnapShot.data ?? "",
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
+                return GestureDetector(
+                  onTap: () {
+                    Combo combo = Combo.fromMap(widget.allData[index]);
+                    NavigatorToDetail()
+                        .navigatorToProDetail(context, [combo], widget.allData);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        FutureBuilder(
+                            future: SearchPageController.searchImage(
+                                widget.allData[index]['TYPE'],
+                                widget.allData[index]['IMAGE']),
+                            builder:
+                                (context, AsyncSnapshot<String> imageSnapShot) {
+                              if (imageSnapShot.connectionState ==
+                                      ConnectionState.waiting &&
+                                  !imageSnapShot.hasData) {
+                                return EasyAnimater();
+                              } else if (imageSnapShot.connectionState ==
+                                      ConnectionState.done &&
+                                  imageSnapShot.hasData) {
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: Image.network(
+                                    imageSnapShot.data ?? "",
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
+                                );
+                              } else if (imageSnapShot.hasError) {
+                                return EasyAnimater();
+                              } else {
+                                return EasyAnimater();
+                              }
+                            }),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              width: 280,
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                widget.allData[index]['ITEMS'] ?? "No Name",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              );
-                            } else if (imageSnapShot.hasError) {
-                              return EasyAnimater();
-                            } else {
-                              return EasyAnimater();
-                            }
-                          }),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                            width: 280,
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              widget.allData[index]['ITEMS'] ?? "No Name",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                          Container(
-                            width: 280,
-                            child: Text(
-                              widget.allData[index]['DESCRIPTION'] ??
-                                  "No Description",
-                              textAlign: TextAlign.end,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                            Container(
+                              width: 280,
+                              child: Text(
+                                widget.allData[index]['DESCRIPTION'] ??
+                                    "No Description",
+                                textAlign: TextAlign.end,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color:
+                                      Theme.of(context).colorScheme.onTertiary,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
+                            Gap(5),
+                            Text(
+                              "${widget.allData[index]['RATE'].toString()}Rs" ??
+                                  "No Price",
+                              style: const TextStyle(
                                 fontSize: 15,
-                                color: Theme.of(context).colorScheme.onTertiary,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
-                          ),
-                          Gap(5),
-                          Text(
-                            "${widget.allData[index]['RATE'].toString()}Rs" ??
-                                "No Price",
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

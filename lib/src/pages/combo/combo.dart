@@ -1,8 +1,12 @@
 import 'package:MealBook/controller/comboLogic.dart';
+import 'package:MealBook/respository/model/combo.dart';
 import 'package:MealBook/src/Theme/theme_preference.dart';
+import 'package:MealBook/src/components/categoryToGridPage.dart';
 import 'package:MealBook/src/components/loaderAnimation.dart';
+import 'package:MealBook/src/components/navigateTodetail.dart';
 import 'package:MealBook/src/pages/combo/recommends.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -363,29 +367,99 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                                                             ),
                                                           ),
                                                           Spacer(),
-                                                          Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 10,
-                                                                    right: 10,
-                                                                    top: 5,
-                                                                    bottom: 5),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                            ),
-                                                            child: Text(
-                                                              "Order Now",
-                                                              style: TextStyle(
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              Combo _combo =
+                                                                  Combo(
+                                                                id: verData
+                                                                        .data![
+                                                                    index]["ID"],
+                                                                items: verData
+                                                                            .data![
+                                                                        index]
+                                                                    ["ITEMS"],
+                                                                rate: verData
+                                                                        .data![
+                                                                    index]["RATE"],
+                                                                description: verData
+                                                                            .data![
+                                                                        index][
+                                                                    "DESCRIPTION"],
+                                                                category: verData
+                                                                            .data![
+                                                                        index][
+                                                                    "CATEGORY"],
+                                                                available:
+                                                                    verData.data![index]["AVAILABLE"] ==
+                                                                            'true'
+                                                                        ? true
+                                                                        : false,
+                                                                likes: verData
+                                                                            .data![
+                                                                        index]
+                                                                    ["LIKES"],
+                                                                isPopular:
+                                                                    verData.data![index]["POPULAR"] ==
+                                                                            'true'
+                                                                        ? true
+                                                                        : false,
+                                                                overallRating:
+                                                                    verData.data![
+                                                                            index]
+                                                                        [
+                                                                        "OVERALL_RATING"],
+                                                                image: imageUrl
+                                                                        .data![
+                                                                    index],
+                                                                isVeg: verData.data![index]
+                                                                            [
+                                                                            "IS_VEG"] ==
+                                                                        'true'
+                                                                    ? true
+                                                                    : false,
+                                                                type: verData
+                                                                        .data![
+                                                                    index]["TYPE"],
+                                                                ingredients: List<
+                                                                    String>.from(verData
+                                                                            .data![
+                                                                        index][
+                                                                    "INGREDIENTS"]),
+                                                              );
+
+                                                              NavigatorToDetail()
+                                                                  .navigatorToProDetail(
+                                                                      context,
+                                                                      [_combo],
+                                                                      verData
+                                                                          .data!);
+                                                            },
+                                                            child: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 10,
+                                                                      right: 10,
+                                                                      top: 5,
+                                                                      bottom:
+                                                                          5),
+                                                              decoration:
+                                                                  BoxDecoration(
                                                                 color: Colors
-                                                                    .black,
-                                                                fontSize: 12,
+                                                                    .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              child: Text(
+                                                                "Order Now",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 12,
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
@@ -463,49 +537,69 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                       itemCount: lottieCategory.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 90,
-                              height: 90,
-                              margin: const EdgeInsets.only(left: 15),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primaryContainer
-                                        .withOpacity(0.2)),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: LottieBuilder.asset(
-                                  isDarkMode
-                                      ? lottieCategoryDarkTheme[index]
-                                      : lottieCategory[index],
-                                  fit: BoxFit.cover,
-                                  width: 70,
-                                  height: 70,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CategoryToGrid(
+                                        categoryName: catagoryList[index],
+                                        lottieImage: isDarkMode
+                                            ? lottieCategoryDarkTheme[index]
+                                            : lottieCategory[index])));
+                            // NavigatorToDetail().navigatorToCategory(
+                            //     context, catagoryList[index], lottieCategory[index]);
+                            CategoryToGrid(
+                              lottieImage: isDarkMode
+                                  ? lottieCategoryDarkTheme[index]
+                                  : lottieCategory[index],
+                              categoryName: catagoryList[index],
+                            );
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 90,
+                                height: 90,
+                                margin: const EdgeInsets.only(left: 15),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryContainer
+                                          .withOpacity(0.2)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: LottieBuilder.asset(
+                                    isDarkMode
+                                        ? lottieCategoryDarkTheme[index]
+                                        : lottieCategory[index],
+                                    fit: BoxFit.cover,
+                                    width: 70,
+                                    height: 70,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Gap(10),
-                            Container(
-                              width: 90,
-                              margin: const EdgeInsets.only(left: 15),
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                catagoryList[index].toUpperCase(),
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondary),
+                              Gap(10),
+                              Container(
+                                width: 90,
+                                margin: const EdgeInsets.only(left: 15),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  catagoryList[index].toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         );
                       }),
                 ),

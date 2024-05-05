@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class ConnectionPage extends ConsumerStatefulWidget {

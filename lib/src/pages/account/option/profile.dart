@@ -8,8 +8,8 @@ import 'package:get/get.dart';
 class Profile extends ConsumerStatefulWidget {
   Profile({super.key, required this.imageUrl, required this.userDataManager});
 
-  String imageUrl;
-  UserDataManager userDataManager;
+  final String imageUrl;
+  final UserDataManager userDataManager;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ProfileState();

@@ -1,5 +1,5 @@
 import 'package:MealBook/respository/model/combo.dart';
-import 'package:MealBook/src/pages/proD/proDetail.dart';
+import 'package:MealBook/src/pages/proD/productDetail.dart';
 import 'package:flutter/material.dart';
 
 class NavigatorToDetail {

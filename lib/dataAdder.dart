@@ -27,7 +27,7 @@ class _CartState extends State<Cart> {
 
   Future<void> call() async {
     print("a");
-    await ref.child('combo/').set(products);
+    await ref.child('all/').set(all);
     print("work is done");
   }
 

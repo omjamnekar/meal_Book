@@ -1,7 +1,9 @@
 import 'package:MealBook/controller/homeLogic.dart';
 import 'package:MealBook/respository/json/combo.dart';
 import 'package:MealBook/respository/provider/actuatorState.dart';
+import 'package:MealBook/src/components/comboToNavigator.dart';
 import 'package:MealBook/src/components/loaderAnimation.dart';
+import 'package:MealBook/src/components/navigateTodetail.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -141,20 +143,34 @@ class _ComboSliderState extends State<ComboSlider> {
                             Positioned(
                               bottom: 10,
                               left: 20,
-                              child: Container(
-                                width: 105,
-                                height: 26,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "Order",
-                                    style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color.fromARGB(
-                                            221, 55, 55, 55)),
+                              child: GestureDetector(
+                                onTap: () {
+                                  List<String> combo = (widget.snapshot[index]
+                                          ["dish"] as List<dynamic>)
+                                      .cast<
+                                          String>() // Ensure that elements are of type String
+                                      .map((object) => object.toString())
+                                      .toList();
+
+                                  ComboToNavigator()
+                                      .navigatorToDetailThroughDataSetter(
+                                          combo, context);
+                                },
+                                child: Container(
+                                  width: 105,
+                                  height: 26,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Order",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color.fromARGB(
+                                              221, 55, 55, 55)),
+                                    ),
                                   ),
                                 ),
                               ),
