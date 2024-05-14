@@ -29,6 +29,12 @@ ThemeData lightMode = ThemeData(
       onSecondary: HexColor("796B6B"),
       tertiary: Color.fromARGB(255, 140, 140, 140),
       primaryContainer: Colors.amber[600],
+    ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: HexColor("EE6B47"),
+      inactiveTrackColor: HexColor("EE6B47").withOpacity(0.5),
+      thumbColor: HexColor("EE6B47"),
+      overlayColor: HexColor("EE6B47").withOpacity(0.5),
     ));
 
 ThemeData darkMode = ThemeData(

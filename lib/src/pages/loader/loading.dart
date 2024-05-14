@@ -169,7 +169,7 @@ class _IntroPageState extends State<IntroPage>
               ),
 
               // loading linearindicator
-              Gap(20),
+              Gap(160),
               Visibility(
                 visible: isVisible,
                 child: Center(

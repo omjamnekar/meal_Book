@@ -6,6 +6,8 @@ import 'package:MealBook/firebase/image.dart';
 import 'package:MealBook/respository/model/user.dart';
 import 'package:MealBook/src/chat/chatPage.dart';
 import 'package:MealBook/src/pages/account/account.dart';
+import 'package:MealBook/src/pages/cart/cart.dart';
+import 'package:MealBook/src/pages/cart/cartLoading.dart';
 import 'package:MealBook/src/pages/combo/combo.dart';
 
 import 'package:MealBook/src/pages/homePage/footer.dart';
@@ -176,14 +178,18 @@ class _HomePageState extends ConsumerState<MainPage> {
                     const Gap(20),
                     GestureDetector(
                       onTap: () {
-                        //  Future<SignUpPlatform> signUpPlatformManager() async {
-
-                        ctrla.signOut(ref, context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CartLoading()));
                       },
                       child: Transform.scale(
                         scale: 2,
-                        child: Image.asset("assets/logo/burgur.png",
-                            width: 20, height: 20),
+                        child: Hero(
+                          tag: "Burgure_logo",
+                          child: Image.asset("assets/logo/burgur.png",
+                              width: 20, height: 20),
+                        ),
                       ), // Increase the width and height values to scale up the image
                     ),
                   ],

@@ -271,6 +271,8 @@ List<String> featureFoodName2 = [
 ];
 
 Map<String, List<dynamic>> variety = {
+
+ 
   "DOSA": [
     {
       "ID": 1,

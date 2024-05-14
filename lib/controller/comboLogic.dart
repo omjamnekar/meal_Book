@@ -105,11 +105,13 @@ class ComboLogic extends GetxController {
     return recData;
   }
 
-  Future<String> fullDataImage(String category, String foodname) async {
+  Future<String> fullDataImage(
+      String category, String foodname, Function(String) image) async {
     try {
       Reference storageReference = FirebaseStorage.instance.ref().child(
           "products/${category.toLowerCase().replaceAll(" ", "")}/${foodname}");
       String url = await storageReference.getDownloadURL();
+      image(url);
       return url;
     } catch (e, stackTrace) {
       print("Error getting image URL: $e");

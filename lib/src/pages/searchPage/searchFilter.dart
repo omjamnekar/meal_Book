@@ -91,8 +91,8 @@ class _SearchAndFilterContentState extends State<SearchAndFilterContent>
                 return GestureDetector(
                   onTap: () {
                     Combo combo = Combo.fromMap(widget.allData[index]);
-                    NavigatorToDetail()
-                        .navigatorToProDetail(context, [combo], widget.allData);
+                    NavigatorToDetail().navigatorToProDetail(
+                        context, [combo], widget.allData, false);
                   },
                   child: Container(
                     margin: const EdgeInsets.all(10),

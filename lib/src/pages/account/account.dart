@@ -4,6 +4,8 @@ import 'package:MealBook/src/Theme/theme_preference.dart';
 import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/src/pages/account/option/profile.dart';
 import 'package:MealBook/src/pages/account/option/security.dart';
+import 'package:MealBook/src/pages/orderCart/ord_loading.dart';
+import 'package:MealBook/src/pages/orderCart/orderRec.dart';
 import 'package:MealBook/src/util/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
@@ -75,6 +77,7 @@ class _AccountManagerState extends ConsumerState<AccountManager>
       {"label": "Accessibility Options", "icon": Icons.accessibility},
       {"label": "Data and Privacy", "icon": Icons.data_usage},
       {"label": "Help and Support", "icon": Icons.help},
+      {"label": "Orders", "icon": Icons.shopping_cart},
       {"label": "payments History", "icon": Icons.payment_sharp},
       {"label": "Logout/Sign Out", "icon": Icons.exit_to_app},
     ];
@@ -333,6 +336,37 @@ class _AccountManagerState extends ConsumerState<AccountManager>
                                         context
                                             .read<ThemeProvider>()
                                             .toggleTheme();
+                                      }
+                                      if (accountOption[index]["label"] ==
+                                          "Orders") {
+                                        // navigate
+
+                                        Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (context, animation,
+                                                    secondaryAnimation) =>
+                                                OrdLoading(child: OrderRec()),
+                                            transitionsBuilder: (context,
+                                                animation,
+                                                secondaryAnimation,
+                                                child) {
+                                              var begin = 0.0;
+                                              var end = 1.0;
+                                              var curve = Curves.ease;
+
+                                              var tween = Tween(
+                                                      begin: begin, end: end)
+                                                  .chain(
+                                                      CurveTween(curve: curve));
+
+                                              return ScaleTransition(
+                                                scale: animation.drive(tween),
+                                                child: child,
+                                              );
+                                            },
+                                          ),
+                                        );
                                       }
                                     }),
                               );

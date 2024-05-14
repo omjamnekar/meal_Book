@@ -3,8 +3,10 @@
 import 'package:MealBook/src/pages/mainPage.dart';
 import 'package:MealBook/respository/provider/actuatorState.dart';
 import 'package:MealBook/respository/provider/registerState.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 // this widget is use for animation and fraction of loading screen and
 //feature or home page
@@ -19,24 +21,44 @@ class Actuator extends ConsumerStatefulWidget {
 }
 
 class _ActuatorState extends ConsumerState<Actuator> {
+  bool isUserSignedOut = false;
   @override
   void initState() {
-    ref.read(imageListProvider.notifier).fetchData();
+    // ref.read(imageListProvider.notifier).fetchData();
+    //_isSignInUser();
     super.initState();
-    Future.delayed(const Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         setState(() {
           _isLoading = false;
         });
       }
     });
+    isUserLoggedIn();
+  }
+
+  Future<void> isUserLoggedIn() async {
+    final googleSignIn = GoogleSignIn();
+    final isSignedIn = await googleSignIn.isSignedIn();
+    final normalSignin = await FirebaseAuth.instance.currentUser;
+    if (isSignedIn || normalSignin != null) {
+      // User is signed in to Google
+      isUserSignedOut = false;
+      print('User is signed in');
+    } else {
+      // User is not signed in to Google
+      isUserSignedOut = true;
+      print('User is not signed in');
+    }
   }
 
   bool _isLoading = true;
   @override
   Widget build(BuildContext context) {
     final booleanState = ref.watch(booleanProvider);
-
+    print('booleanState: ${booleanState.value}');
+    print("isLoading: $_isLoading");
+    print(isUserSignedOut);
     // if isRegistered is true then locate to homepage
     // or fetch data from the firebase
 
@@ -58,9 +80,7 @@ class _ActuatorState extends ConsumerState<Actuator> {
           ? _isLoading
               ? widget.child
               : const MainPage()
-          : ref.watch(imageListProvider).dataCame
-              ? widget.Register
-              : widget.child,
+          : widget.Register,
     );
 
     // return AnimatedCrossFade(firstChild: widget.child, secondChild: isRegistered?HomePage()  : RegisterPage(), crossFadeState:imageListState.state.dataCame?CrossFadeState.showFirst , duration: duration)

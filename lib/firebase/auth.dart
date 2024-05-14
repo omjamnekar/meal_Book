@@ -23,7 +23,8 @@ enum SignUpPlatform {
 class AuthClass {
   Future<void> signOut(BuildContext context) async {
     try {
-      _auth.signOut();
+      await _auth.signOut();
+      print('Sign out');
     } on FirebaseAuthException catch (e) {
       snackbarCon(context, e.message!);
     }

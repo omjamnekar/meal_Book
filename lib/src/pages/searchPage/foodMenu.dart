@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:MealBook/respository/model/combo.dart';
 import 'package:MealBook/src/components/comboToNavigator.dart';
 import 'package:MealBook/src/components/loaderAnimation.dart';
@@ -226,76 +224,83 @@ class FoodMenu extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 35),
                           itemBuilder: (context, index) {
                             if (index > 1) {
-                              return FutureBuilder(
-                                  future: ctrl.searchImage(
-                                      foodmenu.data![index]['TYPE'],
-                                      foodmenu.data![index]['IMAGE']),
-                                  builder: (context,
-                                      AsyncSnapshot<String> menuImage) {
-                                    if (menuImage.connectionState ==
-                                            ConnectionState.waiting &&
-                                        menuImage.hasData) {
-                                      return Container();
-                                    } else if (menuImage.connectionState ==
-                                            ConnectionState.done &&
-                                        menuImage.hasData) {
-                                      return ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            Combo _combo = Combo.fromMap(
-                                                foodmenu.data![index]);
+                              return Container(
+                                child: FutureBuilder(
+                                    future: ctrl.searchImage(
+                                        foodmenu.data![index]['TYPE'],
+                                        foodmenu.data![index]['IMAGE']),
+                                    builder: (context,
+                                        AsyncSnapshot<String> menuImage) {
+                                      if (menuImage.connectionState ==
+                                              ConnectionState.waiting &&
+                                          menuImage.hasData) {
+                                        return Container();
+                                      } else if (menuImage.connectionState ==
+                                              ConnectionState.done &&
+                                          menuImage.hasData) {
+                                        return ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Combo _combo = Combo.fromMap(
+                                                  foodmenu.data![index]);
 
-                                            NavigatorToDetail()
-                                                .navigatorToProDetail(context,
-                                                    [_combo], foodmenu.data!);
-                                          },
-                                          child: Container(
-                                            width: 100,
-                                            height: 100,
-                                            margin: const EdgeInsets.only(
-                                                right: 20),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              image: DecorationImage(
-                                                image: NetworkImage(
-                                                    menuImage.data!),
-                                                fit: BoxFit.cover,
-                                                filterQuality:
-                                                    FilterQuality.high,
-                                                colorFilter: ColorFilter.mode(
-                                                    Colors.black
-                                                        .withOpacity(0.2),
-                                                    BlendMode.darken),
+                                              NavigatorToDetail()
+                                                  .navigatorToProDetail(
+                                                      context,
+                                                      [_combo],
+                                                      foodmenu.data!,
+                                                      false);
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              height: 100,
+                                              margin: const EdgeInsets.only(
+                                                  right: 20),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      menuImage.data!),
+                                                  fit: BoxFit.cover,
+                                                  filterQuality:
+                                                      FilterQuality.high,
+                                                  colorFilter: ColorFilter.mode(
+                                                      Colors.black
+                                                          .withOpacity(0.2),
+                                                      BlendMode.darken),
+                                                ),
                                               ),
-                                            ),
-                                            child: Stack(children: [
-                                              Positioned(
-                                                bottom: 10,
-                                                left: 10,
-                                                child: SizedBox(
-                                                  width: 100,
-                                                  child: Text(
-                                                    "${foodmenu.data![index]['ITEMS']}",
-                                                    maxLines: 1,
-                                                    style: GoogleFonts.poppins(
-                                                      color: Colors.white,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                              child: Stack(children: [
+                                                Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: SizedBox(
+                                                    width: 100,
+                                                    child: Text(
+                                                      "${foodmenu.data![index]['ITEMS']}",
+                                                      maxLines: 1,
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        color: Colors.white,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ]),
+                                              ]),
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    } else {
-                                      return Container();
-                                    }
-                                  });
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    }),
+                              );
                             }
                             return Container();
                           },

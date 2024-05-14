@@ -1,45 +1,63 @@
+import 'dart:convert';
+
 import 'package:MealBook/controller/comboLogic.dart';
-import 'package:MealBook/payments/payOp.dart';
+import 'package:MealBook/src/payments/loading.dart';
+import 'package:MealBook/src/payments/pay_Op.dart';
 import 'package:MealBook/respository/model/combo.dart';
 import 'package:MealBook/respository/model/payInfo.dart';
 import 'package:MealBook/respository/model/user.dart';
 import 'package:MealBook/respository/provider/userState.dart';
 import 'package:MealBook/src/components/asynceChecker.dart';
 import 'package:MealBook/src/components/gridProductDetail.dart';
+import 'package:MealBook/src/pages/cart/cartLoading.dart';
+import 'package:MealBook/src/pages/cart/cartMode.dart';
+import 'package:MealBook/src/payments/stepControl/Time_Con.dart';
+import 'package:MealBook/src/payments/timeSetting/timeSetter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProductDetail extends StatefulWidget {
-  ProductDetail({Key? key, required this.allData, required this.recData})
-      : super(key: key);
-
+class ProductDetail extends ConsumerStatefulWidget {
   List<Combo> allData;
   List<dynamic> recData;
+  bool isCART;
+  ProductDetail(
+      {Key? key,
+      required this.allData,
+      required this.recData,
+      required this.isCART});
 
   @override
-  State<ProductDetail> createState() => _ProductDetailState();
+  ConsumerState<ProductDetail> createState() => _ProductDetailState();
 }
 
-class _ProductDetailState extends State<ProductDetail> {
+class _ProductDetailState extends ConsumerState<ProductDetail> {
   bool isVeg = true;
   double opacityLevel = 0.0; // Define opacity Variable
   late PageController pageController = PageController(initialPage: 0);
-
+  OrderTimeControl orderTimeControl = OrderTimeControl();
   ScrollController scrollController = ScrollController();
-  PaymentGateWay _payment = PaymentGateWay();
+  late PaymentGateWay _payment;
+
   late PayRazorUser payRazorUser;
   num totalPrice = 0;
   late Food food;
-  _payprocess() async {
+  _payprocess(OrderTimeControl orderTimeControl) async {
+    orderTimeControl.orderTime.combo = widget.allData;
+    orderTimeControl.orderTime.totalPrice = totalPrice.toString();
     _payment.init();
     await _userInfoProvide();
 
-    await _payment.openCheckout(_payment.frameDataToCheck(payRazorUser));
+    await _payment.openCheckout(
+        _payment.frameDataToCheck(
+          payRazorUser,
+        ),
+        orderTimeControl.orderTime);
   }
 
   void totalPriceSetter(List<Combo> allData) {
@@ -106,21 +124,24 @@ class _ProductDetailState extends State<ProductDetail> {
 
   initState() {
     super.initState();
+    _payment = PaymentGateWay(
+      context: context,
+      isCART: false,
+    );
     totalPriceSetter(widget.allData);
-
     isVeg = true;
-
     _createInstancefood();
-
     changeOpacity(); // Call the function to start the animation
   }
 
   void changeOpacity() {
     Future.delayed(Duration(seconds: 1), () {
-      setState(() {
-        opacityLevel =
-            opacityLevel == 0 ? 1.0 : 0.0; // Change the opacity level
-      });
+      if (mounted) {
+        // Check if the widget is mounted before calling setState
+        setState(() {
+          opacityLevel = opacityLevel == 0 ? 1.0 : 0.0;
+        });
+      }
     });
   }
 
@@ -165,7 +186,8 @@ class _ProductDetailState extends State<ProductDetail> {
                             return FutureBuilder<String>(
                                 future: combo.fullDataImage(
                                     widget.allData[index].type,
-                                    widget.allData[index].image),
+                                    widget.allData[index].image,
+                                    (image) {}),
                                 builder: (context,
                                     AsyncSnapshot<String> imageProduct) {
                                   return AsyncDataChecker().checkWidgetBinding(
@@ -340,6 +362,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           );
                         }),
                   ),
+
                   Gap(10),
                   // box for image
                   Container(
@@ -357,7 +380,8 @@ class _ProductDetailState extends State<ProductDetail> {
                         return FutureBuilder(
                             future: combo.fullDataImage(
                                 widget.allData[index].type,
-                                widget.allData[index].image),
+                                widget.allData[index].image,
+                                (image) {}),
                             builder: (BuildContext context,
                                 AsyncSnapshot<String> imageProduct) {
                               return AsyncDataChecker().checkWidgetBinding(
@@ -423,6 +447,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     ),
                   ),
                   const Gap(10),
+
                   Container(
                     width: MediaQuery.sizeOf(context).width,
                     child: Row(
@@ -455,6 +480,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       ],
                     ),
                   ),
+
                   Gap(30),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -467,6 +493,8 @@ class _ProductDetailState extends State<ProductDetail> {
                           color: Theme.of(context).colorScheme.onSecondary),
                     ),
                   ),
+                  //INGREDIENTS
+
                   Container(
                     width: MediaQuery.sizeOf(context).width,
                     height: 60,
@@ -506,7 +534,20 @@ class _ProductDetailState extends State<ProductDetail> {
                     ),
                   ),
                   Gap(20),
-
+//Add Cart Button
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          // CartLoading(ref,  widget.allData[0]);
+                          ShowCartMode()
+                              .showCartMode(ref, context, widget.allData[0]);
+                        },
+                        child: Text("Add to Cart")),
+                  ),
+                  Gap(20),
+// LOGO
                   Container(
                     width: MediaQuery.sizeOf(context).width,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -659,7 +700,22 @@ class _ProductDetailState extends State<ProductDetail> {
           ),
         ),
         bottomSheet: GestureDetector(
-          onTap: _payprocess,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TimeLoading(
+                      child: TimeSetter(
+                          isCart: false,
+                          combo: widget.allData,
+                          onTimeSetted: (orderTimeControl) {
+                            setState(() {
+                              this.orderTimeControl = orderTimeControl;
+                            });
+                            _payprocess(orderTimeControl as OrderTimeControl);
+                          }))),
+            );
+          },
           child: Container(
             margin:
                 const EdgeInsets.only(bottom: 20, left: 20, right: 20, top: 10),

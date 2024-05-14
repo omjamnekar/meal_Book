@@ -3,14 +3,14 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class Cart extends StatefulWidget {
-  Cart({Key? key}) : super(key: key);
+class CartAdder extends StatefulWidget {
+  CartAdder({Key? key}) : super(key: key);
 
   @override
-  State<Cart> createState() => _CartState();
+  State<CartAdder> createState() => _CartState();
 }
 
-class _CartState extends State<Cart> {
+class _CartState extends State<CartAdder> {
   DatabaseReference ref = FirebaseDatabase.instance.ref();
 
   String displayText = 'Results go here!';

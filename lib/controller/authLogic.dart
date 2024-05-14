@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:MealBook/firebase/auth.dart';
 import 'package:MealBook/respository/model/user.dart';
 import 'package:MealBook/src/pages/loader/featureIntro.dart';

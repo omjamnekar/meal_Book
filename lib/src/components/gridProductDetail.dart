@@ -1,15 +1,17 @@
 import 'package:MealBook/controller/comboLogic.dart';
 import 'package:MealBook/respository/model/combo.dart';
-import 'package:MealBook/src/components/addCartDownPop.dart';
+import 'package:MealBook/src/components/add_Cart_DownPop.dart';
 import 'package:MealBook/src/components/asynceChecker.dart';
 import 'package:MealBook/src/components/navigateTodetail.dart';
+import 'package:MealBook/src/pages/cart/cartMode.dart';
 import 'package:MealBook/src/pages/proD/productDetail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class GridProductRecommend extends StatelessWidget {
+class GridProductRecommend extends ConsumerStatefulWidget {
   GridProductRecommend({
     super.key,
     required this.recData,
@@ -17,18 +19,24 @@ class GridProductRecommend extends StatelessWidget {
 
   List<dynamic> recData;
 
+  @override
+  ConsumerState<GridProductRecommend> createState() =>
+      _GridProductRecommendState();
+}
+
+class _GridProductRecommendState extends ConsumerState<GridProductRecommend> {
   ComboLogic combo = ComboLogic();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: recData.length > 2
-          ? (recData.length * 230) / 2
-          : (recData.length * 230),
+      height: widget.recData.length > 2
+          ? (widget.recData.length * 230) / 2
+          : (widget.recData.length * 230),
       padding: const EdgeInsets.symmetric(horizontal: 6),
       width: MediaQuery.of(context).size.width,
       child: GridView.builder(
-        itemCount: recData.length,
+        itemCount: widget.recData.length,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -37,8 +45,8 @@ class GridProductRecommend extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           return FutureBuilder(
-              future: combo.fullDataImage(
-                  recData[index]["TYPE"], recData[index]["IMAGE"]),
+              future: combo.fullDataImage(widget.recData[index]["TYPE"],
+                  widget.recData[index]["IMAGE"], (image) {}),
               builder:
                   (BuildContext context, AsyncSnapshot<String> imageProduct) {
                 return AsyncDataChecker().checkWidgetBinding(
@@ -68,7 +76,7 @@ class GridProductRecommend extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                recData[index]["ITEMS"],
+                                widget.recData[index]["ITEMS"],
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.poppins(
@@ -92,7 +100,7 @@ class GridProductRecommend extends StatelessWidget {
                                       child: Row(
                                         children: [
                                           Text(
-                                            "${recData[index]["RATE"]}Rs",
+                                            "${widget.recData[index]["RATE"]}Rs",
                                             style: GoogleFonts.poppins(
                                                 color: Theme.of(context)
                                                     .colorScheme
@@ -102,17 +110,19 @@ class GridProductRecommend extends StatelessWidget {
                                           Icon(
                                             size: 25,
                                             Icons.arrow_drop_down_sharp,
-                                            color: recData[index]["IS_VEG"] ==
+                                            color: widget.recData[index]
+                                                        ["IS_VEG"] ==
                                                     "true"
                                                 ? Colors.green
                                                 : Theme.of(context)
                                                     .colorScheme
                                                     .onPrimary,
                                           ),
-                                          Text(
-                                              recData[index]["IS_VEG"] == "true"
-                                                  ? "Veg"
-                                                  : "Non-Veg")
+                                          Text(widget.recData[index]
+                                                      ["IS_VEG"] ==
+                                                  "true"
+                                              ? "Veg"
+                                              : "Non-Veg")
                                         ],
                                       ),
                                     ),
@@ -128,11 +138,10 @@ class GridProductRecommend extends StatelessWidget {
                                         children: [
                                           GestureDetector(
                                             onTap: () async {
-                                              await AddCartDownPop.show(
-                                                  context,
-                                                  recData[index]["ITEMS"],
-                                                  recData[index]["DESCRIPTION"],
-                                                  () => {});
+                                              Combo combo =
+                                                  _combo(widget.recData, index);
+                                              ShowCartMode().showCartMode(
+                                                  ref, context, combo);
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(
@@ -157,41 +166,51 @@ class GridProductRecommend extends StatelessWidget {
                                           GestureDetector(
                                             onTap: () {
                                               Combo _combo = Combo(
-                                                id: recData[index]["ID"],
-                                                items: recData[index]["ITEMS"],
-                                                rate: recData![index]["RATE"],
-                                                description: recData[index]
-                                                    ["DESCRIPTION"],
-                                                category: recData[index]
+                                                id: widget.recData[index]["ID"],
+                                                items: widget.recData[index]
+                                                    ["ITEMS"],
+                                                rate: widget.recData![index]
+                                                    ["RATE"],
+                                                description:
+                                                    widget.recData[index]
+                                                        ["DESCRIPTION"],
+                                                category: widget.recData[index]
                                                     ["CATEGORY"],
-                                                available: recData[index]
+                                                available: widget.recData[index]
                                                             ["AVAILABLE"] ==
                                                         'true'
                                                     ? true
                                                     : false,
-                                                likes: recData[index]["LIKES"],
-                                                isPopular: recData[index]
+                                                likes: widget.recData[index]
+                                                    ["LIKES"],
+                                                isPopular: widget.recData[index]
                                                             ["POPULAR"] ==
                                                         'true'
                                                     ? true
                                                     : false,
-                                                overallRating: recData[index]
-                                                    ["OVERALL_RATING"],
-                                                image: recData[index]["IMAGE"],
-                                                isVeg: recData[index]
+                                                overallRating:
+                                                    widget.recData[index]
+                                                        ["OVERALL_RATING"],
+                                                image: widget.recData[index]
+                                                    ["IMAGE"],
+                                                isVeg: widget.recData[index]
                                                             ["IS_VEG"] ==
                                                         'true'
                                                     ? true
                                                     : false,
-                                                type: recData[index]["TYPE"],
+                                                type: widget.recData[index]
+                                                    ["TYPE"],
                                                 ingredients: List<String>.from(
-                                                    recData[index]
+                                                    widget.recData[index]
                                                         ["INGREDIENTS"]),
                                               );
 
                                               NavigatorToDetail()
-                                                  .navigatorToProDetail(context,
-                                                      [_combo], recData);
+                                                  .navigatorToProDetail(
+                                                      context,
+                                                      [_combo],
+                                                      widget.recData,
+                                                      false);
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(
@@ -238,5 +257,27 @@ class GridProductRecommend extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Combo _combo(List<dynamic> _recData, int index) {
+    List<String> _ingredients = [];
+    _recData[index]["INGREDIENTS"].forEach((element) {
+      _ingredients.add(element);
+    });
+
+    return Combo(
+        id: _recData[index]["ID"],
+        items: _recData[index]["ITEMS"],
+        rate: _recData[index]["RATE"],
+        description: _recData[index]["DESCRIPTION"],
+        category: _recData[index]["CATEGORY"],
+        available: _recData[index]["AVAILABLE"] != "true" ? false : true,
+        likes: _recData[index]["LIKES"],
+        overallRating: _recData[index]["OVERALL_RATING"],
+        image: _recData[index]["IMAGE"],
+        isPopular: _recData[index]["POPULAR"] != "true" ? false : true,
+        isVeg: _recData[index]["IS_VEG"] != "true" ? false : true,
+        type: _recData[index]["TYPE"],
+        ingredients: _ingredients);
   }
 }

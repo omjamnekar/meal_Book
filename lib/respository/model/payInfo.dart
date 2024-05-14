@@ -8,14 +8,14 @@ class PayRazorUser {
   String email;
   int contect;
   int amount;
-  Food food;
+  Food? food;
 
   PayRazorUser({
     required this.name,
     required this.email,
     required this.contect,
     required this.amount,
-    required this.food,
+    this.food,
   }) : id = Uuid().v4();
 
   Map<String, dynamic> toJson() {

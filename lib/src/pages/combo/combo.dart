@@ -1,7 +1,7 @@
 import 'package:MealBook/controller/comboLogic.dart';
 import 'package:MealBook/respository/model/combo.dart';
 import 'package:MealBook/src/Theme/theme_preference.dart';
-import 'package:MealBook/src/components/categoryToGridPage.dart';
+import 'package:MealBook/src/components/category_To_GridPage.dart';
 import 'package:MealBook/src/components/loaderAnimation.dart';
 import 'package:MealBook/src/components/navigateTodetail.dart';
 import 'package:MealBook/src/pages/combo/recommends.dart';
@@ -432,7 +432,8 @@ class _ComboStoreState extends ConsumerState<ComboStore> {
                                                                       context,
                                                                       [_combo],
                                                                       verData
-                                                                          .data!);
+                                                                          .data!,
+                                                                      false);
                                                             },
                                                             child: Container(
                                                               padding:

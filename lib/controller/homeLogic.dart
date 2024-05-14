@@ -1,5 +1,7 @@
 import 'package:MealBook/firebase/auth.dart';
 import 'package:MealBook/respository/model/user.dart';
+import 'package:MealBook/src/pages/cart/controller/cartControl.dart';
+import 'package:MealBook/src/pages/cart/provider/cartList.dart';
 
 import 'package:MealBook/src/pages/loader/actuator.dart';
 
@@ -59,7 +61,10 @@ class homeController extends GetxController {
       try {
         _authenticate.signOut(context);
 
-        UserState().deleteUser();
+        ref.watch(dataListProvider.notifier).removeAllItems();
+
+        print("done done done");
+
         ref.read(booleanProvider.notifier).update(false);
 
         snackbarCon(context, "Sign out successful");

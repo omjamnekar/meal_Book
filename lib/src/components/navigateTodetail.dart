@@ -3,14 +3,16 @@ import 'package:MealBook/src/pages/proD/productDetail.dart';
 import 'package:flutter/material.dart';
 
 class NavigatorToDetail {
-  navigatorToProDetail(
-      BuildContext context, List<Combo> combo, List<dynamic> _recData) {
+  void navigatorToProDetail(BuildContext context, List<Combo> combo,
+      List<dynamic> _recData, bool isCart) {
+    // Check if navigation is possible
     Navigator.push(
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => ProductDetail(
           allData: combo,
           recData: _recData,
+          isCART: isCart,
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           var begin = Offset(1.0, 0.0);

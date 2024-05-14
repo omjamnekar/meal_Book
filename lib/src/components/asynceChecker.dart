@@ -6,6 +6,8 @@ class AsyncDataChecker {
       required Widget loadingWidget,
       required AsyncSnapshot<dynamic> snapshot,
       required dynamic Function() afterBindingFunction}) {
+    if (snapshot.data == null) return loadingWidget;
+
     if (snapshot.connectionState == ConnectionState.waiting &&
         !snapshot.hasData) {
       return loadingWidget;
