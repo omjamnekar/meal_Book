@@ -17,8 +17,8 @@ class OrderTimeControl extends GetxController {
 
 // after time setting page
   Future<void> setValue(
-    Timestamp currentTime,
-    Timestamp receieveTime,
+    DateTime currentTime,
+    DateTime receieveTime,
   ) async {
     orderTime.currenttime = currentTime;
     orderTime.receieveTime = receieveTime;
@@ -62,8 +62,8 @@ class OrderTimeControl extends GetxController {
         'userid': orderTime.userid,
         'combo': orderTime.combo!.map((e) => e.toMap()).toList(),
         'totalPrice': orderTime.totalPrice,
-        'receieveTime': orderTime.receieveTime!.millisecondsSinceEpoch,
-        'time': orderTime.currenttime!.millisecondsSinceEpoch,
+        'receieveTime': orderTime.receieveTime!.toString(),
+        'time': orderTime.currenttime!.toString(),
         'paymentId': orderTime.paymentId,
       },
     );

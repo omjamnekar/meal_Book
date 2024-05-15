@@ -970,16 +970,15 @@ class _TimeSetterState extends State<TimeSetter> {
       }
 
       DateTime orderUserTime = DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
-          DateTime.now().day,
-          hour24,
-          userSelectedTime.minute);
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        hour24,
+        minute,
+      );
       orderTimeControl.setValue(
-        Timestamp.fromDate(DateTime.now()),
-        Timestamp.fromDate(
-          orderUserTime,
-        ),
+        DateTime.now(),
+        orderUserTime,
       );
     }
 

@@ -11,9 +11,9 @@ class OrderFrame {
   String? totalPrice;
 
   String? paymentId;
-  Timestamp? receieveTime;
+  DateTime? receieveTime;
 
-  Timestamp? currenttime;
+  DateTime? currenttime;
 
   OrderFrame({
     this.combo,
@@ -27,19 +27,22 @@ class OrderFrame {
     this.currenttime,
   }) : id = id ?? Uuid().v4();
 
-  factory OrderFrame.fromMap(Map<String, dynamic> data, String documentId) {
+  factory OrderFrame.fromMap(Map<String, dynamic> data) {
     final List<Combo> combo =
         (data['combo'] as List).map((e) => Combo.fromMap(e)).toList();
+    DateTime revc = data['receieveTime'].toDate();
+    DateTime time = data['time'].toDate();
+
     return OrderFrame(
-      id: documentId,
+      id: data['id'],
       combo: combo,
       name: data['name'],
       email: data['email'],
       userid: data['userid'],
       totalPrice: data['totalPrice'],
       paymentId: data['paymentId'],
-      receieveTime: data['receieveTime'],
-      currenttime: data['time'],
+      receieveTime: revc,
+      currenttime: time,
     );
   }
 

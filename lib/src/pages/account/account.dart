@@ -4,8 +4,11 @@ import 'package:MealBook/src/Theme/theme_preference.dart';
 import 'package:MealBook/src/Theme/theme_provider.dart';
 import 'package:MealBook/src/pages/account/option/profile.dart';
 import 'package:MealBook/src/pages/account/option/security.dart';
+import 'package:MealBook/src/pages/assecess.dart/access.dart';
+import 'package:MealBook/src/pages/help/help.dart';
 import 'package:MealBook/src/pages/orderCart/ord_loading.dart';
 import 'package:MealBook/src/pages/orderCart/orderRec.dart';
+import 'package:MealBook/src/pages/paymentHistory/historyPay.dart';
 import 'package:MealBook/src/util/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
@@ -336,6 +339,37 @@ class _AccountManagerState extends ConsumerState<AccountManager>
                                         context
                                             .read<ThemeProvider>()
                                             .toggleTheme();
+                                      }
+                                      if (accountOption[index]["label"] ==
+                                          "Help and Support") {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                HelpAndSupportPage(),
+                                          ),
+                                        );
+                                      }
+                                      if (accountOption[index]["label"] ==
+                                          "payments History") {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                PaymentHistoryPage(),
+                                          ),
+                                        );
+                                      }
+
+                                      if (accountOption[index]["label"] ==
+                                          "Accessibility Options") {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                AccessibilityOptionsPage(),
+                                          ),
+                                        );
                                       }
                                       if (accountOption[index]["label"] ==
                                           "Orders") {
